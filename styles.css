@@ -152,7 +152,7 @@ figure.poster { margin: 0; }
   .dot { grid-column: auto; }
   .site-footer { height: auto; padding-top: 80px; row-gap: 20px; }
   .projects, .gallery, .about, .photos { grid-column: 1 / -1; }
-  .bio { min-height: 0; }
+  .bio { min-height: 0; margin-bottom: 40px; }
   .about .block { min-height: 0; margin-bottom: 40px; }
 }
 
