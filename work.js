@@ -46,6 +46,7 @@
       if (!group) return;
       gallery.appendChild(group);
       group.hidden = open ? row !== open : row !== preview || row.hidden;
+      group.classList.toggle('is-preview', !open && row === preview);
     });
     gallery.classList.toggle('is-project', !!open);
     if (renderCovers) renderCovers();

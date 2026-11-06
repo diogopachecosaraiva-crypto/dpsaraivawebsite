@@ -612,6 +612,8 @@ img.shot, video.shot { display: block; object-fit: cover; }
    with one open, all of that project's images. */
 .gallery-project { display: contents; }
 .gallery-project[hidden] { display: none; }
+/* empty from the start, before work.js runs: only the previewed project shows */
+.gallery:not(.is-project) .gallery-project:not(.is-preview) { display: none; }
 .gallery:not(.is-project) .gallery-project > .shot:not(:first-child) { display: none; }
 /* On desktop each image is as wide as the column and as tall as its own
    proportions (930:688), so it's never cropped (scroll.js sets --shot-h).
