@@ -1,16 +1,15 @@
-// Light/dark mode. Loaded in <head> so the saved theme applies before the page paints.
+// Light/dark mode. The site opens light; the dot button switches to dark and
+// back. The choice lasts for the rest of the visit (a new visit opens light
+// again), like the language. Loaded in <head> so the theme applies before the
+// page paints.
 (function () {
   var root = document.documentElement;
   root.classList.add('js'); // lets CSS tell that scripts run (used by the Home poster shuffle)
   var saved = null;
-  try { saved = localStorage.getItem('theme'); } catch (e) {}
-  if (saved === 'light' || saved === 'dark') root.dataset.theme = saved;
+  try { saved = sessionStorage.getItem('theme'); } catch (e) {}
+  root.dataset.theme = saved === 'dark' ? 'dark' : 'light';
 
-  function isDark() {
-    return root.dataset.theme
-      ? root.dataset.theme === 'dark'
-      : matchMedia('(prefers-color-scheme: dark)').matches;
-  }
+  function isDark() { return root.dataset.theme === 'dark'; }
 
   // in the page's language (lang.js)
   function label(button) {
@@ -27,7 +26,7 @@
     document.addEventListener('langchange', function () { label(button); });
     button.addEventListener('click', function () {
       root.dataset.theme = isDark() ? 'light' : 'dark';
-      try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+      try { sessionStorage.setItem('theme', root.dataset.theme); } catch (e) {}
       label(button);
     });
   });
