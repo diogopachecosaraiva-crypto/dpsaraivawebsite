@@ -99,6 +99,15 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoratio
   }
 }
 img { display: block; max-width: 100%; }
+/* for screen readers and search engines only: each page's main heading */
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 
 /* Matches Figma's "cap height to baseline" text trimming */
 p, li, .site-header a, .caption, .label { text-box: trim-both cap alphabetic; }
