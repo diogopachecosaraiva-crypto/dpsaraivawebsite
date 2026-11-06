@@ -5,65 +5,655 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Work — Diogo Pacheco Saraiva</title>
   <meta name="description" content="Diogo Pacheco Saraiva — graphic design and illustration, Porto, Portugal.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=BDO+Grotesk:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/BDOGrotesk-DemiBold.otf" as="font" type="font/otf" crossorigin>
+  <link rel="preload" href="assets/fonts/BDOGrotesk-ExtraBold.otf" as="font" type="font/otf" crossorigin>
+  <link rel="stylesheet" href="vendor/lenis.css">
   <link rel="stylesheet" href="styles.css">
+  <script src="theme.js"></script>
+  <script src="lang.js"></script>
+  <script src="strokes.js" defer></script>
+  <script src="vendor/lenis.min.js" defer></script>
+  <script src="scroll.js" defer></script>
+  <script src="work.js" defer></script>
 </head>
-<body>
+<body class="page-split page-work">
   <nav class="site-header grid">
-    <a href="index.html">DPS</a>
+    <a href="index.html" class="logo" aria-label="Diogo Pacheco Saraiva, home" data-pt-aria-label="Diogo Pacheco Saraiva, página inicial">D<span class="more"><span>iogo&nbsp;</span></span>P<span class="more"><span>acheco&nbsp;</span></span>S<span class="more"><span>araiva</span></span></a>
     <a href="work.html">WORK</a>
     <a href="info.html">INFO</a>
-    <img class="dot" src="assets/dot.svg" alt="" width="18" height="18">
+    <div class="tools">
+      <div class="lang" role="group" aria-label="Language" data-pt-aria-label="Língua">
+        <button type="button" data-lang="en" aria-pressed="true" aria-label="English" data-label="EN"><span>EN</span></button>
+        <span class="lang-sep" aria-hidden="true">·</span>
+        <button type="button" data-lang="pt" aria-pressed="false" aria-label="Português" data-label="PT"><span>PT</span></button>
+      </div>
+      <button class="dot" type="button" aria-label="Switch to dark mode"></button>
+    </div>
   </nav>
 
-  <main class="work grid">
-    <ol class="projects">
-      <li class="project"><p>Erkki Kurenniemi</p><div class="meta"><p>Editorial</p><p class="year">2026</p></div></li>
-      <li class="project"><p>Full Frames</p><div class="meta"><p>Editorial</p><p class="year">2026</p></div></li>
-      <li class="project"><p>Comédia (A)Normal</p><div class="meta"><p>Identity, Poster</p><p class="year">2026</p></div></li>
-      <li class="project"><p>Losaint Barberclub</p><div class="meta"><p>Identity</p><p class="year">2026</p></div></li>
-      <li class="project"><p>RUGA</p><div class="meta"><p>Identity</p><p class="year">2025</p></div></li>
-      <li class="project"><p>[ASCII_TYPE_GRID]</p><div class="meta"><p>Poster, Motion</p><p class="year">2025</p></div></li>
-      <li class="project"><p>Uncrowded</p><div class="meta"><p>Editorial</p><p class="year">2025</p></div></li>
-      <li class="project"><p>Portela D’Arcada</p><div class="meta"><p>Identity</p><p class="year">2025</p></div></li>
-      <li class="project"><p>Comédia a Preto &amp; Branco</p><div class="meta"><p>Identity, Poster</p><p class="year">2025</p></div></li>
-      <li class="project"><p>Villa Regio</p><div class="meta"><p>Identity</p><p class="year">2024</p></div></li>
-      <li class="project"><p>Project Conta B</p><div class="meta"><p>Identity</p><p class="year">2024</p></div></li>
-      <li class="project"><p>Quase Irresponsável</p><div class="meta"><p>Editorial</p><p class="year">2023</p></div></li>
-      <li class="project"><p>Core of Pictus</p><div class="meta"><p>Editorial</p><p class="year">2023</p></div></li>
-      <li class="project"><p>Paris (dis)Order</p><div class="meta"><p>Editorial</p><p class="year">2022</p></div></li>
-      <li class="project"><p>Past -Script</p><div class="meta"><p>Editorial</p><p class="year">2022</p></div></li>
-    </ol>
+  <div class="filters">
+    <div class="filters-row grid">
+      <div class="filters-bar">
+        <div class="filter-types" role="group" aria-label="Filter projects by typology" data-pt-aria-label="Filtrar projetos por tipologia">
+          <button type="button" data-type="all" aria-pressed="true" data-label="All"><span>All</span></button> <button type="button" data-type="identity" aria-pressed="false" data-label="Identity"><span>Identity</span></button> <button type="button" data-type="poster" aria-pressed="false" data-label="Poster"><span>Poster</span></button> <button type="button" data-type="editorial" aria-pressed="false" data-label="Editorial"><span>Editorial</span></button> <button type="button" data-type="motion" aria-pressed="false" data-label="Motion"><span>Motion</span></button> <button type="button" data-type="merch" aria-pressed="false" data-label="Merch"><span>Merch</span></button> <button type="button" data-type="web" aria-pressed="false" data-label="Web"><span>Web</span></button> <button type="button" data-type="illustration" aria-pressed="false" data-label="Illustration"><span>Illustration</span></button>
+        </div>
+        <div class="filter-sort" role="group" aria-label="Sort projects by year" data-pt-aria-label="Ordenar projetos por ano">
+          <button type="button" data-sort="year" aria-pressed="true" data-label="Year ↓" data-alt="Year ↑"><span>Year ↓</span></button>
+        </div>
+      </div>
+      <div class="filter-view" role="group" aria-label="View" data-pt-aria-label="Vista">
+        <button type="button" data-view="index" aria-pressed="true" data-label="Index" data-pt-data-label="Índice"><span data-pt="Índice">Index</span></button> <button type="button" data-view="full" aria-pressed="false" data-label="Gallery" data-pt-data-label="Galeria"><span data-pt="Galeria">Gallery</span></button>
+      </div>
+    </div>
+  </div>
 
-    <div class="gallery">
-      <div class="shot"></div>
-      <div class="shot"></div>
-      <div class="shot"></div>
-      <div class="shot"></div>
-      <div class="shot"></div>
-      <div class="shot"></div>
-      <div class="shot"></div>
-      <div class="shot"></div>
-      <div class="shot"></div>
-      <div class="shot"></div>
-      <div class="shot"></div>
-      <div class="shot"></div>
-      <div class="shot"></div>
-      <div class="shot"></div>
-      <div class="shot"></div>
-      <div class="shot"></div>
-      <div class="shot"></div>
-      <div class="shot"></div>
+  <main class="work grid">
+    <div class="pane pane-text pane-list" data-lenis-pane>
+      <ol class="projects">
+        <li class="project" data-project="erkki-kurenniemi">
+          <button class="project-head" type="button" aria-expanded="false" aria-controls="project-erkki-kurenniemi">
+            <span class="name">Erkki Kurenniemi</span><span class="meta"><span>Editorial</span><span class="year">2026</span></span>
+          </button>
+          <div class="project-text" id="project-erkki-kurenniemi" inert>
+            <div><p data-pt="Erkki Kurenniemi: Pioneer of Digital Synthesis — Life, Work and Thoughts on Eternity é uma coleção de textos e ensaios sobre o cientista e compositor finlandês, pioneiro esquecido da música eletrónica. O livro acompanha a vida de um homem que se gravou obsessivamente durante décadas e que, muito antes de nós, colocou a questão que hoje fazemos às nossas máquinas: se guardarmos o suficiente, seremos capazes de sobreviver à nossa própria morte?">Erkki Kurenniemi: Pioneer of Digital Synthesis — Life, Work and Thoughts on Eternity is a collection of texts and essays on the Finnish scientist and composer, a forgotten pioneer of electronic music. The book follows the life of a man who recorded himself obsessively for decades and who, long before us, asked the question we now put to our machines: if we keep enough of ourselves, can we survive our own death?</p></div>
+          </div>
+        </li>
+        <li class="project" data-project="full-frames">
+          <button class="project-head" type="button" aria-expanded="false" aria-controls="project-full-frames">
+            <span class="name">Full Frames</span><span class="meta"><span>Editorial</span><span class="year">2026</span></span>
+          </button>
+          <div class="project-text" id="project-full-frames" inert>
+            <div><p data-pt="Full Frames reúne uma coleção de fotografias tiradas por Diogo Saraiva entre 2022 e 2025, sem tema, cronologia ou intenção definidos. É apenas o gesto instintivo de captar o momento, seja com uma câmara digital, seja com o telemóvel sempre à mão. Cada imagem ocupa a página inteira, sem margens que a contenham, convidando o leitor a mergulhar por completo em cada momento fotografado. Mais do que um projeto temático, este livro é um arquivo pessoal e fragmentado do olhar. Uma coleção de momentos isolados que, em conjunto, formam um retrato indireto de três anos de vida vividos através da lente.">Full Frames brings together a collection of photographs taken by Diogo Saraiva, between 2022 and 2025, with no set theme, chronology, or intention. This is just the instinctive gesture of capturing the moment, whether with a digital camera or a cell phone always at hand. Each image fills the entire page, without margins to contain it, inviting the reader to fully immerse themselves in each photographed moment. More than a thematic project, this book is a personal and fragmented archive of the gaze. A collection of isolated moments that, together, form an indirect portrait of three years of life experienced through the lens.</p></div>
+          </div>
+        </li>
+        <li class="project" data-project="comedia-a-normal">
+          <button class="project-head" type="button" aria-expanded="false" aria-controls="project-comedia-a-normal">
+            <span class="name">Comédia (A)Normal, S1</span><span class="meta"><span>Identity, Poster</span><span class="year">2026</span></span>
+          </button>
+          <div class="project-text" id="project-comedia-a-normal" inert>
+            <div><p data-pt="Comédia (A)Normal, temporada 1, é um ciclo semanal de noites de stand-up comedy na Escola Normal – Casa Cultural, no Porto, promovido pela Comédia a Preto &amp; Branco.">Comédia (A)Normal, season 1, is a weekly series of stand-up comedy nights at Escola Normal – Casa Cultural, in Porto, promoted by Comédia a Preto &amp; Branco.</p></div>
+          </div>
+        </li>
+        <li class="project" data-project="paragem-da-comedia">
+          <button class="project-head" type="button" aria-expanded="false" aria-controls="project-paragem-da-comedia">
+            <span class="name">Paragem da Comédia</span><span class="meta"><span>Identity, Poster, Illustration</span><span class="year">2026</span></span>
+          </button>
+          <div class="project-text" id="project-paragem-da-comedia" inert>
+            <div><p data-pt="Paragem da Comédia é um ciclo de noites de stand-up comedy no Bus Paragem Cultural, nos Anjos, em Lisboa, promovido pela Comédia a Preto &amp; Branco e pela Porra Que Produções. Cada edição tem uma ilustração original e cor própria.">Paragem da Comédia is a series of stand-up comedy nights at Bus Paragem Cultural, in Anjos, Lisbon, promoted by Comédia a Preto &amp; Branco and Porra Que Produções. Each edition has an original illustration and a colour of its own.</p></div>
+          </div>
+        </li>
+        <li class="project" data-project="losaint-barberclub">
+          <button class="project-head" type="button" aria-expanded="false" aria-controls="project-losaint-barberclub">
+            <span class="name">LoSaint Barberclub</span><span class="meta"><span>Identity</span><span class="year">2026</span></span>
+          </button>
+          <div class="project-text" id="project-losaint-barberclub" inert>
+            <div><p data-pt="A LoSaint Barberclub é uma barbearia localizada em Valongo, Porto. Mais do que uma barbearia tradicional, o espaço alarga a sua oferta para além dos serviços de cuidado pessoal, contando também com uma seleção curada de fragrâncias e joalharia. Procura transmitir a ideia de comunidade e pertença, com o objetivo de proporcionar a melhor experiência possível aos seus clientes, que são recebidos e tratados como parte de uma grande família.">LoSaint Barberclub is a barbershop located in Valongo, Porto. More than a traditional barbershop, the space extends its offering beyond grooming services, also featuring a curated selection of fragrances and jewelry. It aims to offer the idea of community and belonging, aiming to provide the best possible experience for its customers, who are welcomed and treated as part of a large family.</p><p>Collaborators: Marco da Silva</p></div>
+          </div>
+        </li>
+        <li class="project" data-project="ruga">
+          <button class="project-head" type="button" aria-expanded="false" aria-controls="project-ruga">
+            <span class="name">RUGA</span><span class="meta"><span>Identity</span><span class="year">2025</span></span>
+          </button>
+          <div class="project-text" id="project-ruga" inert>
+            <div><p data-pt="RUGA é um artista visual português, sediado no Porto. O seu trabalho centra-se sobretudo na exploração do tufting de tapetes e da pintura acrílica, com projetos inspirados na cultura pop e em experiências pessoais.">RUGA is a Portuguese visual artist, based in Porto. His work is mainly done by the exploration of rug tufting and acrylic painting, with projects inspired by pop culture and personal experiences.</p><p>Collaborators: Marco da Silva</p></div>
+          </div>
+        </li>
+        <li class="project" data-project="ascii-type-grid">
+          <button class="project-head" type="button" aria-expanded="false" aria-controls="project-ascii-type-grid">
+            <span class="name">[ASCII_TYPE_GRID]</span><span class="meta"><span>Poster, Motion</span><span class="year">2025</span></span>
+          </button>
+          <div class="project-text" id="project-ascii-type-grid" inert>
+            <div><p data-pt="[ASCII_TYPE_GRID] é uma série de cartazes tipográficos, com base em animação e posteriormente estáticos. A coleção foi construída apenas com caracteres ASCII dispostos numa grelha, em composições desenvolvidas com auxílio de três códigos criativos.">[ASCII_TYPE_GRID] is a series of typographic posters, first made as animations and later as still posters. The collection was built only from ASCII characters set on a grid, in compositions developed with the help of three creative coding scripts.</p></div>
+          </div>
+        </li>
+        <li class="project" data-project="uncrowded">
+          <button class="project-head" type="button" aria-expanded="false" aria-controls="project-uncrowded">
+            <span class="name">Uncrowded</span><span class="meta"><span>Editorial</span><span class="year">2025</span></span>
+          </button>
+          <div class="project-text" id="project-uncrowded" inert>
+            <div><p data-pt="Uncrowded é uma revista que capta a essência da cultura do surf através do olhar de Bernardo Guedes, documentando os lugares, os rostos e os momentos que marcaram o seu percurso.">Uncrowded is a magazine publication that captures the essence of surf culture through the lens of Bernardo Guedes. Documenting the places, faces, and moments that shaped his journey.</p><p>Collaborators: Marco da Silva</p></div>
+          </div>
+        </li>
+        <li class="project" data-project="portela-d-arcada">
+          <button class="project-head" type="button" aria-expanded="false" aria-controls="project-portela-d-arcada">
+            <span class="name">Portela d’Arcada</span><span class="meta"><span>Identity</span><span class="year">2025</span></span>
+          </button>
+          <div class="project-text" id="project-portela-d-arcada" inert>
+            <div><p data-pt="A Portela d’Arcada é uma casa rural situada em Fonte Arcada, Penafiel. Inserida numa zona tranquila e rica em natureza, reflete a calma e a simplicidade da vida no campo. Rodeada de colinas, caminhos de pedra e paisagens que mudam com as estações, é um lugar moldado pela sua ligação à terra e pelo ritmo lento dos dias de verão.">Portela d’Arcada is a rural home located in Fonte Arcada, Penafiel. Set in a quiet, nature-rich area, it embodies the calm and simplicity of life in the countryside. Surrounded by hills, stone paths, and seasonal landscapes, it’s a place shaped by its connection to the land and the slow rhythm of summer days.</p><p>Collaborators: Marco da Silva</p></div>
+          </div>
+        </li>
+        <li class="project" data-project="comedia-a-preto-e-branco">
+          <button class="project-head" type="button" aria-expanded="false" aria-controls="project-comedia-a-preto-e-branco">
+            <span class="name">Comédia a Preto &amp; Branco</span><span class="meta"><span>Identity, Poster</span><span class="year">2025</span></span>
+          </button>
+          <div class="project-text" id="project-comedia-a-preto-e-branco" inert>
+            <div><p data-pt="O projeto Comédia a Preto &amp; Branco, desenvolvido pelos humoristas Tomás Matos e David Santos, tem como objetivo promover eventos de stand-up comedy e criar conteúdos audiovisuais de humor. O projeto junta humoristas portugueses, dando-lhes a oportunidade de participar em produções originais e espetáculos ao vivo. A Comédia a Preto &amp; Branco funciona como uma plataforma de interação, promoção e participação na comédia, ajudando a dinamizar eventos de humor e a juntar diferentes gerações de humoristas no panorama nacional.">The Comédia a Preto &amp; Branco project, developed by comedians Tomás Matos and David Santos, aims to promote stand-up comedy events and create humorous audiovisual content. This project brings together Portuguese comedians, providing them with an opportunity to take part in original productions and live shows. Comédia a Preto &amp; Branco serves as a platform for interaction, promotion and participation in comedy, thereby helping to boost comedy events and bring together different generations of comedians on the national scene.</p><p>Collaborators: Marco da Silva, Nuno Pinto</p></div>
+          </div>
+        </li>
+        <li class="project" data-project="villa-regio">
+          <button class="project-head" type="button" aria-expanded="false" aria-controls="project-villa-regio">
+            <span class="name">Villa Regio</span><span class="meta"><span>Identity</span><span class="year">2024</span></span>
+          </button>
+          <div class="project-text" id="project-villa-regio" inert>
+            <div><p data-pt="Villa Regio é um alojamento local na Rua de Santo Amaro, perto do centro histórico de Vila do Conde, cidade junto à foz do rio Ave que José Régio descreveu como “espraiada entre pinhais, rio e mar”. A identidade tem como base uma letra stencil, cujas pontes interrompem cada letra como se tivesse sido recortada.">Villa Regio is a short-term rental on Rua de Santo Amaro, near the historic centre of Vila do Conde, a town at the mouth of the river Ave that José Régio described as “spread out between pine forests, river and sea”. The identity is based on stencil lettering, whose bridges break up each letter as if it had been cut out.</p></div>
+          </div>
+        </li>
+        <li class="project" data-project="project-conta-b">
+          <button class="project-head" type="button" aria-expanded="false" aria-controls="project-project-conta-b">
+            <span class="name">Project Conta B</span><span class="meta"><span>Identity</span><span class="year">2024</span></span>
+          </button>
+          <div class="project-text" id="project-project-conta-b" inert>
+            <div><p data-pt="A Project Conta B, ou PCB, é uma empresa de contabilidade sediada nos arredores da cidade do Porto que, desde 2007, centra o seu trabalho nas áreas da fiscalidade, da gestão e dos projetos do IEFP.">Project Conta B or PCB is an accounting firm based on the outskirts of the city of Porto, and since 2007, it has focused its accounting work on the areas of taxation, management, and IEFP projects.</p><p>Collaborators: Alexandre Campelo</p></div>
+          </div>
+        </li>
+        <li class="project" data-project="quase-irresponsavel">
+          <button class="project-head" type="button" aria-expanded="false" aria-controls="project-quase-irresponsavel">
+            <span class="name">Quase Irresponsável</span><span class="meta"><span>Editorial</span><span class="year">2023</span></span>
+          </button>
+          <div class="project-text" id="project-quase-irresponsavel" inert>
+            <div><p data-pt="Quase Irresponsável é um projeto fotográfico de Bernardo Guedes sobre uma coleção de fotografias captadas nas saídas noturnas do fotógrafo. Um livro de fotografia de 80 páginas que arquiva fotografias digitais tiradas entre 2022 e 2023.">Quase Irresponsável is a photographic project by Bernardo Guedes about a collection of photographs captured in the photographer’s night outings. An 80-page photo book archiving digital photographs taken between 2022-2023.</p></div>
+          </div>
+        </li>
+        <li class="project" data-project="core-of-pictus">
+          <button class="project-head" type="button" aria-expanded="false" aria-controls="project-core-of-pictus">
+            <span class="name">Core of Pictus</span><span class="meta"><span>Editorial</span><span class="year">2023</span></span>
+          </button>
+          <div class="project-text" id="project-core-of-pictus" inert>
+            <div><p data-pt="Esta publicação nasce da necessidade de catalogar e refletir sobre a apropriação no mundo da arte e, mais especificamente, no design gráfico, num acompanhamento quase cronológico e conceptual, com vários textos, projetos e exemplos de como a apropriação se tornou uma ferramenta comum e quase natural para o ser humano, com todos os seus prós e contras. Core of Pictus pretende catalogar os conceitos mais importantes presentes nos textos escolhidos dos leitores e contar a narrativa dessas palavras em forma de imagem. Ao atribuir símbolos ou elementos visuais a letras individuais, este projeto permite transmitir de forma sucinta e visualmente apelativa ideias complexas associadas à apropriação, comunicando as nuances e as dinâmicas da apropriação no domínio das artes e do design.">This publication arises from the need to catalogue and reflect thoughts on appropriation in the art world and more specifically in graphic design, making an almost chronological and conceptual follow-up, presenting several texts, projects and examples of how appropriation has become a common and almost natural tool to the human being with all its pros and cons. Core of Pictus aims to catalogue the most important concepts present in the chosen texts of the readers and to tell the narrative of these words in image form. By assigning visual symbols or elements to individual letters, this project allows us to convey complex ideas associated with appropriation in a succinct and visually compelling manner, conveying the nuanced ideas and dynamics associated with appropriation in the realm of arts and design.</p></div>
+          </div>
+        </li>
+        <li class="project" data-project="paris-dis-order">
+          <button class="project-head" type="button" aria-expanded="false" aria-controls="project-paris-dis-order">
+            <span class="name">Paris (dis)Order</span><span class="meta"><span>Editorial</span><span class="year">2022</span></span>
+          </button>
+          <div class="project-text" id="project-paris-dis-order" inert>
+            <div><p data-pt="Paris (dis)Order é um arquivo físico de uma curta viagem a Paris de Bernardo Guedes. Esta publicação de conteúdo fotográfico mostra-nos um conjunto de imagens captadas na capital francesa durante um curto período de tempo. Reúne uma seleção de imagens precisas e simples que, em conjunto, formam este corpo de trabalho, também ele preciso e simples, influenciado pela cidade e pelas suas narrativas.">Paris (dis)Order is a physical archive of a short trip to Paris by Bernardo Guedes. This publication with a photographic content shows us a set of images captured in the French capital during a short period of time. It gathers a selection of precise and simple images that together form this body of work, also precise and simple influenced by the city and its narratives.</p></div>
+          </div>
+        </li>
+        <li class="project" data-project="past-script">
+          <button class="project-head" type="button" aria-expanded="false" aria-controls="project-past-script">
+            <span class="name">Past-Script</span><span class="meta"><span>Editorial</span><span class="year">2022</span></span>
+          </button>
+          <div class="project-text" id="project-past-script" inert>
+            <div><p data-pt="Past-Script é um estudo de caso que explora o mistério persistente em torno de um conjunto de artefactos descobertos em 1894 na Serra do Alvão pelos padres José Brenha e Rafael Rodrigues. Motivados por lendas locais, os padres escavaram antigos dólmenes em busca de tesouros e descobriram uma notável coleção de pedras e objetos de guerra gravados com figuras antropomórficas e símbolos. As suas descobertas deram origem à intrigante teoria de que estas gravuras poderiam representar uma das mais antigas formas de escrita alfabética do mundo.">Past-Script is a case study that explores the enduring mystery surrounding a set of artefacts discovered in 1894 in the Serra do Alvão by priests José Brenha and Rafael Rodrigues. Motivated by local legends, the priests excavated ancient dolmens in search of treasures and uncovered a remarkable collection of stones and war objects engraved with anthropomorphic figures and symbols. Their findings gave rise to the intriguing theory that these engravings might represent one of the earliest forms of alphabetic writing in the world.</p><p>Collaborators: Hélder Pinho, José Pedro Carmo, Marco da Silva</p></div>
+          </div>
+        </li>
+      </ol>
+      <p class="filters-empty" hidden data-pt="Ainda não há projetos nesta tipologia.">No projects in this typology yet.</p>
+    </div>
+
+    <div class="pane pane-images pane-gallery" data-lenis-pane>
+      <div class="gallery">
+        <div class="gallery-project" data-project="erkki-kurenniemi">
+          <div class="shot shot-empty"><p data-pt="(Projeto em construção)">(Project under construction)</p></div>
+        </div>
+        <div class="gallery-project" data-project="full-frames">
+          <img class="shot" src="assets/work/full-frames/full-frames-maos.jpg" alt="Full Frames, the book held against a scanner's glass by two hands" data-pt-alt="Full Frames, o livro seguro por duas mãos contra o vidro de um scanner" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-capas.jpg" alt="Full Frames, three front covers" data-pt-alt="Full Frames, três capas" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-capa.jpg" alt="Full Frames, front cover, spine and back cover" data-pt-alt="Full Frames, capa, lombada e contracapa" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-lombadas-deitadas.jpg" alt="Full Frames, four spines lying down" data-pt-alt="Full Frames, quatro lombadas deitadas" loading="lazy" decoding="async">
+          <video class="shot" data-src="assets/work/full-frames/full-frames-spreads.mp4" poster="assets/work/full-frames/full-frames-spreads-poster.jpg" muted loop playsinline preload="none" aria-label="Full Frames, every spread of the book (video)" data-pt-aria-label="Full Frames, todas as páginas duplas do livro (vídeo)"></video>
+          <img class="shot" src="assets/work/full-frames/full-frames-1.jpg" alt="Full Frames, image 1" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-2.jpg" alt="Full Frames, image 2" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-3.jpg" alt="Full Frames, image 3" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-4.jpg" alt="Full Frames, image 4" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-5.jpg" alt="Full Frames, image 5" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-6.jpg" alt="Full Frames, image 6" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-7.jpg" alt="Full Frames, image 7" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-8.jpg" alt="Full Frames, image 8" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-9.jpg" alt="Full Frames, image 9" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-10.jpg" alt="Full Frames, image 10" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-11.jpg" alt="Full Frames, image 11" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-12.jpg" alt="Full Frames, image 12" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-13.jpg" alt="Full Frames, image 13" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-14.jpg" alt="Full Frames, image 14" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-15.jpg" alt="Full Frames, image 15" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-16.jpg" alt="Full Frames, image 16" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-17.jpg" alt="Full Frames, image 17" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-18.jpg" alt="Full Frames, image 18" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-19.jpg" alt="Full Frames, image 19" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-20.jpg" alt="Full Frames, image 20" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-21.jpg" alt="Full Frames, image 21" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-22.jpg" alt="Full Frames, image 22" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-23.jpg" alt="Full Frames, image 23" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-24.jpg" alt="Full Frames, image 24" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-25.jpg" alt="Full Frames, image 25" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-26.jpg" alt="Full Frames, image 26" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-27.jpg" alt="Full Frames, image 27" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-28.jpg" alt="Full Frames, image 28" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-lombadas.jpg" alt="Full Frames, eleven spines" data-pt-alt="Full Frames, onze lombadas" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/full-frames/full-frames-maos-contracapa.jpg" alt="Full Frames, the back cover held against a scanner's glass by two hands" data-pt-alt="Full Frames, a contracapa segura por duas mãos contra o vidro de um scanner" loading="lazy" decoding="async">
+        </div>
+        <div class="gallery-project" data-project="comedia-a-normal">
+          <img class="shot" src="assets/work/comedia-a-normal/comedia-a-normal-1.jpg" alt="Comédia (A)Normal, S1, image 1" loading="lazy" decoding="async">
+          <div class="shot frames">
+            <img src="assets/work/comedia-a-normal/comedia-a-normal-2.jpg" alt="Comédia (A)Normal, S1, image 2" loading="lazy" decoding="async">
+            <img src="assets/work/comedia-a-normal/comedia-a-normal-3.jpg" alt="" loading="lazy" decoding="async">
+          </div>
+          <video class="shot" data-src="assets/work/comedia-a-normal/comedia-a-normal-4.mp4" poster="assets/work/comedia-a-normal/comedia-a-normal-4-poster.jpg" muted loop playsinline preload="none" aria-label="Comédia (A)Normal, S1, image 4 (video)"></video>
+          <img class="shot" src="assets/work/comedia-a-normal/comedia-a-normal-5.jpg" alt="Comédia (A)Normal, S1, image 5" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/comedia-a-normal/comedia-a-normal-6.jpg" alt="Comédia (A)Normal, S1, image 6" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/comedia-a-normal/comedia-a-normal-7a.jpg" alt="Comédia (A)Normal, S1, image 7a" loading="lazy" decoding="async">
+            <img src="assets/work/comedia-a-normal/comedia-a-normal-7b.jpg" alt="Comédia (A)Normal, S1, image 7b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/comedia-a-normal/comedia-a-normal-8.jpg" alt="Comédia (A)Normal, S1, image 8" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/comedia-a-normal/comedia-a-normal-9a.jpg" alt="Comédia (A)Normal, S1, image 9a" loading="lazy" decoding="async">
+            <img src="assets/work/comedia-a-normal/comedia-a-normal-9b.jpg" alt="Comédia (A)Normal, S1, image 9b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/comedia-a-normal/comedia-a-normal-10.jpg" alt="Comédia (A)Normal, S1, image 10" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/comedia-a-normal/comedia-a-normal-11a.jpg" alt="Comédia (A)Normal, S1, image 11a" loading="lazy" decoding="async">
+            <img src="assets/work/comedia-a-normal/comedia-a-normal-11b.jpg" alt="Comédia (A)Normal, S1, image 11b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/comedia-a-normal/comedia-a-normal-12a.jpg" alt="Comédia (A)Normal, S1, image 12a" loading="lazy" decoding="async">
+            <img src="assets/work/comedia-a-normal/comedia-a-normal-12b.jpg" alt="Comédia (A)Normal, S1, image 12b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/comedia-a-normal/comedia-a-normal-13.jpg" alt="Comédia (A)Normal, S1, image 13" loading="lazy" decoding="async">
+        </div>
+        <div class="gallery-project" data-project="paragem-da-comedia">
+          <img class="shot" src="assets/work/paragem-da-comedia/paragem-da-comedia-1.jpg" alt="Paragem da Comédia, image 1" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/paragem-da-comedia/paragem-da-comedia-2a.jpg" alt="Paragem da Comédia, image 2a" loading="lazy" decoding="async">
+            <img src="assets/work/paragem-da-comedia/paragem-da-comedia-2b.jpg" alt="Paragem da Comédia, image 2b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/paragem-da-comedia/paragem-da-comedia-3a.jpg" alt="Paragem da Comédia, image 3a" loading="lazy" decoding="async">
+            <img src="assets/work/paragem-da-comedia/paragem-da-comedia-3b.jpg" alt="Paragem da Comédia, image 3b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/paragem-da-comedia/paragem-da-comedia-4a.jpg" alt="Paragem da Comédia, image 4a" loading="lazy" decoding="async">
+            <img src="assets/work/paragem-da-comedia/paragem-da-comedia-4b.jpg" alt="Paragem da Comédia, image 4b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/paragem-da-comedia/paragem-da-comedia-5a.jpg" alt="Paragem da Comédia, image 5a" loading="lazy" decoding="async">
+            <img src="assets/work/paragem-da-comedia/paragem-da-comedia-5b.jpg" alt="Paragem da Comédia, image 5b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/paragem-da-comedia/paragem-da-comedia-6.jpg" alt="Paragem da Comédia, image 6" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paragem-da-comedia/paragem-da-comedia-7.jpg" alt="Paragem da Comédia, image 7" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paragem-da-comedia/paragem-da-comedia-8.jpg" alt="Paragem da Comédia, image 8" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paragem-da-comedia/paragem-da-comedia-9.jpg" alt="Paragem da Comédia, image 9" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paragem-da-comedia/paragem-da-comedia-10.jpg" alt="Paragem da Comédia, image 10" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paragem-da-comedia/paragem-da-comedia-11.jpg" alt="Paragem da Comédia, image 11" loading="lazy" decoding="async">
+        </div>
+        <div class="gallery-project" data-project="losaint-barberclub">
+          <img class="shot" src="assets/work/losaint-barberclub/losaint-barberclub-1.jpg" alt="LoSaint Barberclub, image 1" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/losaint-barberclub/losaint-barberclub-2.jpg" alt="LoSaint Barberclub, image 2" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/losaint-barberclub/losaint-barberclub-3.jpg" alt="LoSaint Barberclub, image 3" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/losaint-barberclub/losaint-barberclub-4a.jpg" alt="LoSaint Barberclub, image 4a" loading="lazy" decoding="async">
+            <img src="assets/work/losaint-barberclub/losaint-barberclub-4b.jpg" alt="LoSaint Barberclub, image 4b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/losaint-barberclub/losaint-barberclub-5.jpg" alt="LoSaint Barberclub, image 5" loading="lazy" decoding="async">
+          <video class="shot" data-src="assets/work/losaint-barberclub/losaint-barberclub-6.mp4" poster="assets/work/losaint-barberclub/losaint-barberclub-6-poster.jpg" muted loop playsinline preload="none" aria-label="LoSaint Barberclub, image 6 (video)"></video>
+          <img class="shot" src="assets/work/losaint-barberclub/losaint-barberclub-7.jpg" alt="LoSaint Barberclub, image 7" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/losaint-barberclub/losaint-barberclub-8a.jpg" alt="LoSaint Barberclub, image 8a" loading="lazy" decoding="async">
+            <img src="assets/work/losaint-barberclub/losaint-barberclub-8b.jpg" alt="LoSaint Barberclub, image 8b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/losaint-barberclub/losaint-barberclub-9.jpg" alt="LoSaint Barberclub, image 9" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/losaint-barberclub/losaint-barberclub-10a.jpg" alt="LoSaint Barberclub, image 10a" loading="lazy" decoding="async">
+            <img src="assets/work/losaint-barberclub/losaint-barberclub-10b.jpg" alt="LoSaint Barberclub, image 10b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/losaint-barberclub/losaint-barberclub-11a.jpg" alt="LoSaint Barberclub, image 11a" loading="lazy" decoding="async">
+            <img src="assets/work/losaint-barberclub/losaint-barberclub-11b.jpg" alt="LoSaint Barberclub, image 11b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/losaint-barberclub/losaint-barberclub-12.jpg" alt="LoSaint Barberclub, image 12" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/losaint-barberclub/losaint-barberclub-13a.jpg" alt="LoSaint Barberclub, image 13a" loading="lazy" decoding="async">
+            <img src="assets/work/losaint-barberclub/losaint-barberclub-13b.jpg" alt="LoSaint Barberclub, image 13b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/losaint-barberclub/losaint-barberclub-14.jpg" alt="LoSaint Barberclub, image 14" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/losaint-barberclub/losaint-barberclub-15a.jpg" alt="LoSaint Barberclub, image 15a" loading="lazy" decoding="async">
+            <img src="assets/work/losaint-barberclub/losaint-barberclub-15b.jpg" alt="LoSaint Barberclub, image 15b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/losaint-barberclub/losaint-barberclub-16.jpg" alt="LoSaint Barberclub, image 16" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/losaint-barberclub/losaint-barberclub-17a.jpg" alt="LoSaint Barberclub, image 17a" loading="lazy" decoding="async">
+            <img src="assets/work/losaint-barberclub/losaint-barberclub-17b.jpg" alt="LoSaint Barberclub, image 17b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/losaint-barberclub/losaint-barberclub-18a.jpg" alt="LoSaint Barberclub, image 18a" loading="lazy" decoding="async">
+            <img src="assets/work/losaint-barberclub/losaint-barberclub-18b.jpg" alt="LoSaint Barberclub, image 18b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/losaint-barberclub/losaint-barberclub-20.jpg" alt="LoSaint Barberclub, image 20" loading="lazy" decoding="async">
+        </div>
+        <div class="gallery-project" data-project="ruga">
+          <img class="shot" src="assets/work/ruga/ruga-1.jpg" alt="RUGA, image 1" loading="lazy" decoding="async">
+          <video class="shot" data-src="assets/work/ruga/ruga-2.mp4" poster="assets/work/ruga/ruga-2-poster.jpg" muted loop playsinline preload="none" aria-label="RUGA, image 2 (video)"></video>
+          <img class="shot" src="assets/work/ruga/ruga-3.jpg" alt="RUGA, image 3" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/ruga/ruga-4a.jpg" alt="RUGA, image 4a" loading="lazy" decoding="async">
+            <img src="assets/work/ruga/ruga-4b.jpg" alt="RUGA, image 4b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/ruga/ruga-5.jpg" alt="RUGA, image 5" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/ruga/ruga-6.jpg" alt="RUGA, image 6" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/ruga/ruga-7.jpg" alt="RUGA, image 7" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/ruga/ruga-8.jpg" alt="RUGA, image 8" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/ruga/ruga-9a.jpg" alt="RUGA, image 9a" loading="lazy" decoding="async">
+            <img src="assets/work/ruga/ruga-9b.jpg" alt="RUGA, image 9b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/ruga/ruga-10.jpg" alt="RUGA, image 10" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/ruga/ruga-11.jpg" alt="RUGA, image 11" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/ruga/ruga-12.jpg" alt="RUGA, image 12" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/ruga/ruga-13a.jpg" alt="RUGA, image 13a" loading="lazy" decoding="async">
+            <img src="assets/work/ruga/ruga-13b.jpg" alt="RUGA, image 13b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/ruga/ruga-14.jpg" alt="RUGA, image 14" loading="lazy" decoding="async">
+        </div>
+        <div class="gallery-project" data-project="ascii-type-grid">
+          <img class="shot" src="assets/work/ascii-type-grid/ascii-type-grid-1.jpg" alt="[ASCII_TYPE_GRID], image 1" loading="lazy" decoding="async">
+          <video class="shot" data-src="assets/work/ascii-type-grid/ascii-type-grid-2.mp4" poster="assets/work/ascii-type-grid/ascii-type-grid-2-poster.jpg" muted loop playsinline preload="none" aria-label="[ASCII_TYPE_GRID], image 2 (video)"></video>
+          <img class="shot" src="assets/work/ascii-type-grid/ascii-type-grid-5.jpg" alt="[ASCII_TYPE_GRID], image 5" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/ascii-type-grid/ascii-type-grid-6.jpg" alt="[ASCII_TYPE_GRID], image 6" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/ascii-type-grid/ascii-type-grid-7.jpg" alt="[ASCII_TYPE_GRID], image 7" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/ascii-type-grid/ascii-type-grid-8.jpg" alt="[ASCII_TYPE_GRID], image 8" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/ascii-type-grid/ascii-type-grid-9.jpg" alt="[ASCII_TYPE_GRID], image 9" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/ascii-type-grid/ascii-type-grid-10.jpg" alt="[ASCII_TYPE_GRID], image 10" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/ascii-type-grid/ascii-type-grid-11.jpg" alt="[ASCII_TYPE_GRID], image 11" loading="lazy" decoding="async">
+          <video class="shot" data-src="assets/work/ascii-type-grid/ascii-type-grid-12.mp4" poster="assets/work/ascii-type-grid/ascii-type-grid-12-poster.jpg" muted loop playsinline preload="none" aria-label="[ASCII_TYPE_GRID], image 12 (video)"></video>
+          <img class="shot" src="assets/work/ascii-type-grid/ascii-type-grid-13.jpg" alt="[ASCII_TYPE_GRID], image 13" loading="lazy" decoding="async">
+        </div>
+        <div class="gallery-project" data-project="uncrowded">
+          <img class="shot" src="assets/work/uncrowded/uncrowded-1.jpg" alt="Uncrowded, image 1" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/uncrowded/uncrowded-2a.jpg" alt="Uncrowded, image 2a" loading="lazy" decoding="async">
+            <img src="assets/work/uncrowded/uncrowded-2b.jpg" alt="Uncrowded, image 2b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/uncrowded/uncrowded-3a.jpg" alt="Uncrowded, image 3a" loading="lazy" decoding="async">
+            <img src="assets/work/uncrowded/uncrowded-3b.jpg" alt="Uncrowded, image 3b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/uncrowded/uncrowded-4a.jpg" alt="Uncrowded, image 4a" loading="lazy" decoding="async">
+            <img src="assets/work/uncrowded/uncrowded-4b.jpg" alt="Uncrowded, image 4b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/uncrowded/uncrowded-5a.jpg" alt="Uncrowded, image 5a" loading="lazy" decoding="async">
+            <img src="assets/work/uncrowded/uncrowded-5b.jpg" alt="Uncrowded, image 5b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/uncrowded/uncrowded-6a.jpg" alt="Uncrowded, image 6a" loading="lazy" decoding="async">
+            <img src="assets/work/uncrowded/uncrowded-6b.jpg" alt="Uncrowded, image 6b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/uncrowded/uncrowded-7a.jpg" alt="Uncrowded, image 7a" loading="lazy" decoding="async">
+            <img src="assets/work/uncrowded/uncrowded-7b.jpg" alt="Uncrowded, image 7b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/uncrowded/uncrowded-8a.jpg" alt="Uncrowded, image 8a" loading="lazy" decoding="async">
+            <img src="assets/work/uncrowded/uncrowded-8b.jpg" alt="Uncrowded, image 8b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/uncrowded/uncrowded-9a.jpg" alt="Uncrowded, image 9a" loading="lazy" decoding="async">
+            <img src="assets/work/uncrowded/uncrowded-9b.jpg" alt="Uncrowded, image 9b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/uncrowded/uncrowded-10a.jpg" alt="Uncrowded, image 10a" loading="lazy" decoding="async">
+            <img src="assets/work/uncrowded/uncrowded-10b.jpg" alt="Uncrowded, image 10b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/uncrowded/uncrowded-11a.jpg" alt="Uncrowded, image 11a" loading="lazy" decoding="async">
+            <img src="assets/work/uncrowded/uncrowded-11b.jpg" alt="Uncrowded, image 11b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/uncrowded/uncrowded-12a.jpg" alt="Uncrowded, image 12a" loading="lazy" decoding="async">
+            <img src="assets/work/uncrowded/uncrowded-12b.jpg" alt="Uncrowded, image 12b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/uncrowded/uncrowded-13a.jpg" alt="Uncrowded, image 13a" loading="lazy" decoding="async">
+            <img src="assets/work/uncrowded/uncrowded-13b.jpg" alt="Uncrowded, image 13b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/uncrowded/uncrowded-14a.jpg" alt="Uncrowded, image 14a" loading="lazy" decoding="async">
+            <img src="assets/work/uncrowded/uncrowded-14b.jpg" alt="Uncrowded, image 14b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/uncrowded/uncrowded-15a.jpg" alt="Uncrowded, image 15a" loading="lazy" decoding="async">
+            <img src="assets/work/uncrowded/uncrowded-15b.jpg" alt="Uncrowded, image 15b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/uncrowded/uncrowded-16a.jpg" alt="Uncrowded, image 16a" loading="lazy" decoding="async">
+            <img src="assets/work/uncrowded/uncrowded-16b.jpg" alt="Uncrowded, image 16b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/uncrowded/uncrowded-17a.jpg" alt="Uncrowded, image 17a" loading="lazy" decoding="async">
+            <img src="assets/work/uncrowded/uncrowded-17b.jpg" alt="Uncrowded, image 17b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/uncrowded/uncrowded-18a.jpg" alt="Uncrowded, image 18a" loading="lazy" decoding="async">
+            <img src="assets/work/uncrowded/uncrowded-18b.jpg" alt="Uncrowded, image 18b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/uncrowded/uncrowded-19.jpg" alt="Uncrowded, image 19" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/uncrowded/uncrowded-20.jpg" alt="Uncrowded, image 20" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/uncrowded/uncrowded-21.jpg" alt="Uncrowded, image 21" loading="lazy" decoding="async">
+        </div>
+        <div class="gallery-project" data-project="portela-d-arcada">
+          <img class="shot" src="assets/work/portela-d-arcada/portela-d-arcada-1.jpg" alt="Portela d’Arcada, image 1" loading="lazy" decoding="async">
+          <video class="shot" data-src="assets/work/portela-d-arcada/portela-d-arcada-2.mp4" poster="assets/work/portela-d-arcada/portela-d-arcada-2-poster.jpg" muted loop playsinline preload="none" aria-label="Portela d’Arcada, image 2 (video)"></video>
+          <div class="shot shot-pair">
+            <img src="assets/work/portela-d-arcada/portela-d-arcada-3a.jpg" alt="Portela d’Arcada, image 3a" loading="lazy" decoding="async">
+            <img src="assets/work/portela-d-arcada/portela-d-arcada-3b.jpg" alt="Portela d’Arcada, image 3b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/portela-d-arcada/portela-d-arcada-4a.jpg" alt="Portela d’Arcada, image 4a" loading="lazy" decoding="async">
+            <img src="assets/work/portela-d-arcada/portela-d-arcada-4b.jpg" alt="Portela d’Arcada, image 4b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/portela-d-arcada/portela-d-arcada-5.jpg" alt="Portela d’Arcada, image 5" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/portela-d-arcada/portela-d-arcada-6.jpg" alt="Portela d’Arcada, image 6" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/portela-d-arcada/portela-d-arcada-7.jpg" alt="Portela d’Arcada, image 7" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/portela-d-arcada/portela-d-arcada-8.jpg" alt="Portela d’Arcada, image 8" loading="lazy" decoding="async">
+        </div>
+        <div class="gallery-project" data-project="comedia-a-preto-e-branco">
+          <img class="shot" src="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-1.jpg" alt="Comédia a Preto &amp; Branco, image 1" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-2.jpg" alt="Comédia a Preto &amp; Branco, image 2" loading="lazy" decoding="async">
+          <video class="shot" data-src="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-3.mp4" poster="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-3-poster.jpg" muted loop playsinline preload="none" aria-label="Comédia a Preto &amp; Branco, image 3 (video)"></video>
+          <div class="shot shot-pair">
+            <video data-src="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-4a.mp4" poster="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-4a-poster.jpg" muted loop playsinline preload="none" aria-label="Comédia a Preto &amp; Branco, image 4a (video)"></video>
+            <video data-src="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-4b.mp4" poster="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-4b-poster.jpg" muted loop playsinline preload="none" aria-label="Comédia a Preto &amp; Branco, image 4b (video)"></video>
+          </div>
+          <video class="shot" data-src="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-5.mp4" poster="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-5-poster.jpg" muted loop playsinline preload="none" aria-label="Comédia a Preto &amp; Branco, image 5 (video)"></video>
+          <img class="shot" src="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-6.jpg" alt="Comédia a Preto &amp; Branco, image 6" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-7.jpg" alt="Comédia a Preto &amp; Branco, image 7" loading="lazy" decoding="async">
+          <video class="shot" data-src="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-8.mp4" poster="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-8-poster.jpg" muted loop playsinline preload="none" aria-label="Comédia a Preto &amp; Branco, image 8 (video)"></video>
+          <div class="shot shot-pair">
+            <img src="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-9a.jpg" alt="Comédia a Preto &amp; Branco, image 9a" loading="lazy" decoding="async">
+            <img src="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-9b.jpg" alt="Comédia a Preto &amp; Branco, image 9b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-10.jpg" alt="Comédia a Preto &amp; Branco, image 10" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-11a.jpg" alt="Comédia a Preto &amp; Branco, image 11a" loading="lazy" decoding="async">
+            <img src="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-11b.jpg" alt="Comédia a Preto &amp; Branco, image 11b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-13.jpg" alt="Comédia a Preto &amp; Branco, image 13" loading="lazy" decoding="async">
+          <video class="shot" data-src="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-12.mp4" poster="assets/work/comedia-a-preto-e-branco/comedia-a-preto-e-branco-12-poster.jpg" muted loop playsinline preload="none" aria-label="Comédia a Preto &amp; Branco, image 12 (video)"></video>
+        </div>
+        <div class="gallery-project" data-project="villa-regio">
+          <img class="shot" src="assets/work/villa-regio/villa-regio-1.jpg" alt="Villa Regio, image 1" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/villa-regio/villa-regio-2.jpg" alt="Villa Regio, image 2" loading="lazy" decoding="async">
+          <video class="shot" data-src="assets/work/villa-regio/villa-regio-3.mp4" poster="assets/work/villa-regio/villa-regio-3-poster.jpg" muted loop playsinline preload="none" aria-label="Villa Regio, image 3 (video)"></video>
+          <img class="shot" src="assets/work/villa-regio/villa-regio-4.jpg" alt="Villa Regio, image 4" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/villa-regio/villa-regio-5.jpg" alt="Villa Regio, image 5" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/villa-regio/villa-regio-6.jpg" alt="Villa Regio, image 6" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/villa-regio/villa-regio-7.jpg" alt="Villa Regio, image 7" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/villa-regio/villa-regio-8.jpg" alt="Villa Regio, image 8" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/villa-regio/villa-regio-9.jpg" alt="Villa Regio, image 9" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/villa-regio/villa-regio-10a.jpg" alt="Villa Regio, image 10a" loading="lazy" decoding="async">
+            <img src="assets/work/villa-regio/villa-regio-10b.jpg" alt="Villa Regio, image 10b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/villa-regio/villa-regio-11.jpg" alt="Villa Regio, image 11" loading="lazy" decoding="async">
+        </div>
+        <div class="gallery-project" data-project="project-conta-b">
+          <img class="shot" src="assets/work/project-conta-b/project-conta-b-1.jpg" alt="Project Conta B, image 1" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/project-conta-b/project-conta-b-2.jpg" alt="Project Conta B, image 2" loading="lazy" decoding="async">
+          <video class="shot" data-src="assets/work/project-conta-b/project-conta-b-3.mp4" poster="assets/work/project-conta-b/project-conta-b-3-poster.jpg" muted loop playsinline preload="none" aria-label="Project Conta B, image 3 (video)"></video>
+          <img class="shot" src="assets/work/project-conta-b/project-conta-b-4.jpg" alt="Project Conta B, image 4" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/project-conta-b/project-conta-b-5.jpg" alt="Project Conta B, image 5" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/project-conta-b/project-conta-b-6a.jpg" alt="Project Conta B, image 6a" loading="lazy" decoding="async">
+            <img src="assets/work/project-conta-b/project-conta-b-6b.jpg" alt="Project Conta B, image 6b" loading="lazy" decoding="async">
+          </div>
+          <div class="shot shot-pair">
+            <img src="assets/work/project-conta-b/project-conta-b-7a.jpg" alt="Project Conta B, image 7a" loading="lazy" decoding="async">
+            <img src="assets/work/project-conta-b/project-conta-b-7b.jpg" alt="Project Conta B, image 7b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/project-conta-b/project-conta-b-8.jpg" alt="Project Conta B, image 8" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/project-conta-b/project-conta-b-9.jpg" alt="Project Conta B, image 9" loading="lazy" decoding="async">
+        </div>
+        <div class="gallery-project" data-project="quase-irresponsavel">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-1.jpg" alt="Quase Irresponsável, image 1" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-2.jpg" alt="Quase Irresponsável, image 2" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-3.jpg" alt="Quase Irresponsável, image 3" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-4.jpg" alt="Quase Irresponsável, image 4" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-5.jpg" alt="Quase Irresponsável, image 5" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-6.jpg" alt="Quase Irresponsável, image 6" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-7.jpg" alt="Quase Irresponsável, image 7" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-8.jpg" alt="Quase Irresponsável, image 8" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-9.jpg" alt="Quase Irresponsável, image 9" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-10.jpg" alt="Quase Irresponsável, image 10" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-11.jpg" alt="Quase Irresponsável, image 11" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-12.jpg" alt="Quase Irresponsável, image 12" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-13.jpg" alt="Quase Irresponsável, image 13" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-14.jpg" alt="Quase Irresponsável, image 14" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-15.jpg" alt="Quase Irresponsável, image 15" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-16.jpg" alt="Quase Irresponsável, image 16" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-17.jpg" alt="Quase Irresponsável, image 17" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-18.jpg" alt="Quase Irresponsável, image 18" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-19.jpg" alt="Quase Irresponsável, image 19" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-20.jpg" alt="Quase Irresponsável, image 20" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-21.jpg" alt="Quase Irresponsável, image 21" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-22.jpg" alt="Quase Irresponsável, image 22" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-23.jpg" alt="Quase Irresponsável, image 23" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-24.jpg" alt="Quase Irresponsável, image 24" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-25.jpg" alt="Quase Irresponsável, image 25" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-26.jpg" alt="Quase Irresponsável, image 26" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-27.jpg" alt="Quase Irresponsável, image 27" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-28.jpg" alt="Quase Irresponsável, image 28" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-29.jpg" alt="Quase Irresponsável, image 29" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-30.jpg" alt="Quase Irresponsável, image 30" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-31.jpg" alt="Quase Irresponsável, image 31" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-32.jpg" alt="Quase Irresponsável, image 32" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-33.jpg" alt="Quase Irresponsável, image 33" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-34.jpg" alt="Quase Irresponsável, image 34" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-35.jpg" alt="Quase Irresponsável, image 35" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-36.jpg" alt="Quase Irresponsável, image 36" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/quase-irresponsavel/quase-irresponsavel-37a.jpg" alt="Quase Irresponsável, image 37a" loading="lazy" decoding="async">
+            <img src="assets/work/quase-irresponsavel/quase-irresponsavel-37b.jpg" alt="Quase Irresponsável, image 37b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/quase-irresponsavel/quase-irresponsavel-38.jpg" alt="Quase Irresponsável, image 38" loading="lazy" decoding="async">
+        </div>
+        <div class="gallery-project" data-project="core-of-pictus">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-1.jpg" alt="Core of Pictus, image 1" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-2.jpg" alt="Core of Pictus, image 2" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-3.jpg" alt="Core of Pictus, image 3" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-4.jpg" alt="Core of Pictus, image 4" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-5.jpg" alt="Core of Pictus, image 5" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-6.jpg" alt="Core of Pictus, image 6" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-7.jpg" alt="Core of Pictus, image 7" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-8.jpg" alt="Core of Pictus, image 8" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-9.jpg" alt="Core of Pictus, image 9" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-10.jpg" alt="Core of Pictus, image 10" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-11.jpg" alt="Core of Pictus, image 11" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-12.jpg" alt="Core of Pictus, image 12" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-13.jpg" alt="Core of Pictus, image 13" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-14.jpg" alt="Core of Pictus, image 14" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-15.jpg" alt="Core of Pictus, image 15" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-16.jpg" alt="Core of Pictus, image 16" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-17.jpg" alt="Core of Pictus, image 17" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-18.jpg" alt="Core of Pictus, image 18" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-19.jpg" alt="Core of Pictus, image 19" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-20.jpg" alt="Core of Pictus, image 20" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-21.jpg" alt="Core of Pictus, image 21" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-22.jpg" alt="Core of Pictus, image 22" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-23.jpg" alt="Core of Pictus, image 23" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-24.jpg" alt="Core of Pictus, image 24" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-25.jpg" alt="Core of Pictus, image 25" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-26.jpg" alt="Core of Pictus, image 26" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-27.jpg" alt="Core of Pictus, image 27" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-28.jpg" alt="Core of Pictus, image 28" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/core-of-pictus/core-of-pictus-29.jpg" alt="Core of Pictus, image 29" loading="lazy" decoding="async">
+        </div>
+        <div class="gallery-project" data-project="paris-dis-order">
+          <img class="shot" src="assets/work/paris-dis-order/paris-dis-order-1.jpg" alt="Paris (dis)Order, image 1" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paris-dis-order/paris-dis-order-2.jpg" alt="Paris (dis)Order, image 2" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paris-dis-order/paris-dis-order-3.jpg" alt="Paris (dis)Order, image 3" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paris-dis-order/paris-dis-order-4.jpg" alt="Paris (dis)Order, image 4" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paris-dis-order/paris-dis-order-5.jpg" alt="Paris (dis)Order, image 5" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paris-dis-order/paris-dis-order-6.jpg" alt="Paris (dis)Order, image 6" loading="lazy" decoding="async">
+          <video class="shot" data-src="assets/work/paris-dis-order/paris-dis-order-7.mp4" data-rate="2.5" poster="assets/work/paris-dis-order/paris-dis-order-7-poster.jpg" muted loop playsinline preload="none" aria-label="Paris (dis)Order, image 7 (video)"></video>
+          <div class="shot shot-pair">
+            <img src="assets/work/paris-dis-order/paris-dis-order-8a.jpg" alt="Paris (dis)Order, image 8a" loading="lazy" decoding="async">
+            <img src="assets/work/paris-dis-order/paris-dis-order-8b.jpg" alt="Paris (dis)Order, image 8b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/paris-dis-order/paris-dis-order-9.jpg" alt="Paris (dis)Order, image 9" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paris-dis-order/paris-dis-order-10.jpg" alt="Paris (dis)Order, image 10" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paris-dis-order/paris-dis-order-11.jpg" alt="Paris (dis)Order, image 11" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paris-dis-order/paris-dis-order-12.jpg" alt="Paris (dis)Order, image 12" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paris-dis-order/paris-dis-order-13.jpg" alt="Paris (dis)Order, image 13" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paris-dis-order/paris-dis-order-14.jpg" alt="Paris (dis)Order, image 14" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paris-dis-order/paris-dis-order-15.jpg" alt="Paris (dis)Order, image 15" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paris-dis-order/paris-dis-order-16.jpg" alt="Paris (dis)Order, image 16" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paris-dis-order/paris-dis-order-17.jpg" alt="Paris (dis)Order, image 17" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/paris-dis-order/paris-dis-order-18.jpg" alt="Paris (dis)Order, image 18" loading="lazy" decoding="async">
+        </div>
+        <div class="gallery-project" data-project="past-script">
+          <img class="shot" src="assets/work/past-script/past-script-1.jpg" alt="Past-Script, image 1" loading="lazy" decoding="async">
+          <video class="shot" data-src="assets/work/past-script/past-script-2.mp4" poster="assets/work/past-script/past-script-2-poster.jpg" muted loop playsinline preload="none" aria-label="Past-Script, image 2 (video)"></video>
+          <img class="shot" src="assets/work/past-script/past-script-3.jpg" alt="Past-Script, image 3" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/past-script/past-script-4.jpg" alt="Past-Script, image 4" loading="lazy" decoding="async">
+          <video class="shot" data-src="assets/work/past-script/past-script-4b.mp4" poster="assets/work/past-script/past-script-4b-poster.jpg" muted loop playsinline preload="none" aria-label="Past-Script, image 4b (video)"></video>
+          <img class="shot" src="assets/work/past-script/past-script-5.jpg" alt="Past-Script, image 5" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/past-script/past-script-6.jpg" alt="Past-Script, image 6" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/past-script/past-script-7.jpg" alt="Past-Script, image 7" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/past-script/past-script-8a.jpg" alt="Past-Script, image 8a" loading="lazy" decoding="async">
+            <img src="assets/work/past-script/past-script-8b.jpg" alt="Past-Script, image 8b" loading="lazy" decoding="async">
+          </div>
+          <img class="shot" src="assets/work/past-script/past-script-9.jpg" alt="Past-Script, image 9" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/past-script/past-script-10.jpg" alt="Past-Script, image 10" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/past-script/past-script-11.jpg" alt="Past-Script, image 11" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/past-script/past-script-12.jpg" alt="Past-Script, image 12" loading="lazy" decoding="async">
+          <video class="shot" data-src="assets/work/past-script/past-script-13.mp4" poster="assets/work/past-script/past-script-13-poster.jpg" muted loop playsinline preload="none" aria-label="Past-Script, image 13 (video)"></video>
+          <img class="shot" src="assets/work/past-script/past-script-14.jpg" alt="Past-Script, image 14" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/past-script/past-script-15.jpg" alt="Past-Script, image 15" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/past-script/past-script-16.jpg" alt="Past-Script, image 16" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/past-script/past-script-17.jpg" alt="Past-Script, image 17" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/past-script/past-script-18.jpg" alt="Past-Script, image 18" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/past-script/past-script-19.jpg" alt="Past-Script, image 19" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/past-script/past-script-20.jpg" alt="Past-Script, image 20" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/past-script/past-script-21.jpg" alt="Past-Script, image 21" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/past-script/past-script-22.jpg" alt="Past-Script, image 22" loading="lazy" decoding="async">
+          <img class="shot" src="assets/work/past-script/past-script-23.jpg" alt="Past-Script, image 23" loading="lazy" decoding="async">
+          <div class="shot shot-pair">
+            <img src="assets/work/past-script/past-script-24a.jpg" alt="Past-Script, image 24a" loading="lazy" decoding="async">
+            <img src="assets/work/past-script/past-script-24b.jpg" alt="Past-Script, image 24b" loading="lazy" decoding="async">
+          </div>
+          <video class="shot" data-src="assets/work/past-script/past-script-25.mp4" poster="assets/work/past-script/past-script-25-poster.jpg" muted loop playsinline preload="none" aria-label="Past-Script, image 25 (video)"></video>
+        </div>
+      </div>
+    </div>
+    <div class="pane pane-full" data-lenis-pane hidden>
+      <div class="covers">
+        <p class="covers-empty" hidden data-pt="Ainda não há projetos nesta tipologia.">No projects in this typology yet.</p>
+      </div>
     </div>
   </main>
 
   <footer class="site-footer grid">
     <p>Diogo Pacheco Saraiva<br>Porto, Portugal</p>
-    <p>Graphic Design<br>and Illustration</p>
-    <p>Contact via<br><a href="mailto:diogopachecosaraiva@gmail.com">diogopachecosaraiva@gmail.com</a></p>
-    <p>All rights reserved.<br>Diogo Pacheco Saraiva 2026</p>
+    <p data-pt="Design Gráfico<br>e Ilustração">Graphic Design<br>and Illustration</p>
+    <p><span data-pt="Para pedidos e contactos">For inquiries reach at</span><br><a href="mailto:diogopachecosaraiva@gmail.com">diogopachecosaraiva@gmail.com</a></p>
+    <p><span data-pt="Todos os direitos reservados">All rights reserved</span><br>Diogo Pacheco Saraiva 2026</p>
+    <span class="copyright">©</span>
   </footer>
 </body>
 </html>

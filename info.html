@@ -5,61 +5,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Info — Diogo Pacheco Saraiva</title>
   <meta name="description" content="Diogo Pacheco Saraiva — graphic design and illustration, Porto, Portugal.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=BDO+Grotesk:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/BDOGrotesk-DemiBold.otf" as="font" type="font/otf" crossorigin>
+  <link rel="preload" href="assets/fonts/BDOGrotesk-ExtraBold.otf" as="font" type="font/otf" crossorigin>
+  <link rel="stylesheet" href="vendor/lenis.css">
   <link rel="stylesheet" href="styles.css">
+  <script src="theme.js"></script>
+  <script src="lang.js"></script>
+  <script src="strokes.js" defer></script>
+  <script src="vendor/lenis.min.js" defer></script>
+  <script src="scroll.js" defer></script>
 </head>
-<body>
+<body class="page-split page-info">
   <nav class="site-header grid">
-    <a href="index.html">DPS</a>
+    <a href="index.html" class="logo" aria-label="Diogo Pacheco Saraiva, home" data-pt-aria-label="Diogo Pacheco Saraiva, página inicial">D<span class="more"><span>iogo&nbsp;</span></span>P<span class="more"><span>acheco&nbsp;</span></span>S<span class="more"><span>araiva</span></span></a>
     <a href="work.html">WORK</a>
     <a href="info.html">INFO</a>
-    <img class="dot" src="assets/dot.svg" alt="" width="18" height="18">
+    <div class="tools">
+      <div class="lang" role="group" aria-label="Language" data-pt-aria-label="Língua">
+        <button type="button" data-lang="en" aria-pressed="true" aria-label="English" data-label="EN"><span>EN</span></button>
+        <span class="lang-sep" aria-hidden="true">·</span>
+        <button type="button" data-lang="pt" aria-pressed="false" aria-label="Português" data-label="PT"><span>PT</span></button>
+      </div>
+      <button class="dot" type="button" aria-label="Switch to dark mode"></button>
+    </div>
   </nav>
 
   <main class="info grid">
-    <section class="about">
-      <p class="bio">Diogo Pacheco Saraiva is a multidisciplinary graphic designer based in Porto, Portugal. His work spans branding, visual identity, editorial design, poster design, merch design, motion design, web design and illustration. He currently works as a freelancer, collaborating directly with brands and services from different fields.</p>
+    <div class="pane pane-text" data-lenis-pane>
+      <section class="about">
+        <p class="bio" data-pt="Diogo Pacheco Saraiva é um designer gráfico multidisciplinar sediado no Porto, Portugal. O seu trabalho abrange branding, identidade visual, design editorial, design de cartazes, design de merch, motion design, web design e ilustração. Atualmente trabalha como freelancer, colaborando diretamente com marcas e serviços de diferentes áreas.">Diogo Pacheco Saraiva is a multidisciplinary graphic designer based in Porto, Portugal. His work spans branding, visual identity, editorial design, poster design, merch design, motion design, web design and illustration. He currently works as a freelancer, collaborating directly with brands and services from different fields.</p>
 
-      <div class="block">
-        <p><span class="label">Email</span><br><a href="mailto:diogopachecosaraiva@gmail.com">diogopachecosaraiva@gmail.com</a><br>(For inquires please contact via EMAIL)</p>
-      </div>
-      <div class="block">
-        <p><span class="label">Instagram</span><br><a href="https://www.instagram.com/d.p.saraiva/" target="_blank" rel="noopener">@d.p.saraiva</a></p>
-      </div>
+        <div class="block">
+          <p data-pt='<span class="label">Serviços</span><br>Design de Cartazes<br>Branding<br>Identidade Visual<br>Design Editorial<br>Motion Design<br>Design de Merch<br>Web Design<br>Ilustração<br>Estratégia e Design para Redes Sociais'><span class="label">Services</span><br>Poster Design<br>Branding<br>Visual Identity<br>Editorial Design<br>Motion Design<br>Merch Design<br>Web Design<br>Illustration<br>Social-Media Strategy and Design</p>
+        </div>
 
-      <div class="block">
-        <p><span class="label">Talks</span><br>Descomunal - Nova Fornada, Porto, PT, 2025<br>ESMAD, Vila do Conde, PT, 2026</p>
-      </div>
-      <div class="block">
-        <p><span class="label">Workshop</span><br>ESMAD, Vila do Conde, PT, 2026</p>
-      </div>
+        <div class="block">
+          <p><span class="label">Email</span><br><a href="mailto:diogopachecosaraiva@gmail.com">diogopachecosaraiva@gmail.com</a></p>
+          <p><span class="label">Instagram</span><br><a href="https://www.instagram.com/d.p.saraiva/" target="_blank" rel="noopener">@d.p.saraiva</a></p>
+        </div>
 
-      <div class="block wide">
-        <p><span class="label">Academic Formation</span><br>Bachelors Degree, ESAD Matosinhos, PT, 2019 - 2022<br>Short Course on Creative Coding, ESAD Matosinhos, PT, 2022<br>Masters Degree, ESAD Matosinhos, PT, 2022 - 2025</p>
-      </div>
-    </section>
+        <div class="block">
+          <p><span class="label" data-pt="Palestras">Talks</span><br>Descomunal - Nova Fornada, Porto, PT, 2025<br>Mad Shift - ESMAD, Vila do Conde, PT, 2026</p>
+        </div>
+        <div class="block">
+          <p><span class="label">Workshop</span><br>Mad Shift - ESMAD, Vila do Conde, PT, 2026</p>
+        </div>
 
-    <div class="photos">
-      <div class="photo"><img class="crop-b" src="assets/info-2.jpg" alt="Portrait of Diogo Pacheco Saraiva"></div>
-      <div class="photo"><img class="crop-a" src="assets/info-1.jpg" alt="Diogo presenting at a talk"></div>
-      <div class="photo"><img class="crop-d" src="assets/info-3.jpg" alt="" loading="lazy"></div>
-      <div class="photo"><img class="crop-c" src="assets/info-2.jpg" alt="" loading="lazy"></div>
-      <div class="photo"><img class="crop-d" src="assets/info-3.jpg" alt="" loading="lazy"></div>
-      <div class="photo"><img class="crop-c" src="assets/info-2.jpg" alt="" loading="lazy"></div>
-      <div class="photo"><img class="crop-d" src="assets/info-3.jpg" alt="" loading="lazy"></div>
-      <div class="photo"><img class="crop-c" src="assets/info-2.jpg" alt="" loading="lazy"></div>
-      <div class="photo"><img class="crop-d" src="assets/info-3.jpg" alt="" loading="lazy"></div>
-      <div class="photo"><img class="crop-c" src="assets/info-2.jpg" alt="" loading="lazy"></div>
+        <div class="block wide">
+          <p data-pt='<span class="label">Formação Académica</span><br>Licenciatura, ESAD Matosinhos, PT, 2019 - 2022<br>Curso Breve de Creative Coding, ESAD Matosinhos, PT, 2022<br>Mestrado, ESAD Matosinhos, PT, 2022 - 2025'><span class="label">Academic Background</span><br>Bachelors Degree, ESAD Matosinhos, PT, 2019 - 2022<br>Short Course on Creative Coding, ESAD Matosinhos, PT, 2022<br>Masters Degree, ESAD Matosinhos, PT, 2022 - 2025</p>
+        </div>
+      </section>
+    </div>
+
+    <div class="pane pane-images" data-lenis-pane>
+      <div class="photos">
+        <div class="photo"><img class="crop-b" src="assets/info-2.jpg" alt="Portrait of Diogo Pacheco Saraiva" data-pt-alt="Retrato de Diogo Pacheco Saraiva"></div>
+        <div class="photo"><img class="crop-a" src="assets/info-1.jpg" alt="Diogo presenting at a talk" data-pt-alt="Diogo a apresentar numa palestra"></div>
+      </div>
     </div>
   </main>
 
   <footer class="site-footer grid">
     <p>Diogo Pacheco Saraiva<br>Porto, Portugal</p>
-    <p>Graphic Design<br>and Illustration</p>
-    <p>Contact via<br><a href="mailto:diogopachecosaraiva@gmail.com">diogopachecosaraiva@gmail.com</a></p>
-    <p>All rights reserved.<br>Diogo Pacheco Saraiva 2026</p>
+    <p data-pt="Design Gráfico<br>e Ilustração">Graphic Design<br>and Illustration</p>
+    <p><span data-pt="Para pedidos e contactos">For inquiries reach at</span><br><a href="mailto:diogopachecosaraiva@gmail.com">diogopachecosaraiva@gmail.com</a></p>
+    <p><span data-pt="Todos os direitos reservados">All rights reserved</span><br>Diogo Pacheco Saraiva 2026</p>
+    <span class="copyright">©</span>
   </footer>
 </body>
 </html>
