@@ -91,6 +91,13 @@ html { cursor: var(--cursor); }
 p, .viewer-info { cursor: var(--text-cursor); }
 a[href], button { cursor: var(--pointer); }
 a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 2px; }
+/* the Work filters, Year, the views and EN / PT get the menu's underline too,
+   on their word only (not the strokes between them) */
+@media (hover: hover) {
+  .filters button:hover > span, .lang button:hover > span {
+    text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 2px;
+  }
+}
 img { display: block; max-width: 100%; }
 
 /* Matches Figma's "cap height to baseline" text trimming */
@@ -592,8 +599,8 @@ img.shot, video.shot { display: block; object-fit: cover; }
 }
 .shot-empty p { cursor: inherit; }
 /* Work: the images are grouped by project. With no project open, the column
-   shows each listed project's first image, in the list's order (work.js);
-   with one open, only that project's images. */
+   shows only the first image of the project pointed at in the list (work.js);
+   with one open, all of that project's images. */
 .gallery-project { display: contents; }
 .gallery-project[hidden] { display: none; }
 .gallery:not(.is-project) .gallery-project > .shot:not(:first-child) { display: none; }

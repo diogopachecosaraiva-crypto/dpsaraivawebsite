@@ -25,12 +25,14 @@
     document.dispatchEvent(new CustomEvent('work:opened', { detail: project }));
   }
 
-  // The image column: with no project open, each project listed on the left
-  // shows its first image, in the list's order; with one open, only its images.
-  // The column then starts again from the top (scroll.js).
+  // The image column: with no project open it's empty, except for the first
+  // image of the project the pointer (or the keyboard) is on in the list; with
+  // one open, all its images, in a column that scrolls. The column then starts
+  // again from the top (scroll.js).
   var gallery = document.querySelector('.gallery');
   var groups = {};
   var renderCovers = null; // the Full view's grid follows the list too (below)
+  var preview = null; // the row whose first image shows while none is open
   if (gallery) {
     Array.prototype.forEach.call(gallery.querySelectorAll('.gallery-project'), function (group) {
       groups[group.dataset.project] = group;
@@ -43,7 +45,7 @@
       var group = groups[row.dataset.project];
       if (!group) return;
       gallery.appendChild(group);
-      group.hidden = open ? row !== open : row.hidden;
+      group.hidden = open ? row !== open : row !== preview || row.hidden;
     });
     gallery.classList.toggle('is-project', !!open);
     if (renderCovers) renderCovers();
@@ -416,6 +418,26 @@
     };
     fitView();
     phone.addEventListener('change', fitView);
+  }
+
+  // Pointing at a row (or reaching it with the keyboard) previews its first
+  // image; leaving the list empties the column again
+  function setPreview(row) {
+    if (row === preview) return;
+    preview = row;
+    if (!document.querySelector('.project.is-open')) showGallery();
+  }
+  heads.forEach(function (head) {
+    var row = head.closest('.project');
+    head.addEventListener('mouseenter', function () { setPreview(row); });
+    head.addEventListener('focus', function () { setPreview(row); });
+  });
+  var projectList = document.querySelector('.projects');
+  if (projectList) {
+    projectList.addEventListener('mouseleave', function () { setPreview(null); });
+    projectList.addEventListener('focusout', function (event) {
+      if (!projectList.contains(event.relatedTarget)) setPreview(null);
+    });
   }
 
   // On tablet and phone the image column would only come after the whole
