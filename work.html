@@ -32,7 +32,7 @@
   <script src="scroll.js" defer></script>
   <script src="work.js" defer></script>
 </head>
-<body class="page-split page-work">
+<body class="page-split page-work is-full">
   <nav class="site-header grid">
     <a href="index.html" class="logo" aria-label="Diogo Pacheco Saraiva, home" data-pt-aria-label="Diogo Pacheco Saraiva, página inicial">D<span class="more"><span>iogo&nbsp;</span></span>P<span class="more"><span>acheco&nbsp;</span></span>S<span class="more"><span>araiva</span></span></a>
     <a href="work.html">WORK</a>
@@ -58,14 +58,14 @@
         </div>
       </div>
       <div class="filter-view" role="group" aria-label="View" data-pt-aria-label="Vista">
-        <button type="button" data-view="index" aria-pressed="true" data-label="Index" data-pt-data-label="Índice"><span data-pt="Índice">Index</span></button> <button type="button" data-view="full" aria-pressed="false" data-label="Gallery" data-pt-data-label="Galeria"><span data-pt="Galeria">Gallery</span></button>
+        <button type="button" data-view="full" aria-pressed="true" data-label="Gallery" data-pt-data-label="Galeria"><span data-pt="Galeria">Gallery</span></button> <button type="button" data-view="index" aria-pressed="false" data-label="Index" data-pt-data-label="Índice"><span data-pt="Índice">Index</span></button>
       </div>
     </div>
   </div>
 
   <h1 class="visually-hidden" data-pt="Trabalho">Work</h1>
   <main class="work grid">
-    <div class="pane pane-text pane-list" data-lenis-pane>
+    <div class="pane pane-text pane-list" data-lenis-pane hidden>
       <ol class="projects">
         <li class="project" data-project="erkki-kurenniemi">
           <button class="project-head" type="button" aria-expanded="false" aria-controls="project-erkki-kurenniemi">
@@ -199,7 +199,7 @@
       <p class="filters-empty" hidden data-pt="Ainda não há projetos nesta tipologia.">No projects in this typology yet.</p>
     </div>
 
-    <div class="pane pane-images pane-gallery" data-lenis-pane>
+    <div class="pane pane-images pane-gallery" data-lenis-pane hidden>
       <div class="gallery">
         <div class="gallery-project" data-project="erkki-kurenniemi">
           <div class="shot shot-empty"><p data-pt="(Projeto em construção)">(Project under construction)</p></div>
@@ -658,7 +658,7 @@
         </div>
       </div>
     </div>
-    <div class="pane pane-full" data-lenis-pane hidden>
+    <div class="pane pane-full" data-lenis-pane>
       <div class="covers">
         <p class="covers-empty" hidden data-pt="Ainda não há projetos nesta tipologia.">No projects in this typology yet.</p>
       </div>

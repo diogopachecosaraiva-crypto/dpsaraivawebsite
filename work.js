@@ -342,8 +342,9 @@
     });
   }
 
-  // Two views, switched next to the filters (Index / Gallery) and kept for the
-  // rest of the visit: Index is the list with the image column; Gallery is a grid
+  // Two views, switched next to the filters (Gallery / Index) and kept for the
+  // rest of the visit; the page opens on the Gallery (as work.html is written,
+  // so nothing switches on load). Index is the list with the image column; Gallery is a grid
   // of every listed project's first image, two per row, each over the project's
   // line of info laid out as in the list. Clicking one opens the project in the
   // viewer. The grid follows the list's typology filter and order (showGallery).
@@ -415,7 +416,7 @@
     var fitView = function () {
       var savedView = null;
       try { savedView = sessionStorage.getItem('workView'); } catch (e) {}
-      setView(phone.matches || savedView === 'full' ? 'full' : 'index', false);
+      setView(phone.matches || savedView !== 'index' ? 'full' : 'index', false);
     };
     fitView();
     phone.addEventListener('change', fitView);
