@@ -54,7 +54,8 @@
   }
 
   // Images with versions (.frames) alternate between them like a GIF, at the
-  // Home's pace; videos load and play only while they're on screen. With
+  // Home's pace, wherever they show: the column, the covers or the viewer;
+  // videos load and play only while they're on screen. With
   // reduced motion asked for, the first version and the video's cover stay.
   var reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   // a video with data-rate plays at that speed (1.5 = one and a half times
@@ -67,7 +68,7 @@
     var frame = 0;
     setInterval(function () {
       frame++;
-      gallery.querySelectorAll('.frames').forEach(function (frames) {
+      document.querySelectorAll('.frames').forEach(function (frames) {
         var imgs = frames.querySelectorAll('img');
         var current = frame % imgs.length;
         imgs.forEach(function (img, i) { img.classList.toggle('is-current', i === current); });
@@ -247,6 +248,7 @@
       closeButton.classList.toggle('on-dark', !light);
     }
     var returnFocus = null;
+    var pageTheme = 'light';
 
     // videos load and play only while in view
     var playing = 'IntersectionObserver' in window ? new IntersectionObserver(function (entries) {
@@ -298,6 +300,9 @@
       Array.prototype.forEach.call(document.body.children, function (el) {
         if (el !== viewer && !el.classList.contains('site-header')) el.inert = true;
       });
+      // a project opened full size is shown in dark mode (the page itself is light)
+      pageTheme = document.documentElement.dataset.theme;
+      document.documentElement.dataset.theme = 'dark';
       document.body.classList.add('viewer-open');
       viewer.hidden = false;
       addFooter();
@@ -319,6 +324,7 @@
       clearInterval(closeTimer);
       closeButton.classList.remove('on-light', 'on-dark');
       viewer.hidden = true;
+      document.documentElement.dataset.theme = pageTheme;
       document.body.classList.remove('viewer-open');
       document.body.classList.remove('viewer-scrolled');
       viewer.classList.remove('is-end');

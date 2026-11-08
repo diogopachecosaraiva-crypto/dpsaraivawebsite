@@ -46,7 +46,7 @@
   :root { --stroke: 2.5px; }
 }
 
-/* Dark mode: only when the dot button picks it; the site opens light */
+/* Dark mode: the Home, and Work's project viewer (data-theme, set by each page) */
 :root[data-theme="dark"] { --bg: #000000; --ink: #ffffff; color-scheme: dark; }
 
 /* the pointers in dark mode: black outlined in white */
@@ -161,8 +161,8 @@ p, li, .site-header a, .label { text-box: trim-both cap alphabetic; }
   .logo .more { transition: none; }
 }
 
-/* The last column of the menu: the EN / PT language buttons (lang.js) and
-   the light/dark dot, 15px apart, at the right margin */
+/* The last column of the menu: the EN / PT language buttons (lang.js), at
+   the right margin */
 .tools {
   grid-column: -2;
   justify-self: end;
@@ -212,27 +212,6 @@ p, li, .site-header a, .label { text-box: trim-both cap alphabetic; }
   .lang button:hover { font-weight: 800; }
 }
 .lang button:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
-
-/* Light/dark toggle: a circle as tall as the menu's capitals, from their top
-   to the baseline, at every text size */
-.dot {
-  flex: none;
-  font: inherit;
-  width: 1cap;
-  height: 1cap;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  /* at rest just a 2px ink outline; on hover it fills with ink */
-  background: var(--bg);
-  box-shadow: inset 0 0 0 2px var(--ink);
-  cursor: var(--pointer);
-  transition: background-color 0.2s ease;
-}
-@media (hover: hover) {
-  .dot:hover { background: var(--ink); }
-}
-.dot:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
 /* Footer */
 .site-footer {
@@ -362,6 +341,9 @@ figure.poster {
    covers as little of the content as possible (the Work images keep the size
    the full spacing gives them, scroll.js) */
 .page-split .site-footer { padding-top: var(--gutter); }
+/* Work: 30px from the end of the content (the list's last line, the last
+   image, the Gallery's last line of info) to the footer's text */
+.page-work .site-footer { padding-top: var(--space); }
 .page-split.footer-visible .site-footer { transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .page-split .site-footer { transition: none; }
@@ -617,7 +599,7 @@ img.shot, video.shot { display: block; object-fit: cover; }
 /* On desktop each image is as wide as the column and as tall as its own
    proportions (930:688), so it's never cropped (scroll.js sets --shot-h).
    Like the list, the column ends with room for the footer, so the last image
-   stops right above it, 15px from the footer's text. */
+   stops right above it, 30px from the footer's text. */
 .page-work .gallery .shot { width: 100%; height: var(--shot-h, auto); }
 /* The Gallery view (work.js, "full" in the code): instead of the list and the image column, a grid
    of each listed project's first image, two per row (4 columns each, as wide
@@ -626,7 +608,7 @@ img.shot, video.shot { display: block; object-fit: cover; }
    opens its project in the viewer; hovering it turns its info ExtraBold. */
 .pane[hidden] { display: none; }
 .pane-full { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-content: start; }
-/* On desktop the last row's info always ends 15px above the footer's text
+/* On desktop the last row's info always ends 30px above the footer's text
    (from its baseline to the footer text's cap height, where its text starts,
    trimmed like every paragraph). The footer's top edge sits just below the
    info's deepest descender (--descent: the ç's cedilla, a quarter of the type
@@ -635,7 +617,7 @@ img.shot, video.shot { display: block; object-fit: cover; }
    (scroll.js). */
 @media (min-width: 1101px) {
   .page-split { --descent: round(up, var(--text) / 4 + 1px, 1px); }
-  .page-split.is-full > .site-footer { padding-top: calc(var(--gutter) - var(--descent)); }
+  .page-split.is-full > .site-footer { padding-top: calc(var(--space) - var(--descent)); }
   .pane-full { padding-bottom: calc(var(--footer-h, var(--footer-space, 0px)) + var(--descent)); }
 }
 .covers {
@@ -684,7 +666,7 @@ img.shot, video.shot { display: block; object-fit: cover; }
    the window's edges, each as large as fits inside the margins, in its Work
    column proportions (--ratio, work.js). It scrolls like the Work columns.
    The site's menu stays above it, as on the Info page: the viewer starts 30px
-   below the menu, and Close sits at its top right, below the menu's dot. The
+   below the menu, and Close sits at its top right, below the language buttons. The
    project's info and text come first, above the images. */
 .viewer {
   position: fixed;
@@ -800,8 +782,8 @@ body.viewer-open.viewer-scrolled .site-header { height: round(var(--gutter) + 1c
   color: inherit;
   font: inherit;
 }
-/* Close: an X at the viewer's top right, below the menu's dot, level with the
-   project's line of info, the dot's size (the capitals' height) drawn with
+/* Close: an X at the viewer's top right, at the right margin, level with the
+   project's line of info, the capitals' height square, drawn with
    2px strokes like the list's lines. Over an image it turns black or white, whichever shows
    against the part of the image under it (work.js) */
 .viewer-close {
@@ -900,6 +882,9 @@ body.viewer-open.viewer-scrolled .site-header { height: round(var(--gutter) + 1c
   /* Index view: just the list; a project opens in the viewer (work.js), so
      its images aren't left after the whole list */
   .pane-gallery { display: none; }
+  /* the last row's line hangs 2px below the list: room for it, so the
+     footer's text is still 30px below it */
+  .page-work .projects { margin-bottom: 2px; }
 }
 
 /* Phone: 2 columns */

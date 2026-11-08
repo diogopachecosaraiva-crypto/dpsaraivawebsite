@@ -80,7 +80,7 @@
         root.lang = lang;
         try { sessionStorage.setItem('lang', lang); } catch (e) {}
         apply();
-        // theme.js and work.js update the text they write themselves
+        // work.js updates the text it writes itself
         document.dispatchEvent(new CustomEvent('langchange'));
       });
     });
