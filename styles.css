@@ -71,8 +71,8 @@ body {
   /* The Home poster size drives the header and footer spacing on every page
      (see .site-header). Body is the container for those 100cqw measurements. */
   --visible: 4;
-  --cap-gap: 15px;  /* between a poster and its caption */
-  --cap-h: 15px;   /* height kept for a poster caption: 1 line (3 on phones) until home.js measures the tallest */
+  --cap-gap: 15px;  /* room kept below the Home posters, where their captions were, */
+  --cap-h: 15px;   /* so the posters and the menu and footer spacing stay as they were */
   container-type: inline-size;
   margin: 0;
   background: var(--bg);
@@ -110,7 +110,7 @@ img { display: block; max-width: 100%; }
 }
 
 /* Matches Figma's "cap height to baseline" text trimming */
-p, li, .site-header a, .caption, .label { text-box: trim-both cap alphabetic; }
+p, li, .site-header a, .label { text-box: trim-both cap alphabetic; }
 
 /* Figma layout grid: 8 columns, 15px margins, 15px gutter
    (4 columns on tablet, 2 on phone) */
@@ -123,7 +123,7 @@ p, li, .site-header a, .caption, .label { text-box: trim-both cap alphabetic; }
 }
 
 /* Header and footer spacing. The window height left over by a row of
-   2-column Home posters (+ caption) is split between the space under the menu
+   2-column Home posters (+ the room below them) is split between the space under the menu
    and the space above the footer text, capped at Figma's 197px each. So the
    posters always keep their full 2-column width, and at 1920x1080 this gives
    exactly the Figma layout. The same formula runs on every page, so the
@@ -280,9 +280,9 @@ p, li, .site-header a, .caption, .label { text-box: trim-both cap alphabetic; }
   scrollbar-width: none;
   /* posters pass under the 15px side margins instead of showing in them */
   clip-path: inset(0 var(--gutter));
-  /* room below for the captions' descenders (the ç's cedilla, a comma),
-     which hang below their trimmed box: <main> reaches that much into the
-     footer's top margin, so nothing else moves */
+  /* room below, kept from when the posters had captions (for their
+     descenders): <main> reaches that much into the footer's top margin, so
+     nothing else moves */
   --descent: round(up, var(--text) / 4 + 1px, 1px);
   padding-bottom: var(--descent);
   margin-bottom: calc(-1 * var(--descent));
@@ -313,7 +313,7 @@ figure.poster {
     (100cqw - (var(--visible) + 1) * var(--gutter)) / var(--visible),
     (100cqh - var(--cap-gap) - var(--cap-h)) * 455 / 636
   );
-  min-width: 0;  /* a long caption wraps instead of widening the poster */
+  min-width: 0;
   margin: 0;
 }
 .poster img, .poster video {
@@ -323,7 +323,6 @@ figure.poster {
   object-fit: cover;
   -webkit-user-drag: none;
 }
-.poster .caption { display: block; margin-top: var(--cap-gap); }
 
 /* Posters that alternate between versions like a GIF (home.js): the frames
    are stacked in the same place; the first always shows underneath and the
@@ -906,8 +905,6 @@ body.viewer-open.viewer-scrolled .site-header { height: round(var(--gutter) + 1c
 /* Phone: 2 columns */
 @media (max-width: 640px) {
   :root { --header-h: 96px; --text: 15px; --text-lh: 18px; }
-  /* narrow posters: captions can wrap to 3 lines (until home.js measures them) */
-  body { --cap-h: 57px; }
   /* Home: one poster across the screen, or as tall as the screen leaves
      room for (it never switches to narrower posters here) */
   body.page-home, body.page-home[data-dense] { --visible: 1; }
@@ -915,7 +912,7 @@ body.viewer-open.viewer-scrolled .site-header { height: round(var(--gutter) + 1c
      neighbour in view, cut by the screen's edges (so they pass the side
      margins here), to show the row carries on sideways (home.js centres it) */
   .page-home main { clip-path: none; }
-  /* the posters (with their captions) in the middle of the room between
+  /* the posters in the middle of the room between
      the menu and the footer */
   .poster-track { align-items: center; }
   figure.poster {

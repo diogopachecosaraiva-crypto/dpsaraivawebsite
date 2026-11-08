@@ -37,12 +37,14 @@
   // with the intro, the track shows when it starts
   if (!intro) track.classList.add('is-ready');
 
-  // The project is the caption up to the first comma, without a "#01"-style
-  // number: "Comédia (A)Normal, S1, 2026" and "Comédia (A)Normal, S2, 2026"
-  // are the same project, as are "Paragem da Comédia #01" and "#02"
+  // The project is the poster's name in its alt text (a video's label), after
+  // "Poster, " and up to the next comma, without a "#01"-style number:
+  // "Comédia (A)Normal, S1, 2026" and "Comédia (A)Normal, S2, 2026" are the
+  // same project, as are "Paragem da Comédia #01" and "#02"
   function projectOf(figure) {
-    var caption = figure.querySelector('.caption').textContent;
-    return caption.split(',')[0].replace(/\s*#\d+$/, '').trim().toLowerCase();
+    var media = figure.querySelector('img, video');
+    var label = media.getAttribute('alt') || media.getAttribute('aria-label') || '';
+    return label.replace(/^(animated )?poster, /i, '').split(',')[0].replace(/\s*#\d+$/, '').trim().toLowerCase();
   }
 
   function isLater(figure) {
@@ -310,7 +312,6 @@
   function updateDensity() {
     var body = document.body;
     delete body.dataset.dense;
-    fitCaptions();
     var style = getComputedStyle(body);
     var visible = parseFloat(style.getPropertyValue('--visible')) || 4;
     var gutter = parseFloat(style.getPropertyValue('--gutter')) || 15;
@@ -323,41 +324,12 @@
       - parseFloat(footerStyle.paddingTop) - parseFloat(footerStyle.paddingBottom);
     var minHeader = 55;
     var minFooter = footerText + 2 * gutter;
-    if (free < minHeader + minFooter) {
-      body.dataset.dense = '';
-      fitCaptions();
-    }
-  }
-
-  // The room kept under the posters (--cap-h) is the tallest caption's: a
-  // long caption that wraps onto a second line at this poster width isn't
-  // cut by the bottom of the row. Narrower posters (the room taken from a
-  // short window) can wrap more, so the room only grows, measured again until
-  // it holds. It starts again from one line every time, so the result
-  // depends only on the window's size (and the next resize can't build on it).
-  function fitCaptions() {
-    var body = document.body;
-    body.style.removeProperty('--cap-h');
-    var capH = 0;
-    for (var i = 0; i < 8; i++) {
-      var heights = originals.map(function (el) {
-        return el.querySelector('.caption').getBoundingClientRect().height;
-      });
-      var tallest = Math.ceil(Math.max.apply(null, heights));
-      // at most two lines: in a window too short even for that (a phone on
-      // its side), more room would only shrink the posters into thin strips
-      var lineHeight = parseFloat(getComputedStyle(originals[0].querySelector('.caption')).lineHeight);
-      var most = Math.ceil(Math.min.apply(null, heights) + lineHeight);
-      var next = Math.min(tallest, most);
-      if (next <= capH) return;
-      capH = next;
-      body.style.setProperty('--cap-h', capH + 'px');
-    }
+    if (free < minHeader + minFooter) body.dataset.dense = '';
   }
 
   updateDensity();
   build();
-  // the captions' height is only final once the font is in
+  // the footer's height is only final once the font is in
   if (document.fonts) document.fonts.ready.then(updateDensity);
 
   var lenis = new Lenis({
