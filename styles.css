@@ -1107,8 +1107,10 @@ body.viewer-open .site-header .tools { pointer-events: auto; }
      a block's space above the footer */
   .menu-items > :is(a, .tools) { font-size: calc(2 * var(--text)); }
   .menu-items > a:first-of-type { margin-top: auto; }
-  /* "Graphic Design and Illustration" at the top, in the text's size */
-  .menu-tagline { display: block; }
+  /* "Graphic Design and Illustration" at the top, as large as WORK, ABOUT
+     and EN / PT, its two lines as far apart as they are (a capital's height
+     and a block's space from baseline to baseline) */
+  .menu-tagline { display: block; font-size: calc(2 * var(--text)); line-height: calc(1cap + var(--space)); }
   /* (the stroke between EN and PT standing on their baseline, the trimmed
      words' bottom edge, rather than a few pixels under it at this size;
      taking no height of its own, so EN / PT is never taller than WORK or
