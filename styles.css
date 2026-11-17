@@ -67,6 +67,28 @@
 html { -webkit-text-size-adjust: 100%; scrollbar-width: none; background: var(--bg); }
 html::-webkit-scrollbar { display: none; }
 
+/* Going from one page to another (theme.js): a plain block of the next page's
+   background colour fades in over the whole page, menu included, and on the
+   next page fades away to show its contents */
+html::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--bg);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.6s ease, visibility 0s 0.6s;
+}
+html.is-covered::after, html.is-leaving::after {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.6s ease;
+}
+html[data-next="dark"]::after { background: #000000; }
+html[data-next="light"]::after { background: #ffffff; }
+
 body {
   /* The Home poster size drives the header and footer spacing on every page
      (see .site-header). Body is the container for those 100cqw measurements. */
@@ -85,12 +107,25 @@ body {
 }
 
 p, h1, h2, h3, ul, ol { margin: 0; padding: 0; font: inherit; }
+/* paragraphs don't end on a word alone on its line: the browser evens out
+   the last lines (where it can; elsewhere they break as before) */
+p { text-wrap: pretty; }
+/* selected text in reverse, like the pointers: the page's background colour
+   on ink (white on black in light mode, the reverse in dark mode) */
+::selection { background: var(--ink); color: var(--bg); }
 ul, ol { list-style: none; }
 a { color: inherit; text-decoration: none; }
 html { cursor: var(--cursor); }
-p, .viewer-info { cursor: var(--text-cursor); }
+p, .viewer-info, .viewer-bar { cursor: var(--text-cursor); }
 a[href], button { cursor: var(--pointer); }
-a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 2px; }
+/* underlined on hover, only with a mouse: on a touch screen a tapped link
+   would keep it */
+@media (hover: hover) {
+  a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 2px; }
+}
+/* no grey flash where a phone is tapped: what's tapped answers by itself
+   (a page changes, a project opens) */
+html { -webkit-tap-highlight-color: transparent; }
 /* the Work filters, Year, the views and EN / PT get the menu's underline too,
    on their word only (not the strokes between them) */
 @media (hover: hover) {
@@ -99,6 +134,9 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoratio
   }
 }
 img { display: block; max-width: 100%; }
+/* images and videos aren't dragged out of the page or saved with a long press
+   on a phone (protect.js blocks the right-click menu on them) */
+img, video { -webkit-user-drag: none; -webkit-touch-callout: none; }
 /* for screen readers and search engines only: each page's main heading */
 .visually-hidden {
   position: absolute;
@@ -108,6 +146,10 @@ img { display: block; max-width: 100%; }
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* A new paragraph inside a text (the bio, a project's description): on the
+   next line, its first line set 15px in */
+.para { display: block; text-indent: var(--gutter); }
 
 /* Matches Figma's "cap height to baseline" text trimming */
 p, li, .site-header a, .label { text-box: trim-both cap alphabetic; }
@@ -212,6 +254,11 @@ p, li, .site-header a, .label { text-box: trim-both cap alphabetic; }
   .lang button:hover { font-weight: 800; }
 }
 .lang button:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+/* On phones MENU + stands for WORK, ABOUT and EN / PT, and opens them over
+   the page (below, and menu.js); elsewhere they are the menu itself */
+.menu-toggle { display: none; }
+.menu-items { display: contents; }
+.menu-items .site-footer { display: none; }
 
 /* Footer */
 .site-footer {
@@ -244,6 +291,8 @@ p, li, .site-header a, .label { text-box: trim-both cap alphabetic; }
   bottom: var(--gutter);
   text-box: trim-both cap alphabetic;
 }
+/* the phone's shorter footer (below) */
+.footer-short { display: none; }
 
 /* Posters scroll sideways in an endless loop (home.js + Lenis). Each poster
    is 2 grid columns wide (4 in view on desktop) and the track settles on a
@@ -337,13 +386,10 @@ figure.poster {
   transform: translateY(100%);
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
-/* Work and Info: just the 15px margin above the footer's text, so the footer
-   covers as little of the content as possible (the Work images keep the size
-   the full spacing gives them, scroll.js) */
-.page-split .site-footer { padding-top: var(--gutter); }
-/* Work: 30px from the end of the content (the list's last line, the last
-   image, the Gallery's last line of info) to the footer's text */
-.page-work .site-footer { padding-top: var(--space); }
+/* Work and Info: 30px from the end of the content (Work's list's last line,
+   last image or Gallery's last line of info; Info's last text) to the
+   footer's text */
+.page-split .site-footer { padding-top: var(--space); }
 .page-split.footer-visible .site-footer { transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .page-split .site-footer { transition: none; }
@@ -418,7 +464,11 @@ figure.poster {
   text-align: left;
   cursor: var(--pointer);
 }
-.project-head:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+.project-head:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+/* the button takes the whole row, from line to line (its 15px above and
+   below the text), so a tap anywhere on the row opens it, not only on the
+   words; the negative margins keep everything where it was */
+.project-head { padding: 15px 0; margin: -15px 0; }
 .project-head > * { display: block; grid-column: span 2; }
 /* the row's texts are spans (a button can only hold inline content), trimmed
    like every other text so they line up exactly as before */
@@ -441,12 +491,18 @@ figure.poster {
   .projects::before, .project::after { left: 0; right: 0; }
 }
 .project.is-open .project-head { font-weight: 800; }
+/* hovered (or pointed at in the images), its info also underlined, like the
+   menu's links: until it's open */
 @media (hover: hover) {
   .project:hover .project-head,
   .project.is-hinted .project-head { font-weight: 800; }
+  .project:not(.is-open):hover .project-head :is(.name, .meta > span),
+  .project.is-hinted:not(.is-open) .project-head :is(.name, .meta > span) {
+    text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 2px;
+  }
 }
-/* The text slides open under the row (its height animates from 0), 15px below
-   the row's line of info, across the whole list width */
+/* The text slides open under the row (its height animates from 0), 30px below
+   the row's line of info (as in the viewer), across the list's 4 columns */
 .project-text {
   grid-column: 1 / -1;
   display: grid;
@@ -458,8 +514,11 @@ figure.poster {
 /* once fully open, show the text unclipped (its p, j, g hang below the trimmed line) */
 .project.is-open.is-settled .project-text > div { overflow: visible; }
 /* each project's text is one paragraph; only the collaborators line is a
-   paragraph of its own, 15px below it */
-.project-text p { padding-top: var(--gutter); }
+   paragraph of its own (below) */
+.project-text p { padding-top: var(--space); }
+/* the collaborators come first, the text 30px below them, like every gap
+   between blocks (and between the text's paragraphs) */
+.project-text p + p { padding-top: var(--space); }
 @media (prefers-reduced-motion: reduce) {
   .project-text { transition: none; }
 }
@@ -564,7 +623,7 @@ figure.poster {
   gap: var(--gutter);
 }
 .gallery .shot {
-  aspect-ratio: 930 / 688;
+  aspect-ratio: 3 / 2;
   background: var(--ink);
 }
 img.shot, video.shot { display: block; object-fit: cover; }
@@ -574,6 +633,7 @@ img.shot, video.shot { display: block; object-fit: cover; }
 .gallery .shot-pair {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-rows: minmax(0, 1fr);  /* the halves as tall as the pair, whatever their own proportions */
   gap: var(--gutter);
   background: none;
 }
@@ -596,8 +656,8 @@ img.shot, video.shot { display: block; object-fit: cover; }
 /* empty from the start, before work.js runs: only the previewed project shows */
 .gallery:not(.is-project) .gallery-project:not(.is-preview) { display: none; }
 .gallery:not(.is-project) .gallery-project > .shot:not(:first-child) { display: none; }
-/* On desktop each image is as wide as the column and as tall as its own
-   proportions (930:688), so it's never cropped (scroll.js sets --shot-h).
+/* On desktop each image is as wide as the column, 3:2 (scroll.js sets
+   --shot-h); a pair's halves fill it side by side.
    Like the list, the column ends with room for the footer, so the last image
    stops right above it, 30px from the footer's text. */
 .page-work .gallery .shot { width: 100%; height: var(--shot-h, auto); }
@@ -639,7 +699,7 @@ img.shot, video.shot { display: block; object-fit: cover; }
 .cover > .shot {
   grid-column: 1 / -1;
   width: 100%;
-  aspect-ratio: 930 / 688;
+  aspect-ratio: 3 / 2;
   background: var(--ink);
 }
 .cover > .shot-pair {
@@ -655,6 +715,9 @@ img.shot, video.shot { display: block; object-fit: cover; }
 .cover-info .name, .cover-info .meta > span { text-box: trim-both cap alphabetic; min-height: round(up, 1cap, 1px); }
 @media (hover: hover) {
   .cover:hover .cover-info { font-weight: 800; }
+  .cover:hover .cover-info :is(.name, .meta > span) {
+    text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 2px;
+  }
 }
 .cover:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 
@@ -662,19 +725,18 @@ img.shot, video.shot { display: block; object-fit: cover; }
 .gallery.is-project .shot { cursor: var(--pointer); }
 
 /* Work: the image viewer. Over everything, on the page's background, the
-   project's images in a column like the Work images: 15px apart and from
-   the window's edges, each as large as fits inside the margins, in its Work
-   column proportions (--ratio, work.js). It scrolls like the Work columns.
-   The site's menu stays above it, as on the Info page: the viewer starts 30px
-   below the menu, and Close sits at its top right, below the language buttons. The
-   project's info and text come first, above the images. */
+   project's images in a column like the Work images: 15px apart, each from
+   margin to margin in its own proportions (below). It scrolls like the Work
+   columns.
+   In place of the site's menu, the project's line of info (.viewer-bar):
+   the viewer starts 15px below it (--bar-h, work.js: lower if the name or
+   the typology takes two lines), so what scrolls up stops 15px from it, and
+   its content starts 15px lower (30px below it, as on the Info page). The
+   project's collaborators and text come first, above the images. */
 .viewer {
   position: fixed;
   inset: 0;
-  /* 12px higher, with 12px of room at the top of its content: the tops of
-     the first line's letters and accents rise above its trimmed box, and the
-     scroll area would cut them (as the Work and Info columns, scroll.js) */
-  top: calc(round(var(--gutter) + 1cap + var(--space), 1px) - 12px);
+  top: var(--bar-h, round(var(--gutter) + 1cap + var(--gutter), 1px));
   z-index: 10;
   background: var(--bg);
   overflow-y: auto;
@@ -683,53 +745,88 @@ img.shot, video.shot { display: block; object-fit: cover; }
 }
 .viewer::-webkit-scrollbar { display: none; }
 .viewer[hidden] { display: none; }
-/* while it's open (work.js), the menu is fixed at the top over everything,
-   just the menu and the 30px below it, as tall as on the Info page */
+/* while it's open (work.js), of the menu only EN / PT stays, where it is,
+   fixed at the top over the project's line */
 body.viewer-open .site-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 11;
-  height: calc(round(var(--gutter) + 1cap + var(--space), 1px) - 12px);  /* down to where the viewer starts */
-  background: var(--bg);
+  height: round(var(--gutter) + 1cap + var(--gutter), 1px);
+  background: none;
+  pointer-events: none;
 }
-/* once the viewer scrolls, the band reaches down to where its content starts,
-   covering the room left above the first line (work.js) */
-body.viewer-open.viewer-scrolled .site-header { height: round(var(--gutter) + 1cap + var(--space), 1px); }
+body.viewer-open .site-header a { visibility: hidden; }
+body.viewer-open .site-header .tools { pointer-events: auto; }
+/* The project's line, in the menu's ExtraBold and on its columns: the name
+   in DPS's place, the typology in WORK's, the year in ABOUT's, and Close, in
+   the text's weight, from column 7. On tablet one column each (Close in
+   column 4); on phones the name across the line and Close at the right,
+   where MENU + is (which gives way to it), the typology and the year above
+   the text instead. */
+.viewer-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* next to the viewer (work.js), over it; under the menu's EN / PT */
+  z-index: 10;
+  min-height: round(var(--gutter) + 1cap + var(--gutter), 1px);
+  padding-top: var(--gutter);
+  padding-bottom: var(--gutter);
+  align-items: start;
+  background: var(--bg);
+  font-weight: 800;
+}
+.viewer-bar[hidden] { display: none; }
+.viewer-bar .name { grid-column: 1 / 3; }
+.viewer-bar .meta { display: contents; }
+.viewer-bar .meta > span:first-child { grid-column: 3 / 5; }
+.viewer-bar .year { grid-column: 5 / 7; justify-self: start; }
+.viewer-close { grid-column: 7 / 8; justify-self: start; font-weight: 600; }
+.viewer-bar .name, .viewer-bar .meta > span, .viewer-close > span { text-box: trim-both cap alphabetic; }
+.viewer-close {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  cursor: var(--pointer);
+}
+/* on hover underlined, like the menu's links, and ExtraBold, like EN / PT */
+@media (hover: hover) {
+  .viewer-close:hover { font-weight: 800; }
+  .viewer-close:hover > span { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 2px; }
+}
+.viewer-close:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+/* 15px of room above the first line (which also keeps the tops of its
+   letters and accents, rising above their trimmed box, inside the scroll area) */
 .viewer-content {
   display: grid;
   gap: var(--gutter);
-  padding: 12px var(--gutter) var(--gutter);
+  padding: calc(var(--space) - var(--gutter)) var(--gutter) var(--gutter);
 }
 .viewer-images {
   display: grid;
   justify-items: center;
   gap: var(--gutter);
 }
-/* The project's line of info on the list's columns, in the open project's
-   ExtraBold: the name in columns 1-2, the typology from column 3 and the
-   year at the end of column 4; on phones the name above the other two, as
-   in the list. Its text below it, or from column 5 on desktop. Both keep
-   clear of the X where they reach the right edge. */
+/* At the top, the collaborators, and the text from column 5 on desktop (on
+   tablet under them, a line left empty between them, as in the list). On
+   phones the typology and the year come first, the year level with ABOUT in
+   the menu (work.js), and the collaborators go with the text. */
 .viewer-content { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.viewer-info {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: subgrid;
-  padding-right: calc(1cap + var(--gutter));
-  font-weight: 800;
-}
-.viewer-info .name { grid-column: span 2; }
-.viewer-info .meta { grid-column: span 2; display: flex; justify-content: space-between; gap: var(--gutter); }
-.viewer-info .name, .viewer-info .meta > span { text-box: trim-both cap alphabetic; }
-/* the collaborators across the info's columns, in the text's weight, a
-   line left empty under the name: level with the third line of the text
-   (lines --text-lh apart, the name's line a cap height tall) */
-.viewer-info { row-gap: 10px; align-content: start; }
-.viewer-info .credits { grid-column: 1 / -1; margin-top: calc(2 * var(--text-lh) - 1cap - 10px); font-weight: 600; }
+.viewer-info { grid-column: 1 / -1; }
+.viewer-info[hidden] { display: none; }
+.viewer-info .meta { display: grid; grid-template-columns: calc(var(--info-x, 50%) - var(--gutter)) auto; justify-content: start; column-gap: var(--gutter); font-weight: 800; }
+.viewer-info .meta > span { text-box: trim-both cap alphabetic; }
 .viewer-text { grid-column: 1 / -1; }
-.viewer-text p + p { padding-top: var(--gutter); }
+.viewer-text p + p { padding-top: var(--space); }
 /* the images start 30px below the info and the text */
 .viewer-images { grid-column: 1 / -1; margin-top: calc(var(--space) - var(--gutter)); }
 /* At the end, the site's footer (work.js). On tablet and phone it simply
@@ -746,25 +843,34 @@ body.viewer-open.viewer-scrolled .site-header { height: round(var(--gutter) + 1c
 }
 @media (min-width: 1101px) {
   .viewer-content { grid-template-columns: repeat(8, minmax(0, 1fr)); }
-  .viewer-info { grid-column: 1 / 5; padding-right: 0; }
-  .viewer-text { grid-column: 5 / 9; padding-right: calc(1cap + var(--gutter)); }
+  .viewer-info { grid-column: 1 / 5; grid-row: 1; }
+  .viewer-text { grid-column: 5 / 9; grid-row: 1; }
+}
+/* on tablet and phone the text (or the collaborators, on phones) a block's
+   space under the info: 30px, 20px on phones */
+@media (max-width: 1100px) {
+  .viewer-info:not([hidden]) + .viewer-text { margin-top: calc(var(--space) - var(--gutter)); }
+}
+@media (max-width: 1100px) {
+  .viewer-bar .name { grid-column: 1 / 2; }
+  .viewer-bar .meta > span:first-child { grid-column: 2 / 3; }
+  .viewer-bar .year { grid-column: 3 / 4; }
+  .viewer-close { grid-column: 4 / 5; }
 }
 @media (max-width: 640px) {
   .viewer-content { grid-template-columns: minmax(0, 1fr); }
-  /* As in the Gallery: the name and the year on the first line, level with
-     the X (the year just clear of it); the typology on the second */
-  .viewer-info { grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--gutter); row-gap: 10px; padding-right: calc(1cap + var(--gutter)); }
-  .viewer-info .meta { display: contents; }
-  .viewer-info .name { grid-column: 1; grid-row: 1; }
-  .viewer-info .year { grid-column: 2; grid-row: 1; }
-  .viewer-info .meta > span:first-child { grid-column: 1 / -1; grid-row: 2; }
+  .viewer-bar { grid-template-columns: minmax(0, 1fr) auto; }
+  .viewer-bar .name { grid-column: 1; }
+  .viewer-bar .meta { display: none; }
+  .viewer-close { grid-column: 2; justify-self: end; }
 }
+/* As on Studio Bruto: each image from margin to margin, 3:2; a pair's
+   halves fill it side by side, as tall as a single image */
 .viewer-images > .shot {
-  /* as large as fits between the menu's band and 15px from the bottom */
-  width: min(100%, (100dvh - round(var(--gutter) + 1cap + var(--space), 1px) - var(--gutter)) * var(--ratio));
+  width: 100%;
   height: auto;
   min-height: 0;  /* the proportions win over the images' own height */
-  aspect-ratio: var(--ratio);
+  aspect-ratio: 3 / 2;
   margin: 0;
 }
 .viewer-images > img.shot, .viewer-images > video.shot { background: var(--ink); }
@@ -774,48 +880,8 @@ body.viewer-open.viewer-scrolled .site-header { height: round(var(--gutter) + 1c
   grid-template-rows: minmax(0, 1fr);
   gap: var(--gutter);
 }
-.viewer button {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: inherit;
-  font: inherit;
-}
-/* Close: an X at the viewer's top right, at the right margin, level with the
-   project's line of info, the capitals' height square, drawn with
-   2px strokes like the list's lines. Over an image it turns black or white, whichever shows
-   against the part of the image under it (work.js) */
-.viewer-close {
-  position: fixed;
-  top: round(var(--gutter) + 1cap + var(--space), 1px);
-  right: var(--gutter);
-  z-index: 1;
-  width: 1cap;
-  height: 1cap;
-  cursor: var(--pointer);
-}
-.viewer-close { --x: var(--ink); }
-.viewer-close.on-light { --x: #000000; }
-.viewer-close.on-dark { --x: #ffffff; }
-.viewer-close::before,
-.viewer-close::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: calc(1cap * 22 / 18);   /* the square's diagonal, less the strokes' ends */
-  height: 2px;
-  background: var(--x);
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-.viewer-close::after { transform: translate(-50%, -50%) rotate(-45deg); }
-/* on hover it turns bold, like the menu's text: thicker strokes */
-@media (hover: hover) {
-  .viewer-close:hover::before,
-  .viewer-close:hover::after { height: 3px; }
-}
-.viewer button:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+/* it takes the keyboard's focus while open (work.js), without a ring */
+.viewer:focus { outline: none; }
 
 /* Info */
 .info { align-items: start; }
@@ -827,32 +893,72 @@ body.viewer-open.viewer-scrolled .site-header { height: round(var(--gutter) + 1c
   --block-gap: var(--space);
   row-gap: var(--block-gap);
 }
-/* the bio in the same size as the other texts */
-.bio { grid-column: 1 / -1; }
-/* one block per row, stacked: bio, email + Instagram, talks, workshop, education */
-.about .block { grid-column: 1 / -1; }
-.about .block.wide { grid-column: span 3; }
+/* the bio in the same size as the other texts, 4 columns wide */
+.bio { grid-column: 1 / 5; }
+/* the blocks two columns each, side by side, two to a row: services,
+   email + Instagram, talks + workshop, education, collaborators */
+.about .block { grid-column: span 2; }
+/* the first under the bio, not in the room beside it */
+.bio + .block { grid-column: 1 / span 2; }
 .label { text-transform: uppercase; font-weight: 800; }
+/* Lectures, workshop and education: rows like Work's Index (the same
+   classes, .projects / .project, so the same lines, hover and opening; info.js
+   opens them), across the four text columns, each opening a list of entries:
+   a line each, the name over 2 columns, the place and the year (at the right)
+   over the other 2, a gutter apart (15px; 20px on phones, below) */
+.about .sections { grid-column: 1 / -1; margin: 0; list-style: none; }
+.entries {
+  display: grid;
+  grid-template-columns: subgrid;
+  row-gap: var(--gutter);
+  margin: 0;
+  padding: var(--space) 0 0;
+  list-style: none;
+}
+.sections .project-text { grid-template-columns: subgrid; }
+.sections .project-text > div { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; }
+.entries { grid-column: 1 / -1; }
+.entries li { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; }
+.entries .name, .entries .meta > span {
+  display: block;
+  text-box: trim-both cap alphabetic;
+  min-height: round(up, 1cap, 1px);
+}
+.entries .name, .entries .meta { grid-column: span 2; }
+.entries .meta { display: flex; justify-content: space-between; gap: var(--gutter); }
+.entries .year { text-align: right; }
 /* a second group in the same block (Instagram under Email) starts after one
    empty line: 2 line heights from the previous line, minus its trimmed height */
 .about .block p + p { margin-top: var(--block-gap); }
 
+/* The photos in rows the way Work shows a pair: each row a 3:2 frame as wide
+   as the four columns, each photo half of it, as tall as the frame (a photo
+   alone in its row on the left); 15px between the rows */
 .photos { grid-column: 1 / -1; row-gap: var(--gutter); }
+.photo-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-template-rows: minmax(0, 1fr);
+  aspect-ratio: 3 / 2;
+}
 .photo { grid-column: span 2; }
-/* Crops reproduce the image fills set in Figma */
+/* Crops: the image fills set in Figma, at the same scale and across, cut to
+   the frame's height (each image keeps its own proportion: height auto) */
 .photo {
   position: relative;
-  aspect-ratio: 455 / 688;
+  min-height: 0;
   overflow: hidden;
 }
 .photo img {
   position: absolute;
   max-width: none;
+  height: auto;
 }
-.crop-a { width: 146.54%; height: 129.22%; left: -30.89%; top: 0; }
-.crop-b { width: 149.65%; height: 148.22%; left: -18.74%; top: -12.15%; }
-.crop-c { width: 149.33%; height: 148.22%; left: -18.7%;  top: -12.15%; }
-.crop-d { width: 160.05%; height: 158.63%; left: -0.04%;  top: -43.8%; }
+.crop-a { width: 146.54%; left: -30.89%; top: -11.8%; }
+.crop-b { width: 149.65%; left: -18.74%; top: -19%; }
+/* filling the frame, centred */
+.photo img.crop-c { inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; }
 
 /* Tablet: 4 columns */
 @media (max-width: 1100px) {
@@ -861,7 +967,7 @@ body.viewer-open.viewer-scrolled .site-header { height: round(var(--gutter) + 1c
   .site-header { row-gap: 0; }
   .site-header a { grid-column: span 1; }
   .site-footer { row-gap: var(--gutter); font-size: min(var(--text), (100vw - 3 * var(--gutter)) / 35); }
-  .pane-text, .pane-images, .about, .photos { grid-column: 1 / -1; }
+  .pane-text, .pane-images, .about, .photos, .bio { grid-column: 1 / -1; }
   /* stacked: the Work page scrolls as a whole again */
   /* the footer stays at the bottom of the screen when there's little above
      it (a typology with no projects, say): the page is at least the
@@ -873,7 +979,7 @@ body.viewer-open.viewer-scrolled .site-header { height: round(var(--gutter) + 1c
   .page-split .site-footer { position: relative; transform: none; transition: none; }
   body { --visible: 2; }
   body.page-home[data-dense] { --visible: 4; }
-  .about .block.wide { grid-column: 1 / -1; }
+  /* the blocks two to a row (on a phone, one: 2 columns is the whole width) */
   .page-work .filters-row { row-gap: var(--gutter); }
   /* the view switch on a line of its own, under the filters */
   .filter-view { grid-column: 1 / -1; }
@@ -889,58 +995,264 @@ body.viewer-open.viewer-scrolled .site-header { height: round(var(--gutter) + 1c
 
 /* Phone: 2 columns */
 @media (max-width: 640px) {
-  :root { --header-h: 96px; --text: 15px; --text-lh: 18px; }
-  /* Home: one poster across the screen, or as tall as the screen leaves
-     room for (it never switches to narrower posters here) */
+  /* text at 18px on 22px lines (20px on 24px on larger screens); the
+     footer keeps its own size (below) */
+  :root { --header-h: 96px; --text: 18px; --text-lh: 22px; }
+  /* margins and the gaps between columns and images 10px here (15px on
+     larger screens), so the content gets more of the screen's width, and
+     20px between blocks (30px on larger screens): still twice the gutter */
+  :root { --gutter: 10px; --space: 20px; }
+  /* Home: four posters in view, two over two, each a grid column wide (or
+     as tall as the screen leaves room for), in the middle of the room
+     between the menu and the footer. They run down each column, then on to
+     the next, and the row moves a column (two posters) at a time (home.js).
+     The menu and the footer take only their text and margins here, so the
+     posters sit as far from the menu's baseline as from the footer's first
+     line. */
   body.page-home, body.page-home[data-dense] { --visible: 1; }
-  /* one poster in the middle, as large as fits while leaving at least 40px of each
-     neighbour in view, cut by the screen's edges (so they pass the side
-     margins here), to show the row carries on sideways (home.js centres it) */
-  .page-home main { clip-path: none; }
-  /* the posters in the middle of the room between
-     the menu and the footer */
-  .poster-track { align-items: center; }
-  figure.poster {
-    flex-basis: min(
-      100cqw - 2 * (var(--gutter) + 40px),
-      (100cqh - var(--cap-gap) - var(--cap-h)) * 455 / 636
+  .page-home .site-header { height: auto; }
+  .page-home .site-footer { padding-top: 0; }
+  .poster-track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(2, auto);
+    grid-auto-columns: min(
+      (100cqw - 3 * var(--gutter)) / 2,
+      (100cqh - var(--cap-gap) - var(--cap-h) - var(--gutter)) / 2 * 455 / 636
     );
+    align-content: center;
   }
-  /* Work and Info: the menu stays at the top while the page scrolls, its
-     band (the menu and the 30px below it) on the page's background */
-  .page-split .site-header { position: sticky; top: 0; z-index: 5; background: var(--bg); }
+  /* Work and Info: the menu stays at the top while the page scrolls, on a
+     band of the page's background reaching 10px below its line (a margin's
+     width); the rest of the space to the content stays clear, so the tops
+     of letters taller than the capitals there (and accents) aren't cut */
+  .page-split .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: linear-gradient(var(--bg), var(--bg)) top / 100% calc(var(--gutter) + 1cap + var(--gutter)) no-repeat;
+  }
   .grid { --cols: 2; }
-  .site-header { grid-template-columns: repeat(4, auto); justify-content: space-between; }
+  .site-header { grid-template-columns: repeat(2, auto); justify-content: space-between; }
   .site-header a, .tools { grid-column: auto; }
+  /* DPS and MENU + (in the menu's ExtraBold, at the right margin); the +
+     loses its upright and becomes a – while the menu is open. It's drawn
+     (2px strokes, a capital tall and wide, on the baseline), so the stroke
+     can shrink away. */
+  .menu-toggle {
+    display: grid;
+    justify-self: end;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-weight: 800;
+    cursor: var(--pointer);
+  }
+  .menu-toggle > span { text-box: trim-both cap alphabetic; }
+  .menu-toggle:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+  .menu-sign { display: inline-block; position: relative; width: 1cap; height: 1cap; margin-left: 0.1em; }
+  .menu-sign::before, .menu-sign::after { content: ""; position: absolute; background: currentColor; }
+  .menu-sign::before { left: 0; right: 0; top: calc(50% - var(--stroke) / 2); height: var(--stroke); }
+  .menu-sign::after { top: 0; bottom: 0; left: calc(50% - var(--stroke) / 2); width: var(--stroke); transition: transform 0.5s; }
+  .menu-toggle[aria-expanded="true"] .menu-sign::after { transform: scaleY(0); }
+  /* Open, the menu grows from the top down over the whole screen, in the
+     page's colours inverted, and shrinks back up on closing (as on Studio
+     Bruto): its colour grows in 0.7s and what's in it rides down with it, a
+     screen's height, in 1s, so it lands just after. WORK, ABOUT and EN / PT
+     one under the other, from a block's space below the menu's line (which
+     stays on top), and the footer at the bottom (menu.js copies it in). */
+  .menu-items {
+    --bg: #000000;
+    --ink: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: var(--space);
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    padding: calc(var(--gutter) + 1cap + var(--space)) var(--gutter) var(--gutter);
+    background: var(--bg);
+    color: var(--ink);
+    touch-action: none;
+    overscroll-behavior: contain;
+    visibility: hidden;
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 0.7s ease, visibility 0s 1s;
+  }
+  .menu-items > * { transform: translateY(-100vh); transition: transform 1s ease; }
+  /* the menu's line keeps a band of the menu's colour behind it, so what
+     rides up and down passes under DPS and MENU, not over them */
+  .menu-items::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: calc(var(--gutter) + 1cap + var(--gutter));
+    z-index: 1;
+    background: var(--bg);
+  }
+  :root[data-theme="dark"] .menu-items { --bg: #ffffff; --ink: #000000; }
+  .site-header.is-open .menu-items {
+    visibility: visible;
+    clip-path: inset(0);
+    transition: clip-path 0.7s ease, visibility 0s;
+  }
+  .site-header.is-open .menu-items > * { transform: none; }
+  /* WORK, ABOUT and EN / PT twice the text's size (36px), at the bottom,
+     a block's space above the footer */
+  .menu-items > :is(a, .tools) { font-size: calc(2 * var(--text)); }
+  .menu-items > a:first-child { margin-top: auto; }
+  /* (the stroke between EN and PT standing on their baseline, the trimmed
+     words' bottom edge, rather than a few pixels under it at this size;
+     taking no height of its own, so EN / PT is never taller than WORK or
+     ABOUT and the space above it stays the same, whatever Safari trims) */
+  .menu-items .lang { align-items: end; }
+  .menu-items .lang-sep { margin-top: -1cap; }
+  .menu-items .site-footer {
+    display: grid;
+    align-self: stretch;
+    margin: 0 calc(-1 * var(--gutter)) 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  /* DPS and MENU – in the menu's colours while it covers them: from when
+     its colour has passed their line coming down (0.04s in), until it passes
+     it again going up (0.52s in) */
+  .logo, .menu-toggle { position: relative; z-index: 21; transition: color 0s 0.52s; }
+  .site-header.is-open .logo, .site-header.is-open .menu-toggle { color: #ffffff; transition-delay: 0.04s; }
+  :root[data-theme="dark"] .site-header.is-open .logo,
+  :root[data-theme="dark"] .site-header.is-open .menu-toggle { color: #000000; }
+  @media (prefers-reduced-motion: reduce) {
+    .menu-sign::after, .menu-items, .site-header.is-open .menu-items, .menu-items > *, .logo, .menu-toggle { transition: none; }
+  }
+  /* in a project's viewer the menu gives way to the project's line: Close
+     takes MENU +'s place */
+  body.viewer-open .menu-toggle { visibility: hidden; }
   .photo { grid-column: span 1; }
   .project-head > * { grid-column: 1 / -1; }
-  /* The footer in two equal columns: name and place, then what Diogo does;
-     next to them the email, then the rights. The text shrinks with the
-     screen so the email (the widest line, 16.6em) stays on one line in its
-     half. */
+  /* About's entries like the Gallery's lines of info here: the name and, at
+     the end, the year on the first line; the place on the second */
+  .entries li { grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--gutter); }
+  .entries .meta { display: contents; }
+  .entries .name { grid-column: 1; grid-row: 1; }
+  .entries .year { grid-column: 2; grid-row: 1; }
+  .entries .meta > span:first-child { grid-column: 1 / -1; grid-row: 2; }
+  /* each entry's two lines (the name, then the place and year) a line height
+     apart, like the lines of Services and Collaborators */
+  .entries li { row-gap: calc(var(--text-lh) - round(up, 1cap, 1px)); }
+  /* and 20px between the entries, like the space between About's blocks */
+  .entries { row-gap: var(--space); }
+  /* The footer shorter, in two equal columns: the name, then the city, ©
+     and year; next to them the line asking for inquiries and the email.
+     What Diogo does and the rights are left out (the About has them). The
+     text shrinks with the screen so the email (the widest line, 16.6em)
+     stays on one line in its half. */
   .site-footer {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: auto auto;
-    grid-auto-flow: column;
-    font-size: min(var(--text), (100vw - 3 * var(--gutter)) / 2 / 16.6);
+    font-size: min(20px, (100vw - 3 * var(--gutter)) / 2 / 16.6);
   }
   .site-footer p { grid-column: auto; }
+  .site-footer p:nth-of-type(2), .site-footer p:nth-of-type(4),
+  .footer-long, .copyright { display: none; }
+  .footer-short { display: inline; }
   .project-head { row-gap: 10px; }
   .filters-bar { grid-column: 1 / -1; }
   /* Work: only the Gallery on phones, so no Index / Gallery switch (work.js) */
   .filter-view { display: none; }
   /* the typologies fold into "Filter: All ↓" next to Year; open, they're a
-     list below, one per line, without the strokes (work.js) */
+     list below, one per line, without the strokes (work.js). It opens like
+     the menu: it grows in 1s, pushing the projects down, with the list
+     riding down at its bottom edge (set at the bottom, it's cut at the top),
+     and shrinks back the same way. It's cut 10px below "Filter" and its
+     last line stays 20px above the projects all along (its height counts
+     those 10px); the letters below the last baseline aren't cut. The list's
+     height is measured (--types-h, work.js). */
   .filters .filter-toggle { display: inline-grid; }
-  .filters-bar { flex-wrap: wrap; row-gap: var(--gutter); }
-  .filter-types { display: none; flex-basis: 100%; order: 1; }
-  .filters-bar.is-open .filter-types { display: grid; justify-items: start; row-gap: 10px; }
+  .filters-bar { flex-wrap: wrap; row-gap: 0; }
+  .filter-types {
+    display: grid;
+    justify-items: start;
+    align-content: unsafe end;
+    row-gap: 10px;
+    flex-basis: 100%;
+    order: 1;
+    position: relative;  /* (measured from, work.js) */
+    height: 0;
+    clip-path: inset(var(--gutter) -100vw -1em);
+    visibility: hidden;
+    transition: height 1s ease, visibility 0s 1s;
+  }
+  .filters-bar.is-open .filter-types { height: calc(var(--types-h, 0px) + var(--gutter)); visibility: visible; transition: height 1s ease, visibility 0s; }
+  @media (prefers-reduced-motion: reduce) {
+    .filter-types, .filters-bar.is-open .filter-types { transition: none; }
+  }
   .filter-types button:not(:last-child) > span::after { content: none; }
-  /* Gallery: the name and, at the end, the year on the first line; the
-     typology on the second */
-  .cover-info { grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--gutter); row-gap: 10px; }
+  /* Gallery: one line, the name and, at the end, the year; no typology
+     (the project's full view still shows it) */
+  .cover-info { grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--gutter); }
   .cover-info .meta { display: contents; }
   .cover-info .name { grid-column: 1; grid-row: 1; }
+  .cover-info .meta > span:first-child { display: none; }
   .cover-info .year { grid-column: 2; grid-row: 1; }
-  .cover-info .meta > span:first-child { grid-column: 1 / -1; grid-row: 2; }
+  /* Full view: the typology and, at the end of the line, the year */
+  .viewer-info .meta { grid-template-columns: minmax(0, 1fr) auto; }
+  .viewer-info .year { text-align: right; }
+  /* the collaborators' names never broken over two lines */
+  .name-whole { white-space: nowrap; }
+  /* and a pair's halves one under the other, each alone across the screen,
+     uncropped */
+  .viewer-images > .shot-pair { display: contents; }
+  .viewer-images > .shot-pair > * { display: block; width: 100%; height: auto; object-fit: cover; background: var(--ink); }
+  /* About: the bio's lines as full as the words allow, as Safari sets them
+     (Chrome's "pretty" would end its first lines short here); its
+     paragraphs' last two words are joined in info.html, so none ends on a
+     word alone */
+  .bio { text-wrap: wrap; }
+  /* About: a photo alone in its row takes the whole row, cut to the
+     frame (the talk: the screen and Diogo pointing at it) */
+  .photo:only-child { grid-column: 1 / -1; }
+  .photo:only-child img { inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
+  /* About: the first two photos right after the bio, then the rest of the
+     texts, and the talk's photo last (the columns open up into one list,
+     20px apart) */
+  .page-info :is(.pane, .about, .photos) { display: contents; }
+  .page-info .bio { order: -2; }
+  .page-info .photo-row:first-child { order: -1; }
+}
+
+/* Touch screens: what can be tapped answers in a larger area than its
+   letters (about 44px tall, the size of a fingertip), invisible, so nothing
+   moves. The menu's links, EN / PT, Close and the text's links get a block
+   reaching past them (::before); the filters, whose ::before and ::after
+   are taken, grow with padding that negative margins cancel. */
+@media (pointer: coarse) {
+  .site-header a, .lang button, .viewer-close, .about a[href], .site-footer a[href] { position: relative; }
+  .site-header a::before, .lang button::before, .viewer-close::before,
+  .about a[href]::before, .site-footer a[href]::before {
+    content: "";
+    position: absolute;
+  }
+  /* the menu: from the top of the screen to 20px below the words, 10px
+     either side (EN and PT meet at the stroke between them) */
+  .site-header a::before, .lang button::before { inset: calc(-1 * var(--gutter)) -10px -20px; }
+  .menu-toggle { position: relative; }
+  .menu-toggle::before { content: ""; position: absolute; inset: calc(-1 * var(--gutter)) -10px -20px; }
+  /* in the open menu, one under the other: each reaches halfway to the next */
+  .menu-items a::before, .menu-items .lang button::before { inset: calc(-1 * var(--space) / 2) -10px; }
+  .viewer-close::before { inset: calc(-1 * var(--gutter)) -15px; }
+  .about a[href]::before, .site-footer a[href]::before { inset: -12px -4px; }
+  /* (the sticky menu's band covers what reaches above Filter and Year, so
+     theirs reaches further down) */
+  .filters button { padding: 14px 0 20px; margin: -14px 0 -20px; }
+  /* the phones' list of typologies: each one's area reaches halfway to the
+     next, so they tile the list without overlapping */
+  @media (max-width: 640px) {
+    .filter-types { row-gap: var(--gutter); }
+    .filter-types button { padding-block: 7.5px; margin-block: -7.5px; }
+  }
 }

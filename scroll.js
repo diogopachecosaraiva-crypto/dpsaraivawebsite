@@ -13,7 +13,7 @@
   // its end. On tablet and phone the columns stack (styles.css), and the page
   // scrolls as a whole. Switches live when the window crosses the breakpoint.
   var twoColumns = matchMedia('(min-width: 1101px)');
-  var footer = document.querySelector('.site-footer');
+  var footer = document.querySelector('body > .site-footer');
   var instances = [];
   var longest = null; // the Lenis of the column with more to scroll
 
@@ -41,11 +41,10 @@
     updateFooter();
   }
 
-  // Work only: each image as wide as the image column and as tall as its own
-  // proportions (the exported images', 930:688), so none is ever cropped;
-  // rounded down to whole pixels, like the list's rows, so it never comes out
-  // wider than the column
-  var SHOT_RATIO = 930 / 688;
+  // Work only: each image as wide as the image column and 3:2 (a pair's
+  // halves fill it side by side); rounded down to whole pixels, like the
+  // list's rows, so it never comes out wider than the column
+  var SHOT_RATIO = 3 / 2;
   function sizeWorkImages() {
     var gallery = panes[1];
     var style = getComputedStyle(gallery);

@@ -25,8 +25,11 @@
   // The row opens by sliding in from the right (see the intro, below), so the
   // last posters of the loop are in view straight away too
   var intro = typeof Lenis !== 'undefined' && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // on phones 4 are in view (two over two) and the intro comes in from 4
+  // back: only those load first, so the opening shows sooner
+  var inView = matchMedia('(max-width: 640px)').matches ? 4 : OPENING;
   originals.forEach(function (el, n) {
-    var opening = n < OPENING || (intro && n >= originals.length - OPENING);
+    var opening = n < inView || (intro && n >= originals.length - inView);
     // the posters in view straight away load first; the rest load as they scroll in
     el.querySelectorAll('img').forEach(function (img) {
       img.loading = opening ? 'eager' : 'lazy';
@@ -185,14 +188,12 @@
   }
 
   var area = track.parentElement; // <main>, the horizontal scroll container
-  var step = 0;      // one poster + gutter, in px
+  var step = 0;      // one column of posters + gutter, in px
   var setWidth = 0;  // all original posters + their gutters
-  // On phones one poster rests in the middle, with parts of its neighbours
-  // showing at both edges (styles.css): the positions the track settles onto
-  // are shifted by `centre` (the scroll that centres the first poster; 0
-  // elsewhere, where the posters line up with the grid from the left margin)
-  var centred = matchMedia('(max-width: 640px)');
-  var centre = 0;
+  // On phones the posters come two over two (styles.css): a column holds two
+  // of them, and the track always settles onto a column
+  var phone = matchMedia('(max-width: 640px)');
+  var rows = 1;
   var settleTimer = null;
   var keyTarget = null; // where the latest arrow-key move is heading
 
@@ -206,12 +207,15 @@
     var visible = area.clientWidth;
     var posterWidth = originals[0].getBoundingClientRect().width;
     step = posterWidth + gap;
-    setWidth = step * originals.length;
-    centre = centred.matches
-      ? (parseFloat(getComputedStyle(track).paddingLeft) || 0) - (visible - posterWidth) / 2
-      : 0;
-    // only as many copies as fill one visible width (+1 for the partial poster)
-    var copies = Math.ceil(visible / step) + 1;
+    rows = phone.matches ? 2 : 1;
+    // in two rows, an odd number of posters would leave the loop's last
+    // column half empty: the loop then goes through them twice (the second
+    // time one place further on), so it ends on a full column
+    var loop = originals.length % rows ? originals.length * 2 : originals.length;
+    setWidth = step * loop / rows;
+    // copies for that second time round, then as many as fill one visible
+    // width (+1 column for the partial one)
+    var copies = loop - originals.length + (Math.ceil(visible / step) + 1) * rows;
     for (var c = 0; c < copies; c++) {
       var clone = originals[c % originals.length].cloneNode(true);
       clone.setAttribute('data-clone', '');
@@ -245,16 +249,17 @@
   // can start at once. Within three screen widths of the view it buffers in full,
   // and it only plays while it is visible (paused when it scrolls away, to save
   // battery and data); otherwise the cover shows.
-  // A video with data-start (the ASCII posters, whose animation opens on a
-  // black background) begins at that moment, the first frame on its colour
-  // (also its cover), and then loops through the whole animation as usual.
+  // A video with data-start (seconds) begins at that moment, which should be
+  // the frame its cover shows, and then loops through the whole animation as
+  // usual. (None uses it now: the ASCII posters' videos open on their colour.)
   var nearObserver = null;
   var inViewObserver = null;
   function startAt(event) {
     var video = event.target;
     video.currentTime = parseFloat(video.dataset.start);
   }
-  function prepareVideo(video, preload) {
+  function media(path) { return window.videoFile ? videoFile.url(path) : path; }
+  function prepareVideo(video, preload, now) {
     // again after every load(), which takes the video back to its start
     // (copies made after a resize already have their src, so this isn't
     // left to the first load below)
@@ -265,8 +270,21 @@
     }
     if (!video.getAttribute('src')) {
       video.poster = video.dataset.poster;
+      // on phones, where the posters are small, a lighter copy (540px wide),
+      // fetched whole before it's needed so it starts at once (video-file.js);
+      // now, as it comes into view, it streams if that isn't ready yet
+      // (from R2 on the published site, video-file.js)
+      var small = phone.matches && video.dataset.srcSmall && media(video.dataset.srcSmall);
+      if (small && window.videoFile) {
+        var ready = videoFile.get(small, function (copy) {
+          if (!video.getAttribute('src')) { video.preload = 'auto'; video.src = copy; }
+        });
+        if (ready) { video.preload = 'auto'; video.src = ready; return; }
+        if (!now) return;
+        videoFile.giveUp(small);
+      }
       video.preload = preload;
-      video.src = video.dataset.src;
+      video.src = small || media(video.dataset.src);
     } else if (preload === 'auto' && video.preload !== 'auto') {
       video.preload = 'auto';
       if (video.paused) video.load();
@@ -292,9 +310,15 @@
       entries.forEach(function (entry) {
         var video = entry.target;
         if (entry.isIntersecting && !reduceMotion) {
-          prepareVideo(video, 'auto');
+          prepareVideo(video, 'auto', true);
+          // muted said again: Safari on the iPhone only plays a video on its
+          // own when it's muted, and a copy of the poster (the loop's, made
+          // with cloneNode) can lose the muted it had in the HTML
+          video.muted = true;
           var playing = video.play();
-          if (playing) playing.catch(function () {}); // e.g. blocked by low-power mode: the cover shows
+          // refused (e.g. Low Power Mode): the cover shows until a touch
+          // (video-file.js)
+          if (playing) playing.catch(function (error) { if (window.videoFile) videoFile.refused(error); });
         } else {
           video.pause();
         }
@@ -318,7 +342,7 @@
     var posterH = (body.clientWidth - (visible + 1) * gutter) / visible * 636 / 455;
     var capH = parseFloat(style.getPropertyValue('--cap-h')) || 15;
     var free = innerHeight - posterH - (parseFloat(style.getPropertyValue('--cap-gap')) || 15) - capH;
-    var footer = document.querySelector('.site-footer');
+    var footer = document.querySelector('body > .site-footer');
     var footerStyle = getComputedStyle(footer);
     var footerText = footer.getBoundingClientRect().height
       - parseFloat(footerStyle.paddingTop) - parseFloat(footerStyle.paddingBottom);
@@ -350,9 +374,9 @@
   // Where the track will stop: the grid position if `rest` is close to one,
   // otherwise `rest` itself
   function restingPoint(rest) {
-    var nearest = Math.round((rest - centre) / step) * step + centre;
-    // on phones, always onto the nearest poster, in the middle
-    return centred.matches || Math.abs(rest - nearest) <= step * SNAP ? nearest : rest;
+    var nearest = Math.round(rest / step) * step;
+    // on phones, always onto the nearest column
+    return phone.matches || Math.abs(rest - nearest) <= step * SNAP ? nearest : rest;
   }
   function settle() {
     // where Lenis's smoothing is heading, measured from the current position
@@ -367,7 +391,7 @@
   }
   lenis.on('virtual-scroll', settleSoon);
 
-  // The intro: the row starts two posters back (at the end of the loop)
+  // The intro: the row starts two posters back (two columns on phones; at the end of the loop)
   // and comes in from the right, already moving, slowing down onto the opening
   // posters, so it's clear from the start that it scrolls sideways. It starts
   // once the posters it shows are ready (1.5 seconds at most); scrolling,
@@ -375,13 +399,13 @@
   var INTRO_TIME = 1.4;  // s
   var INTRO_POSTERS = 2; // how far back it starts
   if (intro) {
-    lenis.scrollTo(setWidth - INTRO_POSTERS * step + centre, { immediate: true });
+    lenis.scrollTo(setWidth - INTRO_POSTERS * step, { immediate: true });
     var started = false;
     var startIntro = function () {
       if (started) return;
       started = true;
       track.classList.add('is-ready');
-      lenis.scrollTo(centre, {
+      lenis.scrollTo(0, {
         duration: INTRO_TIME,
         easing: function (t) { return 1 - Math.pow(1 - t, 3); }
       });
@@ -436,9 +460,9 @@
     e.preventDefault();
     // while a previous key move is still animating, count from where it is going,
     // so quick repeated presses add up
-    var at = ((lenis.isScrolling === 'smooth' && keyTarget !== null ? keyTarget : lenis.scroll) - centre) / step;
+    var at = (lenis.isScrolling === 'smooth' && keyTarget !== null ? keyTarget : lenis.scroll) / step;
     var next = e.key === 'ArrowRight' ? Math.floor(at + 0.01) + 1 : Math.ceil(at - 0.01) - 1;
-    keyTarget = next * step + centre;
+    keyTarget = next * step;
     lenis.scrollTo(keyTarget, {
       onComplete: function () { keyTarget = null; }
     });
@@ -448,22 +472,23 @@
   // to fit short windows), keeping the same place in the loop
   // (deferred until the resize settles, so the measurements are final)
   // (not on the first call, which only reports the size build() already used
-  // and would stop the intro). The place is put back through restingPoint, so
-  // on phones a poster always ends in the middle: after a rotation, or a
-  // resize from a wider layout or in the middle of a move.
+  // and would stop the intro). The place is counted in posters, so it holds
+  // between one row and two, and put back through restingPoint, so on phones
+  // a column always ends lined up: after a rotation, or a resize from a wider
+  // layout or in the middle of a move.
   var resizeTimer = null;
   var index = 0;
   var firstSize = true;
   new ResizeObserver(function () {
     if (firstSize) { firstSize = false; return; }
-    if (!resizeTimer) index = (lenis.scroll - centre) / step;
+    if (!resizeTimer) index = lenis.scroll / step * rows;
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function () {
       resizeTimer = null;
       updateDensity();
       build();
       lenis.resize();
-      lenis.scrollTo(restingPoint(index * step + centre), { immediate: true });
+      lenis.scrollTo(restingPoint(index / rows * step), { immediate: true });
     }, 100);
   }).observe(area);
 })();

@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
   <title>Diogo Pacheco Saraiva</title>
-  <meta name="description" content="Diogo Pacheco Saraiva is a multidisciplinary graphic designer based in Porto, Portugal. His work spans branding, visual identity, editorial design, poster design, merch design, motion design, web design and illustration.">
+  <meta name="description" content="Diogo Pacheco Saraiva is a graphic designer based in Porto, Portugal. His work spans branding, visual identity, editorial design, poster design, merch design, motion design, web design and illustration.">
   <link rel="canonical" href="https://dpsaraiva.com/">
   <link rel="icon" href="favicon.ico" sizes="48x48">
   <link rel="icon" href="favicon-192.png" type="image/png" sizes="192x192">
@@ -12,7 +13,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Diogo Pacheco Saraiva">
   <meta property="og:title" content="Diogo Pacheco Saraiva">
-  <meta property="og:description" content="Diogo Pacheco Saraiva is a multidisciplinary graphic designer based in Porto, Portugal. His work spans branding, visual identity, editorial design, poster design, merch design, motion design, web design and illustration.">
+  <meta property="og:description" content="Diogo Pacheco Saraiva is a graphic designer based in Porto, Portugal. His work spans branding, visual identity, editorial design, poster design, merch design, motion design, web design and illustration.">
   <meta property="og:url" content="https://dpsaraiva.com/">
   <meta property="og:image" content="https://dpsaraiva.com/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
@@ -27,7 +28,7 @@
     "@type": "Person",
     "name": "Diogo Pacheco Saraiva",
     "jobTitle": "Graphic Designer",
-    "description": "Diogo Pacheco Saraiva is a multidisciplinary graphic designer based in Porto, Portugal. His work spans branding, visual identity, editorial design, poster design, merch design, motion design, web design and illustration.",
+    "description": "Diogo Pacheco Saraiva is a graphic designer based in Porto, Portugal. His work spans branding, visual identity, editorial design, poster design, merch design, motion design, web design and illustration.",
     "url": "https://dpsaraiva.com/",
     "image": "https://dpsaraiva.com/assets/og-image.jpg",
     "email": "mailto:diogopachecosaraiva@gmail.com",
@@ -42,20 +43,27 @@
   <link rel="stylesheet" href="styles.css">
   <script src="theme.js"></script>
   <script src="lang.js"></script>
+  <script src="menu.js" defer></script>
+  <script src="protect.js"></script>
+  <script src="sizes.js" defer></script>
   <script src="strokes.js" defer></script>
   <script src="vendor/lenis.min.js" defer></script>
+  <script src="video-file.js" defer></script>
   <script src="home.js" defer></script>
 </head>
 <body class="page-home">
   <nav class="site-header grid">
     <a href="index.html" class="logo" aria-label="Diogo Pacheco Saraiva, home" data-pt-aria-label="Diogo Pacheco Saraiva, página inicial">D<span class="more"><span>iogo&nbsp;</span></span>P<span class="more"><span>acheco&nbsp;</span></span>S<span class="more"><span>araiva</span></span></a>
-    <a href="work.html">WORK</a>
-    <a href="info.html">INFO</a>
-    <div class="tools">
-      <div class="lang" role="group" aria-label="Language" data-pt-aria-label="Língua">
-        <button type="button" data-lang="en" aria-pressed="true" aria-label="English" data-label="EN"><span>EN</span></button>
-        <span class="lang-sep" aria-hidden="true">·</span>
-        <button type="button" data-lang="pt" aria-pressed="false" aria-label="Português" data-label="PT"><span>PT</span></button>
+    <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="menu-items"><span>MENU <span class="menu-sign" aria-hidden="true"></span></span></button>
+    <div class="menu-items" id="menu-items">
+      <a href="work.html" data-pt="TRABALHO">WORK</a>
+      <a href="info.html" data-pt="SOBRE">ABOUT</a>
+      <div class="tools">
+        <div class="lang" role="group" aria-label="Language" data-pt-aria-label="Língua">
+          <button type="button" data-lang="en" aria-pressed="true" aria-label="English" data-label="EN"><span>EN</span></button>
+          <span class="lang-sep" aria-hidden="true">·</span>
+          <button type="button" data-lang="pt" aria-pressed="false" aria-label="Português" data-label="PT"><span>PT</span></button>
+        </div>
       </div>
     </div>
   </nav>
@@ -64,159 +72,162 @@
   <main>
     <div class="poster-track" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Posters" data-pt-aria-roledescription="carrossel" data-pt-aria-label="Cartazes">
       <figure class="poster" data-first="4">
-        <img src="assets/home/01.jpg" alt="Poster, D.B.G.C, 2026" loading="lazy" decoding="async">
+        <img src="assets/home/01.jpg" srcset="assets/home/01-w642.jpg 642w, assets/home/01.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, D.B.G.C, 2026" loading="lazy" decoding="async">
       </figure>
       <figure class="poster">
-        <img src="assets/home/02.jpg" alt="Poster, Comédia (A)Normal, S2, 2026" loading="lazy" decoding="async">
+        <img src="assets/home/02.jpg" srcset="assets/home/02-w642.jpg 642w, assets/home/02.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Comédia (A)Normal, S2, 2026" loading="lazy" decoding="async">
+      </figure>
+      <figure class="poster">
+        <img src="assets/home/comediaanormals2_2.jpg" srcset="assets/home/comediaanormals2_2-w642.jpg 642w, assets/home/comediaanormals2_2.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Comédia (A)Normal, S2, 2026" loading="lazy" decoding="async">
       </figure>
       <figure class="poster" data-color="orange">
-        <img src="assets/home/03.jpg" alt="Poster, Comédia (A)Normal, S1, 2026" loading="lazy" decoding="async">
+        <img src="assets/home/03.jpg" srcset="assets/home/03-w642.jpg 642w, assets/home/03.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Comédia (A)Normal, S1, 2026" loading="lazy" decoding="async">
       </figure>
       <figure class="poster" data-color="green">
-        <img src="assets/home/04.jpg" alt="Poster, Comédia (A)Normal, S1, 2026" loading="lazy" decoding="async">
+        <img src="assets/home/04.jpg" srcset="assets/home/04-w642.jpg 642w, assets/home/04.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Comédia (A)Normal, S1, 2026" loading="lazy" decoding="async">
       </figure>
       <figure class="poster" data-color="red">
-        <img src="assets/home/05.jpg" alt="Poster, Comédia (A)Normal, S1, 2026" loading="lazy" decoding="async">
+        <img src="assets/home/05.jpg" srcset="assets/home/05-w642.jpg 642w, assets/home/05.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Comédia (A)Normal, S1, 2026" loading="lazy" decoding="async">
       </figure>
       <figure class="poster" data-color="blue">
-        <img src="assets/home/06.jpg" alt="Poster, Comédia (A)Normal, S1, 2026" loading="lazy" decoding="async">
+        <img src="assets/home/06.jpg" srcset="assets/home/06-w642.jpg 642w, assets/home/06.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Comédia (A)Normal, S1, 2026" loading="lazy" decoding="async">
       </figure>
       <figure class="poster" data-color="orange">
-        <img src="assets/home/07.jpg" alt="Poster, Comédia (A)Normal, S1, 2026" loading="lazy" decoding="async">
+        <img src="assets/home/07.jpg" srcset="assets/home/07-w642.jpg 642w, assets/home/07.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Comédia (A)Normal, S1, 2026" loading="lazy" decoding="async">
       </figure>
       <figure class="poster" data-color="green">
-        <img src="assets/home/08.jpg" alt="Poster, Comédia (A)Normal, S1, 2026" loading="lazy" decoding="async">
+        <img src="assets/home/08.jpg" srcset="assets/home/08-w642.jpg 642w, assets/home/08.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Comédia (A)Normal, S1, 2026" loading="lazy" decoding="async">
       </figure>
       <figure class="poster" data-color="red">
-        <img src="assets/home/09.jpg" alt="Poster, Comédia (A)Normal, S1, 2026" loading="lazy" decoding="async">
+        <img src="assets/home/09.jpg" srcset="assets/home/09-w642.jpg 642w, assets/home/09.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Comédia (A)Normal, S1, 2026" loading="lazy" decoding="async">
       </figure>
       <figure class="poster" data-color="blue">
-        <img src="assets/home/10.jpg" alt="Poster, Comédia (A)Normal, S1, 2026" loading="lazy" decoding="async">
+        <img src="assets/home/10.jpg" srcset="assets/home/10-w642.jpg 642w, assets/home/10.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Comédia (A)Normal, S1, 2026" loading="lazy" decoding="async">
       </figure>
       <figure class="poster cycle">
         <div class="frames">
-          <img src="assets/home/11.jpg" alt="Poster, Paragem da Comédia #02, 2026" loading="lazy" decoding="async">
-          <img src="assets/home/12.jpg" alt="" loading="lazy" decoding="async">
+          <img src="assets/home/11.jpg" srcset="assets/home/11-w642.jpg 642w, assets/home/11.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Paragem da Comédia #02, 2026" loading="lazy" decoding="async">
+          <img src="assets/home/12.jpg" srcset="assets/home/12-w642.jpg 642w, assets/home/12.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="" loading="lazy" decoding="async">
         </div>
       </figure>
       <figure class="poster cycle" data-first="1">
         <div class="frames">
-          <img src="assets/home/13.jpg" alt="Poster, Paragem da Comédia #01, 2026" loading="lazy" decoding="async">
-          <img src="assets/home/14.jpg" alt="" loading="lazy" decoding="async">
+          <img src="assets/home/13.jpg" srcset="assets/home/13-w642.jpg 642w, assets/home/13.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Paragem da Comédia #01, 2026" loading="lazy" decoding="async">
+          <img src="assets/home/14.jpg" srcset="assets/home/14-w642.jpg 642w, assets/home/14.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="" loading="lazy" decoding="async">
         </div>
       </figure>
       <figure class="poster" data-later>
-        <img src="assets/home/15.jpg" alt="Poster, ExPress Faces, 2021" loading="lazy" decoding="async">
+        <img src="assets/home/15.jpg" srcset="assets/home/15-w634.jpg 634w, assets/home/15.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, ExPress Faces, 2021" loading="lazy" decoding="async">
       </figure>
       <figure class="poster" data-later>
-        <img src="assets/home/16.jpg" alt="Poster, ExPress Faces, 2021" loading="lazy" decoding="async">
+        <img src="assets/home/16.jpg" srcset="assets/home/16-w634.jpg 634w, assets/home/16.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, ExPress Faces, 2021" loading="lazy" decoding="async">
       </figure>
       <figure class="poster" data-later>
-        <img src="assets/home/17.jpg" alt="Poster, ExPress Faces, 2021" loading="lazy" decoding="async">
+        <img src="assets/home/17.jpg" srcset="assets/home/17-w634.jpg 634w, assets/home/17.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, ExPress Faces, 2021" loading="lazy" decoding="async">
       </figure>
       <figure class="poster" data-later>
-        <img src="assets/home/18.jpg" alt="Poster, A, 2023" loading="lazy" decoding="async">
+        <img src="assets/home/18.jpg" srcset="assets/home/18-w634.jpg 634w, assets/home/18.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, A, 2023" loading="lazy" decoding="async">
       </figure>
       <figure class="poster">
-        <img src="assets/home/19.jpg" alt="Poster, Porto Film Fest, 2025" loading="lazy" decoding="async">
+        <img src="assets/home/19.jpg" srcset="assets/home/19-w634.jpg 634w, assets/home/19.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Porto Film Fest, 2025" loading="lazy" decoding="async">
       </figure>
       <figure class="poster">
-        <img src="assets/home/20.jpg" alt="Poster, Porto Film Fest, 2025" loading="lazy" decoding="async">
+        <img src="assets/home/20.jpg" srcset="assets/home/20-w634.jpg 634w, assets/home/20.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Porto Film Fest, 2025" loading="lazy" decoding="async">
       </figure>
       <figure class="poster">
-        <img src="assets/home/21.jpg" alt="Poster, Porto Film Fest, 2025" loading="lazy" decoding="async">
+        <img src="assets/home/21.jpg" srcset="assets/home/21-w634.jpg 634w, assets/home/21.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Porto Film Fest, 2025" loading="lazy" decoding="async">
       </figure>
       <figure class="poster">
-        <img src="assets/home/22.jpg" alt="Poster, Porto Film Fest, 2025" loading="lazy" decoding="async">
+        <img src="assets/home/22.jpg" srcset="assets/home/22-w634.jpg 634w, assets/home/22.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Porto Film Fest, 2025" loading="lazy" decoding="async">
       </figure>
       <figure class="poster">
-        <img src="assets/home/23.jpg" alt="Poster, Comédia a Preto &amp; Branco, 2025" loading="lazy" decoding="async">
+        <img src="assets/home/23.jpg" srcset="assets/home/23-w634.jpg 634w, assets/home/23.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Comédia a Preto &amp; Branco, 2025" loading="lazy" decoding="async">
       </figure>
       <figure class="poster">
-        <img src="assets/home/24.jpg" alt="Poster, Comédia a Preto &amp; Branco, 2025" loading="lazy" decoding="async">
+        <img src="assets/home/24.jpg" srcset="assets/home/24-w634.jpg 634w, assets/home/24.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Comédia a Preto &amp; Branco, 2025" loading="lazy" decoding="async">
       </figure>
       <figure class="poster">
-        <img src="assets/home/25.jpg" alt="Poster, LoSaint Barberclub, 2025" loading="lazy" decoding="async">
+        <img src="assets/home/25.jpg" srcset="assets/home/25-w642.jpg 642w, assets/home/25.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, LoSaint Barberclub, 2025" loading="lazy" decoding="async">
       </figure>
       <figure class="poster">
-        <img src="assets/home/26.jpg" alt="Poster, RUGA, 2025" loading="lazy" decoding="async">
+        <img src="assets/home/26.jpg" srcset="assets/home/26-w634.jpg 634w, assets/home/26.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, RUGA, 2025" loading="lazy" decoding="async">
       </figure>
       <figure class="poster cycle">
         <div class="frames">
-          <img src="assets/home/ruga-v21.jpg" alt="Poster, RUGA, 2025" loading="lazy" decoding="async">
-          <img src="assets/home/ruga-v22.jpg" alt="" loading="lazy" decoding="async">
+          <img src="assets/home/ruga-v21.jpg" srcset="assets/home/ruga-v21-w642.jpg 642w, assets/home/ruga-v21.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, RUGA, 2025" loading="lazy" decoding="async">
+          <img src="assets/home/ruga-v22.jpg" srcset="assets/home/ruga-v22-w642.jpg 642w, assets/home/ruga-v22.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="" loading="lazy" decoding="async">
         </div>
       </figure>
       <figure class="poster cycle">
         <div class="frames">
-          <img src="assets/home/ruga-v31.jpg" alt="Poster, RUGA, 2025" loading="lazy" decoding="async">
-          <img src="assets/home/ruga-v32.jpg" alt="" loading="lazy" decoding="async">
+          <img src="assets/home/ruga-v31.jpg" srcset="assets/home/ruga-v31-w642.jpg 642w, assets/home/ruga-v31.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, RUGA, 2025" loading="lazy" decoding="async">
+          <img src="assets/home/ruga-v32.jpg" srcset="assets/home/ruga-v32-w642.jpg 642w, assets/home/ruga-v32.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="" loading="lazy" decoding="async">
         </div>
       </figure>
       <figure class="poster">
-        <img src="assets/home/27.jpg" alt="Poster, Saltu Halloween Edition, 2024" loading="lazy" decoding="async">
+        <img src="assets/home/27.jpg" srcset="assets/home/27-w634.jpg 634w, assets/home/27.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Saltu Halloween Edition, 2024" loading="lazy" decoding="async">
       </figure>
       <figure class="poster">
-        <img src="assets/home/28.jpg" alt="Poster, Project Conta B, 2024" loading="lazy" decoding="async">
+        <img src="assets/home/28.jpg" srcset="assets/home/28-w634.jpg 634w, assets/home/28.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Project Conta B, 2024" loading="lazy" decoding="async">
       </figure>
       <figure class="poster">
-        <img src="assets/home/29.jpg" alt="Poster, W.D.M, 2023" loading="lazy" decoding="async">
+        <img src="assets/home/29.jpg" srcset="assets/home/29-w634.jpg 634w, assets/home/29.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, W.D.M, 2023" loading="lazy" decoding="async">
       </figure>
       <figure class="poster cycle" data-first="3">
         <div class="frames">
-          <img src="assets/home/31.jpg" alt="Poster, Sexta Escaldante, 2024" loading="lazy" decoding="async">
-          <img src="assets/home/sexta-3.jpg" alt="" loading="lazy" decoding="async">
-          <img src="assets/home/30.jpg" alt="" loading="lazy" decoding="async">
+          <img src="assets/home/31.jpg" srcset="assets/home/31-w634.jpg 634w, assets/home/31.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Sexta Escaldante, 2024" loading="lazy" decoding="async">
+          <img src="assets/home/sexta-3.jpg" srcset="assets/home/sexta-3-w634.jpg 634w, assets/home/sexta-3.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="" loading="lazy" decoding="async">
+          <img src="assets/home/30.jpg" srcset="assets/home/30-w634.jpg 634w, assets/home/30.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="" loading="lazy" decoding="async">
         </div>
       </figure>
       <figure class="poster cycle">
         <div class="frames">
-          <img src="assets/home/32.jpg" alt="Poster, O mar não leva só areia, 2023" loading="lazy" decoding="async">
-          <img src="assets/home/mar-2.jpg" alt="" loading="lazy" decoding="async">
-          <img src="assets/home/mar-3.jpg" alt="" loading="lazy" decoding="async">
+          <img src="assets/home/32.jpg" srcset="assets/home/32-w634.jpg 634w, assets/home/32.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, O mar não leva só areia, 2023" loading="lazy" decoding="async">
+          <img src="assets/home/mar-2.jpg" srcset="assets/home/mar-2-w634.jpg 634w, assets/home/mar-2.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="" loading="lazy" decoding="async">
+          <img src="assets/home/mar-3.jpg" srcset="assets/home/mar-3-w634.jpg 634w, assets/home/mar-3.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="" loading="lazy" decoding="async">
         </div>
       </figure>
       <figure class="poster">
-        <img src="assets/home/33.jpg" alt="Poster, Artsons Lab, 2025" loading="lazy" decoding="async">
+        <img src="assets/home/33.jpg" srcset="assets/home/33-w634.jpg 634w, assets/home/33.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Artsons Lab, 2025" loading="lazy" decoding="async">
       </figure>
       <figure class="poster">
-        <img src="assets/home/34.jpg" alt="Poster, Comédia a Preto &amp; Branco, 2024" loading="lazy" decoding="async">
+        <img src="assets/home/34.jpg" srcset="assets/home/34-w634.jpg 634w, assets/home/34.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Comédia a Preto &amp; Branco, 2024" loading="lazy" decoding="async">
       </figure>
       <figure class="poster">
-        <img src="assets/home/35.jpg" alt="Poster, Comédia a Preto &amp; Branco, 2024" loading="lazy" decoding="async">
+        <img src="assets/home/35.jpg" srcset="assets/home/35-w634.jpg 634w, assets/home/35.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Comédia a Preto &amp; Branco, 2024" loading="lazy" decoding="async">
       </figure>
       <figure class="poster">
-        <img src="assets/home/36.jpg" alt="Poster, Comédia a Preto &amp; Branco, 2024" loading="lazy" decoding="async">
+        <img src="assets/home/36.jpg" srcset="assets/home/36-w634.jpg 634w, assets/home/36.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Comédia a Preto &amp; Branco, 2024" loading="lazy" decoding="async">
       </figure>
       <figure class="poster">
-        <img src="assets/home/37.jpg" alt="Poster, Comédia a Preto &amp; Branco, 2024" loading="lazy" decoding="async">
+        <img src="assets/home/37.jpg" srcset="assets/home/37-w634.jpg 634w, assets/home/37.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Comédia a Preto &amp; Branco, 2024" loading="lazy" decoding="async">
       </figure>
       <figure class="poster">
-        <img src="assets/home/38.jpg" alt="Poster, Comédia a Preto &amp; Branco, 2025" loading="lazy" decoding="async">
+        <img src="assets/home/38.jpg" srcset="assets/home/38-w634.jpg 634w, assets/home/38.jpg 1268w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Comédia a Preto &amp; Branco, 2025" loading="lazy" decoding="async">
       </figure>
       <figure class="poster" data-first="2">
-        <img src="assets/home/39.jpg" alt="Poster, Amor de Mãe, 2025" loading="lazy" decoding="async">
+        <img src="assets/home/39.jpg" srcset="assets/home/39-w636.jpg 636w, assets/home/39.jpg 1273w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Amor de Mãe, 2025" loading="lazy" decoding="async">
       </figure>
       <figure class="poster" data-later>
-        <img src="assets/home/40.jpg" alt="Poster, Grayscale Tech Files, 2025" loading="lazy" decoding="async">
+        <img src="assets/home/40.jpg" srcset="assets/home/40-w642.jpg 642w, assets/home/40.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, Grayscale Tech Files, 2025" loading="lazy" decoding="async">
       </figure>
       <figure class="poster" data-later>
-        <video data-src="assets/home/ascii-1.mp4" data-poster="assets/home/ascii-1-start.jpg" data-start="2.13" muted loop playsinline preload="none" aria-label="Animated poster, [ASCII_TYPE_GRID], 2025"></video>
+        <video disablepictureinpicture controlslist="nodownload" data-src="assets/home/ascii-1.mp4" data-src-small="assets/home/ascii-1-w540.mp4" data-poster="assets/home/ascii-1-start.jpg" muted loop playsinline preload="none" aria-label="Animated poster, [ASCII_TYPE_GRID], 2025"></video>
       </figure>
       <figure class="poster" data-later>
-        <video data-src="assets/home/ascii-2.mp4" data-poster="assets/home/ascii-2-start.jpg" data-start="2.03" muted loop playsinline preload="none" aria-label="Animated poster, [ASCII_TYPE_GRID], 2025"></video>
+        <video disablepictureinpicture controlslist="nodownload" data-src="assets/home/ascii-2.mp4" data-src-small="assets/home/ascii-2-w540.mp4" data-poster="assets/home/ascii-2-start.jpg" muted loop playsinline preload="none" aria-label="Animated poster, [ASCII_TYPE_GRID], 2025"></video>
       </figure>
       <figure class="poster" data-later>
-        <video data-src="assets/home/ascii-3.mp4" data-poster="assets/home/ascii-3-start.jpg" data-start="2.0" muted loop playsinline preload="none" aria-label="Animated poster, [ASCII_TYPE_GRID], 2025"></video>
+        <video disablepictureinpicture controlslist="nodownload" data-src="assets/home/ascii-3.mp4" data-src-small="assets/home/ascii-3-w540.mp4" data-poster="assets/home/ascii-3-start.jpg" muted loop playsinline preload="none" aria-label="Animated poster, [ASCII_TYPE_GRID], 2025"></video>
       </figure>
       <figure class="poster">
-        <img src="assets/home/65.jpg" alt="Poster, C H A O S, 2023" loading="lazy" decoding="async">
+        <img src="assets/home/65.jpg" srcset="assets/home/65-w642.jpg 642w, assets/home/65.jpg 1285w" sizes="(max-width: 640px) calc(50vw - 15px), (max-width: 1100px) 50vw, calc(25vw - 19px)" alt="Poster, C H A O S, 2023" loading="lazy" decoding="async">
       </figure>
     </div>
   </main>
 
   <footer class="site-footer grid">
-    <p>Diogo Pacheco Saraiva<br>Porto, Portugal</p>
+    <p>Diogo Pacheco Saraiva<span class="footer-long"><br>Porto, Portugal</span><span class="footer-short"><br>Porto © 2026</span></p>
     <p data-pt="Design Gráfico<br>e Ilustração">Graphic Design<br>and Illustration</p>
     <p><span data-pt="Para pedidos e contactos">For inquiries reach at</span><br><a href="mailto:diogopachecosaraiva@gmail.com">diogopachecosaraiva@gmail.com</a></p>
     <p><span data-pt="Todos os direitos reservados">All rights reserved</span><br>Diogo Pacheco Saraiva 2026</p>

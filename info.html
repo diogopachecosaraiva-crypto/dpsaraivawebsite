@@ -3,16 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Info — Diogo Pacheco Saraiva</title>
-  <meta name="description" content="About Diogo Pacheco Saraiva, freelance graphic designer in Porto, Portugal: services, talks, workshops, academic background and contacts.">
+  <meta name="theme-color" content="#ffffff">
+  <title>About — Diogo Pacheco Saraiva</title>
+  <meta name="description" content="About Diogo Pacheco Saraiva, freelance graphic designer in Porto, Portugal: services, lectures, workshops, academic background, collaborators and contacts.">
   <link rel="canonical" href="https://dpsaraiva.com/info.html">
   <link rel="icon" href="favicon.ico" sizes="48x48">
   <link rel="icon" href="favicon-192.png" type="image/png" sizes="192x192">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Diogo Pacheco Saraiva">
-  <meta property="og:title" content="Info — Diogo Pacheco Saraiva">
-  <meta property="og:description" content="About Diogo Pacheco Saraiva, freelance graphic designer in Porto, Portugal: services, talks, workshops, academic background and contacts.">
+  <meta property="og:title" content="About — Diogo Pacheco Saraiva">
+  <meta property="og:description" content="About Diogo Pacheco Saraiva, freelance graphic designer in Porto, Portugal: services, lectures, workshops, academic background, collaborators and contacts.">
   <meta property="og:url" content="https://dpsaraiva.com/info.html">
   <meta property="og:image" content="https://dpsaraiva.com/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
@@ -27,7 +28,7 @@
     "@type": "Person",
     "name": "Diogo Pacheco Saraiva",
     "jobTitle": "Graphic Designer",
-    "description": "Diogo Pacheco Saraiva is a multidisciplinary graphic designer based in Porto, Portugal. His work spans branding, visual identity, editorial design, poster design, merch design, motion design, web design and illustration.",
+    "description": "Diogo Pacheco Saraiva is a graphic designer based in Porto, Portugal. His work spans branding, visual identity, editorial design, poster design, merch design, motion design, web design and illustration.",
     "url": "https://dpsaraiva.com/",
     "image": "https://dpsaraiva.com/assets/og-image.jpg",
     "email": "mailto:diogopachecosaraiva@gmail.com",
@@ -42,32 +43,39 @@
   <link rel="stylesheet" href="styles.css">
   <script src="theme.js"></script>
   <script src="lang.js"></script>
+  <script src="menu.js" defer></script>
+  <script src="protect.js"></script>
+  <script src="sizes.js" defer></script>
   <script src="strokes.js" defer></script>
   <script src="vendor/lenis.min.js" defer></script>
   <script src="scroll.js" defer></script>
+  <script src="info.js" defer></script>
 </head>
 <body class="page-split page-info">
   <nav class="site-header grid">
     <a href="index.html" class="logo" aria-label="Diogo Pacheco Saraiva, home" data-pt-aria-label="Diogo Pacheco Saraiva, página inicial">D<span class="more"><span>iogo&nbsp;</span></span>P<span class="more"><span>acheco&nbsp;</span></span>S<span class="more"><span>araiva</span></span></a>
-    <a href="work.html">WORK</a>
-    <a href="info.html">INFO</a>
-    <div class="tools">
-      <div class="lang" role="group" aria-label="Language" data-pt-aria-label="Língua">
-        <button type="button" data-lang="en" aria-pressed="true" aria-label="English" data-label="EN"><span>EN</span></button>
-        <span class="lang-sep" aria-hidden="true">·</span>
-        <button type="button" data-lang="pt" aria-pressed="false" aria-label="Português" data-label="PT"><span>PT</span></button>
+    <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="menu-items"><span>MENU <span class="menu-sign" aria-hidden="true"></span></span></button>
+    <div class="menu-items" id="menu-items">
+      <a href="work.html" data-pt="TRABALHO">WORK</a>
+      <a href="info.html" data-pt="SOBRE">ABOUT</a>
+      <div class="tools">
+        <div class="lang" role="group" aria-label="Language" data-pt-aria-label="Língua">
+          <button type="button" data-lang="en" aria-pressed="true" aria-label="English" data-label="EN"><span>EN</span></button>
+          <span class="lang-sep" aria-hidden="true">·</span>
+          <button type="button" data-lang="pt" aria-pressed="false" aria-label="Português" data-label="PT"><span>PT</span></button>
+        </div>
       </div>
     </div>
   </nav>
 
-  <h1 class="visually-hidden" data-pt="Info">Info</h1>
+  <h1 class="visually-hidden" data-pt="Sobre">About</h1>
   <main class="info grid">
     <div class="pane pane-text" data-lenis-pane>
       <section class="about">
-        <p class="bio" data-pt="Diogo Pacheco Saraiva é um designer gráfico multidisciplinar sediado no Porto, Portugal. A sua prática move-se entre a investigação e a exploração visual, deixando que o propósito de cada projeto defina a sua forma, sem nunca perder de vista a mensagem que tem de transmitir.<br>Atualmente trabalha como freelancer, colaborando diretamente com marcas, serviços, organizações e indivíduos.">Diogo Pacheco Saraiva is a multidisciplinary graphic designer based in Porto, Portugal. His practice moves between research and visual exploration, letting each project’s purpose shape its form while staying anchored in the message it needs to convey.<br>He currently works as a freelancer, collaborating directly with brands, services, organisations and individuals.</p>
+        <p class="bio" data-pt="Diogo Pacheco Saraiva é um designer gráfico sediado no Porto,&nbsp;Portugal.<span class='para'>A sua prática move-se entre a investigação e a exploração visual, deixando que o propósito de cada projeto defina a sua forma, sem nunca perder de vista a mensagem que tem de&nbsp;transmitir.</span><span class='para'>Atualmente trabalha como freelancer, colaborando diretamente com marcas, serviços, organizações e&nbsp;indivíduos.</span>">Diogo Pacheco Saraiva is a graphic designer based in Porto,&nbsp;Portugal.<span class='para'>His practice moves between research and visual exploration, letting each project’s purpose shape its form while staying anchored in the message it needs to&nbsp;convey.</span><span class='para'>He currently works as a freelancer, collaborating directly with brands, services, organisations and&nbsp;individuals.</span></p>
 
         <div class="block">
-          <p data-pt='<span class="label">Serviços</span><br>Design de Cartazes<br>Branding<br>Identidade Visual<br>Design Editorial<br>Motion Design<br>Design de Merch<br>Web Design<br>Ilustração<br>Estratégia e Design para Redes Sociais'><span class="label">Services</span><br>Poster Design<br>Branding<br>Visual Identity<br>Editorial Design<br>Motion Design<br>Merch Design<br>Web Design<br>Illustration<br>Social-Media Strategy and Design</p>
+          <p data-pt='<span class="label">Serviços</span><br>Design de Cartazes<br>Branding<br>Identidade Visual<br>Design Editorial<br>Motion Design<br>Design de Merch<br>Web Design<br>Ilustração<br>Redes Sociais'><span class="label">Services</span><br>Poster Design<br>Branding<br>Visual Identity<br>Editorial Design<br>Motion Design<br>Merch Design<br>Web Design<br>Illustration<br>Social Media</p>
         </div>
 
         <div class="block">
@@ -75,29 +83,63 @@
           <p><span class="label">Instagram</span><br><a href="https://www.instagram.com/d.p.saraiva/" target="_blank" rel="noopener">@d.p.saraiva</a></p>
         </div>
 
-        <div class="block">
-          <p><span class="label" data-pt="Palestras">Talks</span><br>Descomunal - Nova Fornada, Porto, PT, 2025<br>Mad Shift - ESMAD, Vila do Conde, PT, 2026</p>
-        </div>
-        <div class="block">
-          <p><span class="label">Workshop</span><br>Mad Shift - ESMAD, Vila do Conde, PT, 2026</p>
-        </div>
+        <ul class="projects sections">
+          <li class="project">
+            <button class="project-head" type="button" aria-expanded="false" aria-controls="about-lectures">
+              <span class="name" data-pt="Palestras">Lectures</span>
+            </button>
+            <div class="project-text" id="about-lectures" inert>
+              <div><ul class="entries">
+                <li><span class="name">Mad Shift - FMAD</span><span class="meta"><span>Vila do Conde, PT</span><span class="year">2026</span></span></li>
+                <li><span class="name">Descomunal - Nova Fornada</span><span class="meta"><span>Porto, PT</span><span class="year">2025</span></span></li>
+              </ul></div>
+            </div>
+          </li>
+          <li class="project">
+            <button class="project-head" type="button" aria-expanded="false" aria-controls="about-workshop">
+              <span class="name">Workshops</span>
+            </button>
+            <div class="project-text" id="about-workshop" inert>
+              <div><ul class="entries">
+                <li><span class="name">Mad Shift - FMAD (Making Marks)</span><span class="meta"><span>Vila do Conde, PT</span><span class="year">2026</span></span></li>
+              </ul></div>
+            </div>
+          </li>
+          <li class="project">
+            <button class="project-head" type="button" aria-expanded="false" aria-controls="about-education">
+              <span class="name" data-pt="Formação Académica">Academic Background</span>
+            </button>
+            <div class="project-text" id="about-education" inert>
+              <div><ul class="entries">
+                <li><span class="name" data-pt="Mestrado">Masters Degree</span><span class="meta"><span>ESAD Matosinhos, PT</span><span class="year">2022 - 2025</span></span></li>
+                <li><span class="name" data-pt="Curso de Curta Duração em Creative Coding">Short Course on Creative Coding</span><span class="meta"><span>ESAD Matosinhos, PT</span><span class="year">2022</span></span></li>
+                <li><span class="name" data-pt="Licenciatura">Bachelors Degree</span><span class="meta"><span>ESAD Matosinhos, PT</span><span class="year">2019 - 2022</span></span></li>
+              </ul></div>
+            </div>
+          </li>
+        </ul>
 
-        <div class="block wide">
-          <p data-pt='<span class="label">Formação Académica</span><br>Licenciatura, ESAD Matosinhos, PT, 2019 - 2022<br>Curso de curta duração em Creative Coding, ESAD Matosinhos, PT, 2022<br>Mestrado, ESAD Matosinhos, PT, 2022 - 2025'><span class="label">Academic Background</span><br>Bachelors Degree, ESAD Matosinhos, PT, 2019 - 2022<br>Short course on Creative Coding, ESAD Matosinhos, PT, 2022<br>Masters Degree, ESAD Matosinhos, PT, 2022 - 2025</p>
+        <div class="block">
+          <p><span class="label" data-pt="Colaboradores">Collaborators</span><br>Alexandre Campelo<br>Bernardo Guedes<br>Hélder Pinho<br>José Pedro Carmo<br>Marco da Silva<br>Nuno Pinto</p>
         </div>
       </section>
     </div>
 
     <div class="pane pane-images" data-lenis-pane>
       <div class="photos">
-        <div class="photo"><img class="crop-b" src="assets/info-2.jpg" alt="Portrait of Diogo Pacheco Saraiva" data-pt-alt="Retrato de Diogo Pacheco Saraiva"></div>
-        <div class="photo"><img class="crop-a" src="assets/info-1.jpg" alt="Diogo presenting at a talk" data-pt-alt="Diogo a apresentar numa palestra"></div>
+        <div class="photo-row">
+          <div class="photo"><img class="crop-b" src="assets/info-2.jpg" srcset="assets/info-2-w666.jpg 666w, assets/info-2.jpg 1333w" sizes="(max-width: 1100px) calc(50vw - 23px), calc(25vw - 19px)" alt="Portrait of Diogo Pacheco Saraiva" data-pt-alt="Retrato de Diogo Pacheco Saraiva"></div>
+          <div class="photo"><img class="crop-c" src="assets/info-4.jpg" srcset="assets/info-4-w680.jpg 680w, assets/info-4.jpg 1360w" sizes="(max-width: 1100px) calc(50vw - 23px), calc(25vw - 19px)" alt="Diogo as a child, painting" data-pt-alt="Diogo em criança, a pintar"></div>
+        </div>
+        <div class="photo-row">
+          <div class="photo"><img class="crop-a" src="assets/info-1.jpg" srcset="assets/info-1-w750.jpg 750w, assets/info-1.jpg 1500w" sizes="(max-width: 1100px) calc(50vw - 23px), calc(25vw - 19px)" alt="Diogo presenting at a talk" data-pt-alt="Diogo a apresentar numa palestra"></div>
+        </div>
       </div>
     </div>
   </main>
 
   <footer class="site-footer grid">
-    <p>Diogo Pacheco Saraiva<br>Porto, Portugal</p>
+    <p>Diogo Pacheco Saraiva<span class="footer-long"><br>Porto, Portugal</span><span class="footer-short"><br>Porto © 2026</span></p>
     <p data-pt="Design Gráfico<br>e Ilustração">Graphic Design<br>and Illustration</p>
     <p><span data-pt="Para pedidos e contactos">For inquiries reach at</span><br><a href="mailto:diogopachecosaraiva@gmail.com">diogopachecosaraiva@gmail.com</a></p>
     <p><span data-pt="Todos os direitos reservados">All rights reserved</span><br>Diogo Pacheco Saraiva 2026</p>

@@ -58,6 +58,38 @@
   // videos load and play only while they're on screen. With
   // reduced motion asked for, the first version and the video's cover stay.
   var reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // a video shown at most 640px wide (on a phone) plays its lighter copy,
+  // 960px wide (720 for a pair's half), where it has one (data-src-small,
+  // made with _originais/tools/small-video.swift)
+  function videoSource(video) {
+    var small = video.dataset.srcSmall;
+    var width = video.getBoundingClientRect().width;
+    return small && width && width <= 640 ? small : video.dataset.src;
+  }
+  // refused to play on its own (e.g. Low Power Mode): it plays at a touch
+  // (video-file.js)
+  function refused(error) { if (window.videoFile) videoFile.refused(error); }
+  // a video starts loading a screen and a half before it comes into view, so
+  // it's ready to play by the time it gets there: its lighter copy fetched
+  // whole (video-file.js), the full video buffered (where that's honoured);
+  // now, as it comes into view, it plays from whatever there is
+  var NEAR = '150% 0px';
+  function loadVideo(video, now) {
+    if (video.getAttribute('src')) return;
+    var path = videoSource(video);
+    // (from R2 on the published site, video-file.js)
+    var url = window.videoFile ? videoFile.url(path) : path;
+    if (path === video.dataset.srcSmall && window.videoFile) {
+      var ready = videoFile.get(url, function (copy) {
+        if (!video.getAttribute('src')) video.src = copy;
+      });
+      if (ready) { video.src = ready; return; }
+      if (!now) return;
+      videoFile.giveUp(url);
+    }
+    video.preload = 'auto';
+    video.src = url;
+  }
   // a video with data-rate plays at that speed (1.5 = one and a half times
   // faster), wherever it plays: the column, the covers or the viewer
   document.addEventListener('play', function (event) {
@@ -75,18 +107,21 @@
       });
     }, 750);
     if ('IntersectionObserver' in window) {
+      var nearVideos = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) { if (entry.isIntersecting) loadVideo(entry.target); });
+      }, { rootMargin: NEAR });
       var videos = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
           var video = entry.target;
           if (entry.isIntersecting) {
-            if (!video.getAttribute('src')) video.src = video.dataset.src;
-            video.play().catch(function () {});
+            loadVideo(video, true);
+            video.play().catch(refused);
           } else {
             video.pause();
           }
         });
       });
-      gallery.querySelectorAll('video').forEach(function (video) { videos.observe(video); });
+      gallery.querySelectorAll('video').forEach(function (video) { nearVideos.observe(video); videos.observe(video); });
     }
   }
 
@@ -123,35 +158,45 @@
 
   // With a project open, clicking one of its images opens the project's images
   // over everything, in a column like the Work images: one under the other,
-  // 20px apart, each as large as the window allows inside the 20px margins
-  // and as it is in the Work column (pairs side by side, videos playing while
-  // in view). It scrolls freely and smoothly like the Work columns (Lenis),
-  // always from the start. Above the images, the project's line of
-  // info and its text, on the same columns as in the list (the text from
-  // column 5). At the end comes the site's footer, as on the rest of the
-  // Work page: on desktop it slides up once the scroll reaches the end, and
-  // the last image stops above it. The X (top right) or Escape go back.
+  // 15px apart, each from margin to margin, 3:2 (a pair's halves side by
+  // side, as tall, videos playing while in view). It scrolls freely and smoothly like the Work columns (Lenis),
+  // always from the start. The project's line of info (name, typology,
+  // year) and Close take the menu's place at the top; above the images, its
+  // collaborators and its text (from column 5 on desktop). At the end comes
+  // the site's footer, as on the rest of the Work page: on desktop it slides
+  // up once the scroll reaches the end, and the last image stops above it.
+  // Close, the browser's back (button or gesture) or Escape go back: opening
+  // a project is a step in the browser's history.
   if (gallery) {
     var viewer = document.createElement('div');
     viewer.className = 'viewer';
     viewer.hidden = true;
     viewer.setAttribute('role', 'dialog');
-    viewer.setAttribute('aria-modal', 'true');
+    // (not aria-modal: its Close, on the project's line, sits next to it; the
+    // rest of the page is made inert while it's open instead)
     viewer.setAttribute('aria-label', 'Image viewer');
     viewer.setAttribute('data-pt-aria-label', 'Visualizador de imagens');
+    viewer.tabIndex = -1;   // focused while open, for the keyboard
     viewer.innerHTML =
       '<div class="viewer-content">' +
         '<div class="viewer-info"></div>' +
         '<div class="viewer-text"></div>' +
         '<div class="viewer-images"></div>' +
       '</div>' +
-      '<button class="viewer-close" type="button" aria-label="Close" data-pt-aria-label="Fechar"></button>';
+      '<div class="viewer-bar grid">' +
+        '<button class="viewer-close" type="button"><span data-pt="Fechar">Close</span></button>' +
+      '</div>';
     document.body.appendChild(viewer);
     var content = viewer.querySelector('.viewer-content');
     var info = viewer.querySelector('.viewer-info');
     var text = viewer.querySelector('.viewer-text');
     var images = viewer.querySelector('.viewer-images');
-    var closeButton = viewer.querySelector('.viewer-close');
+    var projectLine = viewer.querySelector('.viewer-bar');
+    // the project's line goes next to the viewer, not inside it: fixed above
+    // a scrolling box, Safari on the iPhone would clip it away
+    projectLine.hidden = true;
+    document.body.appendChild(projectLine);
+    var closeButton = projectLine.querySelector('.viewer-close');
     var viewerLenis = null;
     var viewerFooter = null;
     var twoColumns = matchMedia('(min-width: 1101px)');
@@ -179,132 +224,106 @@
         : viewer.scrollTop >= viewer.scrollHeight - viewer.clientHeight - 2;
       viewer.classList.toggle('is-end', end);
     }
-    viewer.addEventListener('scroll', function () { if (!viewerLenis) { updateFooter(); updateClose(); clipTop(); } });
-    window.addEventListener('resize', function () { if (!viewer.hidden) { sizeFooter(); updateClose(); } });
-    // the 12px of room above the first line (styles.css) is covered by the
-    // menu's band as soon as the column scrolls, so nothing shows above where
-    // it starts
-    function clipTop() {
-      var scrolled = viewerLenis ? viewerLenis.scroll > 0.01 || viewerLenis.targetScroll > 0.01 : viewer.scrollTop > 0;
-      document.body.classList.toggle('viewer-scrolled', scrolled);
-    }
+    viewer.addEventListener('scroll', function () { if (!viewerLenis) updateFooter(); });
+    window.addEventListener('resize', function () { if (!viewer.hidden) { sizeFooter(); alignToMenu(); } });
 
-    // The X: black or white, whichever shows against the part of the image
-    // under it, measured from a few pixels of that part (a video's current
-    // frame, or its poster until it plays); over the page itself, the page's
-    // ink. Checked as the column scrolls, and a few times a second for videos.
-    var sample = document.createElement('canvas');
-    sample.width = sample.height = 6;
-    var sampleContext = sample.getContext('2d', { willReadFrequently: true });
-    var posters = {};
-    var closeTimer = null;
-    function lightness(media, x, y, size) {
-      var box = media.getBoundingClientRect();
-      var source = media;
-      var width = media.naturalWidth, height = media.naturalHeight;
-      if (media.tagName === 'VIDEO') {
-        width = media.videoWidth; height = media.videoHeight;
-        if (media.readyState < 2) {
-          source = posters[media.poster];
-          if (!source) {
-            source = posters[media.poster] = new Image();
-            source.src = media.poster;
-          }
-          width = source.naturalWidth; height = source.naturalHeight;
-        }
+    // The year above the text starts where ABOUT does in the menu
+    // (styles.css): how far that is from the info's left edge, whatever the
+    // menu's layout. On phones, with ABOUT inside MENU +, at the grid's
+    // second column instead.
+    var infoLink = document.querySelector('.site-header a[href="info.html"]');
+    function alignToMenu() {
+      if (!infoLink) return;
+      var x = infoLink.getBoundingClientRect().left;
+      if (infoLink.closest('.menu-items') && phoneViewer.matches) {
+        var gutter = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gutter')) || 10;
+        x = (document.documentElement.clientWidth + gutter) / 2;
       }
-      if (!width || !height) return null;
-      // object-fit: cover, centred
-      var scale = Math.max(box.width / width, box.height / height);
-      var left = box.left + (box.width - width * scale) / 2;
-      var top = box.top + (box.height - height * scale) / 2;
-      try {
-        sampleContext.drawImage(source, (x - left) / scale, (y - top) / scale, size / scale, size / scale, 0, 0, 6, 6);
-        var data = sampleContext.getImageData(0, 0, 6, 6).data;
-      } catch (e) { return null; }
-      var sum = 0;
-      for (var i = 0; i < data.length; i += 4) sum += 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
-      return sum / (data.length / 4) / 255;
+      info.style.setProperty('--info-x', (x - info.getBoundingClientRect().left) + 'px');
+      projectLine.style.setProperty('--info-x', (x - projectLine.getBoundingClientRect().left) + 'px');
     }
-    function updateClose() {
-      if (viewer.hidden) return;
-      var button = closeButton.getBoundingClientRect();
-      var x = button.left + button.width / 2, y = button.top + button.height / 2;
-      var size = button.width + 8;
-      var under = null;
-      images.querySelectorAll('img, video').forEach(function (media) {
-        var box = media.getBoundingClientRect();
-        if (x >= box.left && x <= box.right && y >= box.top && y <= box.bottom) under = media;
-      });
-      var level = under ? lightness(under, x - size / 2, y - size / 2, size) : null;
-      // a little hysteresis, so it doesn't flicker on mid greys
-      var light = closeButton.classList.contains('on-light');
-      if (level === null) {
-        closeButton.classList.remove('on-light', 'on-dark');
-        return;
-      }
-      light = light ? level > 0.45 : level > 0.55;
-      closeButton.classList.toggle('on-light', light);
-      closeButton.classList.toggle('on-dark', !light);
+    // the viewer starts 15px below the project's line, however many lines
+    // it takes (a whole pixel, as the menu's band). Rounded down: the line
+    // covers the viewer's top by a fraction of a pixel rather than leave a
+    // sliver of the page behind showing between them.
+    function fitBar() {
+      if (!viewer.hidden) viewer.style.setProperty('--bar-h', Math.floor(projectLine.getBoundingClientRect().height + 0.001) + 'px');
     }
+    if ('ResizeObserver' in window) new ResizeObserver(fitBar).observe(projectLine);
+
     var returnFocus = null;
     var pageTheme = 'light';
 
-    // videos load and play only while in view
+    // videos start loading on their way into view (NEAR) and play only while
+    // in view
+    function videosIn(el) { return el.tagName === 'VIDEO' ? [el] : el.querySelectorAll('video'); }
+    var nearing = 'IntersectionObserver' in window ? new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) Array.prototype.forEach.call(videosIn(entry.target), function (video) { loadVideo(video); });
+      });
+    }, { root: viewer, rootMargin: NEAR }) : null;
     var playing = 'IntersectionObserver' in window ? new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
-        var videos = entry.target.tagName === 'VIDEO' ? [entry.target] : entry.target.querySelectorAll('video');
-        Array.prototype.forEach.call(videos, function (video) {
+        Array.prototype.forEach.call(videosIn(entry.target), function (video) {
           if (!entry.isIntersecting) { video.pause(); return; }
-          if (!video.getAttribute('src')) video.src = video.dataset.src;
+          loadVideo(video, true);
           video.muted = true;
-          if (!reduceMotion) video.play().catch(function () {});
+          if (!reduceMotion) video.play().catch(refused);
         });
       });
     }, { root: viewer }) : null;
 
-    // the project's line of info (name, typology, year) and its text, as
-    // they are in the list (in the page's language); the collaborators go
-    // on the line under the name instead of after the text (not on phones)
+    // the project's info (name, typology, year) and its text, as they are
+    // in the list (in the page's language): the info in the menu's place, the
+    // collaborators apart from the text (styles.css; on phones the typology
+    // and the year above the text, the collaborators with it)
     function showInfo(row) {
-      info.replaceChildren(row.querySelector('.name').cloneNode(true), row.querySelector('.meta').cloneNode(true));
+      var meta = row.querySelector('.meta');
+      projectLine.replaceChildren(row.querySelector('.name').cloneNode(true), meta.cloneNode(true), closeButton);
+      info.replaceChildren();
       text.replaceChildren();
+      if (phoneViewer.matches) info.appendChild(meta.cloneNode(true));
       row.querySelectorAll('.project-text p').forEach(function (para) {
         var copy = para.cloneNode(true);
         if (!phoneViewer.matches && /^(Collaborators|Colaboradores):/.test(para.textContent)) {
-          copy.className = 'credits';
           info.appendChild(copy);
         } else {
           text.appendChild(copy);
         }
       });
+      info.hidden = !info.children.length;
     }
     var phoneViewer = matchMedia('(max-width: 640px)');
 
     // the project's images (shot: one of them, in the image column), and its
-    // row in the list
-    function open(shot, row) {
+    // row in the list. Each project has its own address, work.html#<project>
+    // (its data-project): opening it is a step in the browser's history with
+    // that address (pushed unless the address is already there), and the tab
+    // takes the project's name
+    var pageTitle = document.title;
+    function open(shot, row, pushed) {
+      if (!viewer.hidden) close(); // another project, through its address
       showInfo(row);
       images.replaceChildren();
       Array.prototype.forEach.call(shot.parentElement.children, function (source) {
         if (!source.classList.contains('shot')) return;
-        var box = source.getBoundingClientRect();
         var copy = source.cloneNode(true);
-        // the Work column's proportions (as in Figma while the column is hidden, in the Full view)
-        copy.style.setProperty('--ratio', box.height ? box.width / box.height : 930 / 688);
         images.appendChild(copy);
-        if (playing) playing.observe(copy);
+        // (each video itself: on phones a pair has no box of its own)
+        if (playing) Array.prototype.forEach.call(videosIn(copy), function (video) { nearing.observe(video); playing.observe(video); });
       });
       returnFocus = document.activeElement;
       // the menu stays usable above it (styles.css)
       Array.prototype.forEach.call(document.body.children, function (el) {
-        if (el !== viewer && !el.classList.contains('site-header')) el.inert = true;
+        if (el !== viewer && el !== projectLine && !el.classList.contains('site-header')) el.inert = true;
       });
       // a project opened full size is shown in dark mode (the page itself is light)
       pageTheme = document.documentElement.dataset.theme;
       document.documentElement.dataset.theme = 'dark';
       document.body.classList.add('viewer-open');
       viewer.hidden = false;
+      projectLine.hidden = false;
+      fitBar();
       addFooter();
       // whichever image was clicked, it opens at the start, with the
       // project's info above the first image
@@ -312,23 +331,25 @@
       if (typeof Lenis !== 'undefined') {
         // overscroll off: at its ends it doesn't pass the wheel on to the page behind
         viewerLenis = new Lenis({ wrapper: viewer, content: content, overscroll: false, autoRaf: true });
-        viewerLenis.on('scroll', function () { updateFooter(); updateClose(); clipTop(); });
+        viewerLenis.on('scroll', updateFooter);
       }
       updateFooter();
-      updateClose();
-      closeTimer = setInterval(updateClose, 200);
-      closeButton.focus({ preventScroll: true });
+      alignToMenu();
+      viewer.focus({ preventScroll: true });
+      document.title = row.querySelector('.name').textContent.trim() + ' — ' + pageTitle.replace(/^Work — /, '');
+      // a step in the browser's history, so its back closes the project
+      if (!pushed) history.pushState({ viewer: true }, '', '#' + row.dataset.project);
     }
     function close() {
+      if (viewer.hidden) return;
       if (viewerLenis) { viewerLenis.destroy(); viewerLenis = null; }
-      clearInterval(closeTimer);
-      closeButton.classList.remove('on-light', 'on-dark');
       viewer.hidden = true;
+      projectLine.hidden = true;
+      document.title = pageTitle;
       document.documentElement.dataset.theme = pageTheme;
       document.body.classList.remove('viewer-open');
-      document.body.classList.remove('viewer-scrolled');
       viewer.classList.remove('is-end');
-      if (playing) playing.disconnect();
+      if (playing) { nearing.disconnect(); playing.disconnect(); }
       images.replaceChildren();
       Array.prototype.forEach.call(document.body.children, function (el) { el.inert = false; });
       // back where the keyboard was, or nowhere (a click on an image)
@@ -338,14 +359,74 @@
 
     gallery.addEventListener('click', function (event) {
       var shot = event.target.closest('.shot');
-      if (shot && gallery.classList.contains('is-project')) open(shot, document.querySelector('.project.is-open'));
+      if (shot && gallery.classList.contains('is-project')) openFaded(shot, document.querySelector('.project.is-open'));
     });
-    closeButton.addEventListener('click', close);
+    // the project an address names (#full-frames), with its first image
+    function fromAddress() {
+      var key = decodeURIComponent(location.hash.slice(1));
+      var row = key && document.querySelector('.projects > .project[data-project="' + key.replace(/"/g, '') + '"]');
+      var group = row && groups[key];
+      var shot = group && group.querySelector('.shot');
+      return shot ? { shot: shot, row: row } : null;
+    }
+    // the browser's back closes it; Close and Escape go back the same way.
+    // Forward opens it again, and so does a project's address typed or
+    // followed while on the page
+    // Opening a project (a click or a key) and closing it (Close, Escape)
+    // go the way pages change (theme.js, styles.css): a block of the colour
+    // coming fades in over the page, the project opens or closes under it,
+    // and after a moment it fades away
+    var LEAVE = 600; // ms, as in theme.js
+    var HOLD = 300;
+    var fades = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var fading = false;
+    function fadeTo(theme, change) {
+      if (fading) return;
+      if (!fades) { change(); return; }
+      fading = true;
+      var root = document.documentElement;
+      root.dataset.next = theme;
+      root.classList.add('is-leaving');
+      setTimeout(function () {
+        change();
+        setTimeout(function () {
+          root.classList.remove('is-leaving');
+          fading = false;
+          setTimeout(function () { if (!root.classList.contains('is-leaving')) delete root.dataset.next; }, LEAVE);
+        }, HOLD);
+      }, LEAVE);
+    }
+    function openFaded(shot, row) {
+      if (!viewer.hidden) return;
+      fadeTo('dark', function () { open(shot, row); });
+    }
+    function goBack() {
+      fadeTo(pageTheme, function () {
+        if (history.state && history.state.viewer) history.back();
+        else close();
+      });
+    }
+    window.addEventListener('popstate', function () {
+      var target = fromAddress();
+      if (!target) { close(); return; }
+      if (!history.state || !history.state.viewer) history.replaceState({ viewer: true }, '');
+      open(target.shot, target.row, true);
+    });
+    closeButton.addEventListener('click', goBack);
     document.addEventListener('keydown', function (event) {
       if (viewer.hidden || event.key !== 'Escape') return;
-      close();
+      goBack();
       event.preventDefault();
     });
+
+    // arriving at a project's address opens it, over the Work page: the
+    // address first goes back to work.html, so the browser's back (or Close)
+    // leaves the project for the Work page rather than the site
+    var arrived = fromAddress();
+    if (arrived) {
+      history.replaceState(null, '', location.pathname + location.search);
+      open(arrived.shot, arrived.row);
+    }
   }
 
   // Two views, switched next to the filters (Gallery / Index) and kept for the
@@ -380,11 +461,11 @@
         (shot.tagName === 'VIDEO' ? [shot] : Array.prototype.slice.call(shot.querySelectorAll('video')))
           .forEach(function (video) { videos.observe(video); });
       }
-      el.addEventListener('click', function () { open(first, row); });
+      el.addEventListener('click', function () { openFaded(first, row); });
       el.addEventListener('keydown', function (event) {
         if (event.key !== 'Enter' && event.key !== ' ') return;
         event.preventDefault();
-        open(first, row);
+        openFaded(first, row);
       });
       cards[key] = el;
       return el;
@@ -458,7 +539,7 @@
     head.addEventListener('click', function () {
       var group = groups[project.dataset.project];
       if (stacked.matches && group && group.querySelector('.shot')) {
-        open(group.querySelector('.shot'), project);
+        openFaded(group.querySelector('.shot'), project);
         return;
       }
       var opening = !project.classList.contains('is-open');
@@ -548,7 +629,17 @@
     toggle.replaceChildren(label);
     toggle.setAttribute('aria-expanded', String(open));
   }
+  // the list's full height, which it grows to on opening (styles.css): from
+  // its first line's top to its last line's baseline, as laid out (their
+  // tap areas reach past them)
+  function measureTypes() {
+    var first = typeButtons[0], last = typeButtons[typeButtons.length - 1];
+    var top = first.getBoundingClientRect().top - parseFloat(getComputedStyle(first).marginTop);
+    var bottom = last.getBoundingClientRect().bottom + parseFloat(getComputedStyle(last).marginBottom);
+    typesBox.style.setProperty('--types-h', bottom - top + 'px');
+  }
   function setMenu(open) {
+    if (open) measureTypes();
     bar.classList.toggle('is-open', open);
     labelToggle();
   }

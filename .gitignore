@@ -1,3 +1,6 @@
 .DS_Store
 .claude/
 _originais/
+# the videos are on Cloudflare R2 (media.dpsaraiva.com), not in the site
+*.mp4
+_r2/
