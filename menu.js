@@ -1,4 +1,5 @@
-// Phones: MENU + opens WORK, ABOUT, EN / PT and the footer over the page
+// Phones: MENU + opens WORK, ABOUT, EN / PT, the footer and, at the top,
+// "Graphic Design and Illustration" over the page
 // (styles.css), coming down in the page's colours inverted, and closes them
 // again (going back up), as does Escape. While it's open the rest of the
 // page is inert and doesn't scroll under it (Lenis leaves it alone). It's
@@ -13,6 +14,14 @@
   // a copy of the footer at the menu's bottom (shown only there, on phones)
   var footer = document.querySelector('body > .site-footer');
   if (footer) items.appendChild(footer.cloneNode(true));
+  // and at its top, what Diogo does: "Graphic Design and Illustration", as
+  // the footer has it (with its Portuguese)
+  var tagline = footer && footer.querySelector('p:nth-of-type(2)');
+  if (tagline) {
+    tagline = tagline.cloneNode(true);
+    tagline.className = 'menu-tagline';
+    items.insertBefore(tagline, items.firstChild);
+  }
   // the phone browser's bars in the menu's colour while it's open (the page's
   // colours inverted), and back once it has gone up (styles.css)
   var bar = document.querySelector('meta[name="theme-color"]');

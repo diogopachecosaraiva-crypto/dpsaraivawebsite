@@ -258,7 +258,7 @@ p, li, .site-header a, .label { text-box: trim-both cap alphabetic; }
    the page (below, and menu.js); elsewhere they are the menu itself */
 .menu-toggle { display: none; }
 .menu-items { display: contents; }
-.menu-items .site-footer { display: none; }
+.menu-items .site-footer, .menu-tagline { display: none; }
 
 /* Footer */
 .site-footer {
@@ -1106,7 +1106,9 @@ body.viewer-open .site-header .tools { pointer-events: auto; }
   /* WORK, ABOUT and EN / PT twice the text's size (36px), at the bottom,
      a block's space above the footer */
   .menu-items > :is(a, .tools) { font-size: calc(2 * var(--text)); }
-  .menu-items > a:first-child { margin-top: auto; }
+  .menu-items > a:first-of-type { margin-top: auto; }
+  /* "Graphic Design and Illustration" at the top, in the text's size */
+  .menu-tagline { display: block; }
   /* (the stroke between EN and PT standing on their baseline, the trimmed
      words' bottom edge, rather than a few pixels under it at this size;
      taking no height of its own, so EN / PT is never taller than WORK or
