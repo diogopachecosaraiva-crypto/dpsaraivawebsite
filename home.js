@@ -479,8 +479,7 @@
   var resizeTimer = null;
   var index = 0;
   var firstSize = true;
-  new ResizeObserver(function () {
-    if (firstSize) { firstSize = false; return; }
+  function resized() {
     if (!resizeTimer) index = lenis.scroll / step * rows;
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function () {
@@ -490,5 +489,12 @@
       lenis.resize();
       lenis.scrollTo(restingPoint(index / rows * step), { immediate: true });
     }, 100);
+  }
+  new ResizeObserver(function () {
+    if (firstSize) { firstSize = false; return; }
+    resized();
   }).observe(area);
+  // and on the window's own resize, in case the slider's size is reported
+  // late or not at all (the sizes follow the window's width, styles.css)
+  window.addEventListener('resize', resized);
 })();

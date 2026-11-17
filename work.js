@@ -604,11 +604,13 @@
     });
     labelYear();
     labelToggle();
+    fitFilters();
   }
 
-  // Phones: the typologies fold into one line, "Filter: All ↓" (Filtro: Todos
-  // in Portuguese), next to Year; tapping it opens them below, one per line,
-  // and choosing one closes them again (styles.css shows it only on phones)
+  // The typologies fold into one line, "Filter: All ↓" (Filtro: Todos in
+  // Portuguese), next to Year, on phones and wherever they wouldn't fit on
+  // one line beside it (.is-compact, fitFilters below); tapping it opens them
+  // below, one per line, and choosing one closes them again (styles.css)
   var bar = document.querySelector('.filters-bar');
   var typesBox = document.querySelector('.filter-types');
   var toggle = document.createElement('button');
@@ -645,6 +647,40 @@
   }
   toggle.addEventListener('click', function () { setMenu(!bar.classList.contains('is-open')); });
   document.addEventListener('langchange', labelToggle);
+
+  // Folded or on one line: on one line the typologies need their own widths
+  // (as they are in the folded list too) plus, between each two, the stroke
+  // with 10px on either side; beside Year, a gutter apart. Measured whenever
+  // that could change: the window's size, the language, the active one
+  // (bold), the font coming in.
+  var phoneFilters = matchMedia('(max-width: 640px)');
+  function fitFilters() {
+    var fold = phoneFilters.matches;
+    if (!fold) {
+      var style = getComputedStyle(document.documentElement);
+      var stroke = parseFloat(style.getPropertyValue('--stroke')) || 2;
+      var gutter = parseFloat(style.getPropertyValue('--gutter')) || 15;
+      // (each word's own width, without the stroke drawn after it on one line)
+      var word = document.createRange();
+      var needed = typeButtons.reduce(function (sum, b) {
+        word.selectNodeContents(b.firstElementChild.firstChild);
+        return sum + word.getBoundingClientRect().width;
+      }, 0) + (typeButtons.length - 1) * (20 + stroke);
+      var sort = bar.querySelector('.filter-sort');
+      var room = bar.getBoundingClientRect().width - (sort ? sort.getBoundingClientRect().width + gutter : 0);
+      fold = needed > room;
+    }
+    if (fold === bar.classList.contains('is-compact')) return;
+    bar.classList.toggle('is-compact', fold);
+    if (!fold) setMenu(false);
+  }
+  new ResizeObserver(fitFilters).observe(bar);
+  window.addEventListener('resize', fitFilters);
+  document.addEventListener('langchange', fitFilters);
+  if (document.fonts) document.fonts.ready.then(fitFilters);
+  // the page opening in Portuguese: lang.js translates the typologies once
+  // the page is read, after this first ran, so the labels follow then
+  document.addEventListener('DOMContentLoaded', function () { labelYear(); labelToggle(); fitFilters(); });
 
   // Year (Ano in Portuguese, lang.js), with its arrow; both arrows' widths
   // are reserved in styles.css

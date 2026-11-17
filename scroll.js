@@ -143,4 +143,7 @@
   // which column is longer can change with the window size (and as images load)
   new ResizeObserver(measure).observe(document.querySelector('main'));
   panes.forEach(function (pane) { new ResizeObserver(measure).observe(pane.firstElementChild); });
+  // and on the window's own resize (the sizes follow the window's width,
+  // styles.css), in case a column's size is reported late
+  window.addEventListener('resize', measure);
 })();

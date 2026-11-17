@@ -16,15 +16,33 @@
   font-display: swap;
 }
 
-/* Design tokens from the Figma file "dpsaraiva.com" (1920px frames) */
+/* Design tokens from the Figma file "dpsaraiva.com" (1920px frames).
+   On computers and tablets they follow the window's width: --u is one of
+   Figma's pixels, 1px in a 1920px window, growing and shrinking with it in
+   a straight line, so 0.7px (the least) from 1101px down, ~0.82px at 1440px,
+   ~1.24px at 2560px. Every size below is so many --u, whole pixels: at
+   1920px the Figma sizes (text 20px on 24px lines, 15px margins and
+   gutter, 30px between blocks), at 1440px 16px / 19px / 12px / 24px, at
+   1101px and on tablets 14px / 17px / 11px / 22px. Phones keep their own
+   fixed sizes (--u 1px there, below). Registered as lengths (@property), so
+   scripts reading them (home.js, scroll.js, work.js) get pixels. */
+@property --u { syntax: '<length>'; inherits: true; initial-value: 1px; }
+@property --gutter { syntax: '<length>'; inherits: true; initial-value: 15px; }
+@property --space { syntax: '<length>'; inherits: true; initial-value: 30px; }
+@property --header-h { syntax: '<length>'; inherits: true; initial-value: 197px; }
+@property --text { syntax: '<length>'; inherits: true; initial-value: 20px; }
+@property --text-lh { syntax: '<length>'; inherits: true; initial-value: 24px; }
+@property --cap-gap { syntax: '<length>'; inherits: true; initial-value: 15px; }
+@property --cap-h { syntax: '<length>'; inherits: true; initial-value: 15px; }
 :root {
   --bg: #ffffff;
   --ink: #000000;
-  --gutter: 15px;
+  --u: max(0.7px, 0.03663vw + 0.2967px);
+  --gutter: round(calc(15 * var(--u)), 1px);
   --space: calc(2 * var(--gutter));  /* 30px between blocks: below the menu, between groups of content */
-  --header-h: 197px;     /* top of content, measured from the top of the page */
-  --text: 20px;
-  --text-lh: 24px;
+  --header-h: round(calc(197 * var(--u)), 1px);     /* top of content, measured from the top of the page */
+  --text: round(calc(20 * var(--u)), 1px);
+  --text-lh: round(calc(24 * var(--u)), 1px);
   /* the vertical strokes between the filters and between EN and PT: 2px
      like the project list's lines, a little more on sharp screens, where
      a short stroke between bold letters reads thinner than a long line */
@@ -93,8 +111,8 @@ body {
   /* The Home poster size drives the header and footer spacing on every page
      (see .site-header). Body is the container for those 100cqw measurements. */
   --visible: 4;
-  --cap-gap: 15px;  /* room kept below the Home posters, where their captions were, */
-  --cap-h: 15px;   /* so the posters and the menu and footer spacing stay as they were */
+  --cap-gap: round(calc(15 * var(--u)), 1px);  /* room kept below the Home posters, where their captions were, */
+  --cap-h: round(calc(15 * var(--u)), 1px);   /* so the posters and the menu and footer spacing stay as they were */
   container-type: inline-size;
   margin: 0;
   background: var(--bg);
@@ -262,8 +280,9 @@ p, li, .site-header a, .label { text-box: trim-both cap alphabetic; }
 
 /* Footer */
 .site-footer {
-  /* 56px = the footer's 2 lines of text + bottom margin, with 2px to spare */
-  --footer-top: clamp(var(--gutter), var(--free) / 2 - 56px, 138px);
+  /* 56px = the footer's 2 lines of text + bottom margin, with 2px to spare
+     (in Figma's pixels, as the 138px most) */
+  --footer-top: clamp(var(--gutter), var(--free) / 2 - round(56 * var(--u), 1px), round(138 * var(--u), 1px));
   padding-top: var(--footer-top);
   padding-bottom: var(--gutter);
   align-items: end;
@@ -434,7 +453,7 @@ figure.poster {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: subgrid;
-  padding: 15px 0;
+  padding: round(calc(15 * var(--u)), 1px) 0;
   border-bottom: 2px solid transparent;
 }
 /* the 2px line under each row, drawn over its (empty) border, 15px longer
@@ -468,7 +487,7 @@ figure.poster {
 /* the button takes the whole row, from line to line (its 15px above and
    below the text), so a tap anywhere on the row opens it, not only on the
    words; the negative margins keep everything where it was */
-.project-head { padding: 15px 0; margin: -15px 0; }
+.project-head { padding: round(calc(15 * var(--u)), 1px) 0; margin: round(calc(-15 * var(--u)), 1px) 0; }
 .project-head > * { display: block; grid-column: span 2; }
 /* the row's texts are spans (a button can only hold inline content), trimmed
    like every other text so they line up exactly as before */
@@ -596,9 +615,38 @@ figure.poster {
   .filters button:hover { font-weight: 800; }
 }
 .filters button:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
-/* the phones' "Filter: All ↓" (work.js), only on phones (below) */
+/* "Filter: All ↓" (work.js): on phones, and wherever the typologies
+   wouldn't fit on one line next to Year (.is-compact, work.js) */
 .filters .filter-toggle { display: none; }
 .filter-toggle b { font-weight: 800; }
+/* Then the typologies fold into "Filter: All ↓" next to Year; open, they're
+   a list below, one per line, without the strokes (work.js). It opens like
+   the phones' menu: it grows in 1s, pushing the projects down, with the list
+   riding down at its bottom edge (set at the bottom, it's cut at the top),
+   and shrinks back the same way. It's cut a gutter below "Filter" and its
+   last line stays a block's space above the projects all along (its height
+   counts that gutter); the letters below the last baseline aren't cut. The
+   list's height is measured (--types-h, work.js). */
+.filters-bar.is-compact .filter-toggle { display: inline-grid; }
+.filters-bar.is-compact { flex-wrap: wrap; row-gap: 0; }
+.filters-bar.is-compact .filter-types {
+  display: grid;
+  justify-items: start;
+  align-content: unsafe end;
+  row-gap: var(--gutter);
+  flex-basis: 100%;
+  order: 1;
+  position: relative;  /* (measured from, work.js) */
+  height: 0;
+  clip-path: inset(var(--gutter) -100vw -1em);
+  visibility: hidden;
+  transition: height 1s ease, visibility 0s 1s;
+}
+.filters-bar.is-compact.is-open .filter-types { height: calc(var(--types-h, 0px) + var(--gutter)); visibility: visible; transition: height 1s ease, visibility 0s; }
+@media (prefers-reduced-motion: reduce) {
+  .filters-bar.is-compact .filter-types, .filters-bar.is-compact.is-open .filter-types { transition: none; }
+}
+.filters-bar.is-compact .filter-types button:not(:last-child) > span::after { content: none; }
 .filters-empty { grid-column: 1 / -1; }
 /* with no project in the typology, the list's top line goes too (work.js) */
 .projects.is-empty::before { content: none; }
@@ -997,7 +1045,7 @@ body.viewer-open .site-header .tools { pointer-events: auto; }
 @media (max-width: 640px) {
   /* text at 18px on 22px lines (20px on 24px on larger screens); the
      footer keeps its own size (below) */
-  :root { --header-h: 96px; --text: 18px; --text-lh: 22px; }
+  :root { --u: 1px; --header-h: 96px; --text: 18px; --text-lh: 22px; }
   /* margins and the gaps between columns and images 10px here (15px on
      larger screens), so the content gets more of the screen's width, and
      20px between blocks (30px on larger screens): still twice the gutter */
@@ -1168,34 +1216,6 @@ body.viewer-open .site-header .tools { pointer-events: auto; }
   .filters-bar { grid-column: 1 / -1; }
   /* Work: only the Gallery on phones, so no Index / Gallery switch (work.js) */
   .filter-view { display: none; }
-  /* the typologies fold into "Filter: All ↓" next to Year; open, they're a
-     list below, one per line, without the strokes (work.js). It opens like
-     the menu: it grows in 1s, pushing the projects down, with the list
-     riding down at its bottom edge (set at the bottom, it's cut at the top),
-     and shrinks back the same way. It's cut 10px below "Filter" and its
-     last line stays 20px above the projects all along (its height counts
-     those 10px); the letters below the last baseline aren't cut. The list's
-     height is measured (--types-h, work.js). */
-  .filters .filter-toggle { display: inline-grid; }
-  .filters-bar { flex-wrap: wrap; row-gap: 0; }
-  .filter-types {
-    display: grid;
-    justify-items: start;
-    align-content: unsafe end;
-    row-gap: 10px;
-    flex-basis: 100%;
-    order: 1;
-    position: relative;  /* (measured from, work.js) */
-    height: 0;
-    clip-path: inset(var(--gutter) -100vw -1em);
-    visibility: hidden;
-    transition: height 1s ease, visibility 0s 1s;
-  }
-  .filters-bar.is-open .filter-types { height: calc(var(--types-h, 0px) + var(--gutter)); visibility: visible; transition: height 1s ease, visibility 0s; }
-  @media (prefers-reduced-motion: reduce) {
-    .filter-types, .filters-bar.is-open .filter-types { transition: none; }
-  }
-  .filter-types button:not(:last-child) > span::after { content: none; }
   /* Gallery: one line, the name and, at the end, the year; no typology
      (the project's full view still shows it) */
   .cover-info { grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--gutter); }
@@ -1253,10 +1273,7 @@ body.viewer-open .site-header .tools { pointer-events: auto; }
   /* (the sticky menu's band covers what reaches above Filter and Year, so
      theirs reaches further down) */
   .filters button { padding: 14px 0 20px; margin: -14px 0 -20px; }
-  /* the phones' list of typologies: each one's area reaches halfway to the
+  /* the folded list of typologies: each one's area reaches halfway to the
      next, so they tile the list without overlapping */
-  @media (max-width: 640px) {
-    .filter-types { row-gap: var(--gutter); }
-    .filter-types button { padding-block: 7.5px; margin-block: -7.5px; }
-  }
+  .filters-bar.is-compact .filter-types button { padding-block: calc(var(--gutter) * 3 / 4); margin-block: calc(var(--gutter) * -3 / 4); }
 }
