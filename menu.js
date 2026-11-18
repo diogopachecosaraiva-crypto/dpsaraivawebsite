@@ -1,4 +1,4 @@
-// Phones: MENU + opens WORK, ABOUT, EN / PT, the footer and, at the top,
+// Phones: MENU + opens PROJECTS, ABOUT, EN / PT, the footer and, at the top,
 // "Graphic Design and Illustration" over the page
 // (styles.css), coming down in the page's colours inverted, and closes them
 // again (going back up), as does Escape. While it's open the rest of the

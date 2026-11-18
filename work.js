@@ -336,7 +336,7 @@
       updateFooter();
       alignToMenu();
       viewer.focus({ preventScroll: true });
-      document.title = row.querySelector('.name').textContent.trim() + ' — ' + pageTitle.replace(/^Work — /, '');
+      document.title = row.querySelector('.name').textContent.trim() + ' — ' + pageTitle.replace(/^Projects — /, '');
       // a step in the browser's history, so its back closes the project
       if (!pushed) history.pushState({ viewer: true }, '', '#' + row.dataset.project);
     }

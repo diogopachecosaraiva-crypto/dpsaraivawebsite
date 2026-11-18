@@ -205,7 +205,7 @@ p, li, .site-header a, .label { text-box: trim-both cap alphabetic; }
 .site-header a { font-weight: 800; justify-self: start; grid-column: span 2; }
 /* DPS opens into "Diogo Pacheco Saraiva" on hover: the letters after each
    initial grow from zero width. Only where the full name (230px) fits
-   before WORK, and only with a mouse. */
+   before PROJECTS, and only with a mouse. */
 .logo { white-space: nowrap; }
 .logo:hover { text-decoration: none; }
 .logo .more {
@@ -272,7 +272,7 @@ p, li, .site-header a, .label { text-box: trim-both cap alphabetic; }
   .lang button:hover { font-weight: 800; }
 }
 .lang button:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
-/* On phones MENU + stands for WORK, ABOUT and EN / PT, and opens them over
+/* On phones MENU + stands for PROJECTS, ABOUT and EN / PT, and opens them over
    the page (below, and menu.js); elsewhere they are the menu itself */
 .menu-toggle { display: none; }
 .menu-items { display: contents; }
@@ -808,7 +808,7 @@ body.viewer-open .site-header {
 body.viewer-open .site-header a { visibility: hidden; }
 body.viewer-open .site-header .tools { pointer-events: auto; }
 /* The project's line, in the menu's ExtraBold and on its columns: the name
-   in DPS's place, the typology in WORK's, the year in ABOUT's, and Close, in
+   in DPS's place, the typology in PROJECTS's, the year in ABOUT's, and Close, in
    the text's weight, from column 7. On tablet one column each (Close in
    column 4); on phones the name across the line and Close at the right,
    where MENU + is (which gives way to it), the typology and the year above
@@ -1109,7 +1109,7 @@ body.viewer-open .site-header .tools { pointer-events: auto; }
   /* Open, the menu grows from the top down over the whole screen, in the
      page's colours inverted, and shrinks back up on closing (as on Studio
      Bruto): its colour grows in 0.7s and what's in it rides down with it, a
-     screen's height, in 1s, so it lands just after. WORK, ABOUT and EN / PT
+     screen's height, in 1s, so it lands just after. PROJECTS, ABOUT and EN / PT
      one under the other, from a block's space below the menu's line (which
      stays on top), and the footer at the bottom (menu.js copies it in). */
   .menu-items {
@@ -1151,17 +1151,17 @@ body.viewer-open .site-header .tools { pointer-events: auto; }
     transition: clip-path 0.7s ease, visibility 0s;
   }
   .site-header.is-open .menu-items > * { transform: none; }
-  /* WORK, ABOUT and EN / PT twice the text's size (36px), at the bottom,
+  /* PROJECTS, ABOUT and EN / PT twice the text's size (36px), at the bottom,
      a block's space above the footer */
   .menu-items > :is(a, .tools) { font-size: calc(2 * var(--text)); }
   .menu-items > a:first-of-type { margin-top: auto; }
-  /* "Graphic Design and Illustration" at the top, as large as WORK, ABOUT
+  /* "Graphic Design and Illustration" at the top, as large as PROJECTS, ABOUT
      and EN / PT, its two lines as far apart as they are (a capital's height
      and a block's space from baseline to baseline) */
   .menu-tagline { display: block; font-size: calc(2 * var(--text)); line-height: calc(1cap + var(--space)); }
   /* (the stroke between EN and PT standing on their baseline, the trimmed
      words' bottom edge, rather than a few pixels under it at this size;
-     taking no height of its own, so EN / PT is never taller than WORK or
+     taking no height of its own, so EN / PT is never taller than PROJECTS or
      ABOUT and the space above it stays the same, whatever Safari trims) */
   .menu-items .lang { align-items: end; }
   .menu-items .lang-sep { margin-top: -1cap; }
