@@ -224,6 +224,52 @@
     }
     track.style.width = setWidth + visible + 'px';
     watchVideos();
+    measureFold();
+  }
+
+  // The posters turn at the side margins, as if the row ran round the edges
+  // of a drum (it's flat in between, so in view they keep their size and
+  // their place on the grid): one going out at a margin swings back from it,
+  // hinged on its inner side, its outer side staying on the margin and
+  // drawing in until it's seen edge-on; one coming in opens out the same way.
+  // Each poster's place in the track is measured flat (measureFold, at every
+  // build) and the turn follows the scroll (fold, on every Lenis frame).
+  var FOLD_DEPTH = 2; // the perspective, in poster widths: smaller, steeper
+  var folding = [], foldWidth = 0, foldGap = 0, areaLeft = 0, areaWidth = 0;
+  function measureFold() {
+    folding = Array.prototype.slice.call(track.children);
+    folding.forEach(function (el) { el.style.transform = ''; el.foldTransform = ''; });
+    var trackLeft = track.getBoundingClientRect().left;
+    folding.forEach(function (el) { el.foldLeft = el.getBoundingClientRect().left - trackLeft; });
+    foldWidth = originals[0].getBoundingClientRect().width;
+    foldGap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    var box = area.getBoundingClientRect();
+    areaLeft = box.left;
+    areaWidth = box.width;
+    fold();
+  }
+  function fold() {
+    if (reduceMotion || !foldWidth) return;
+    var shift = areaLeft - area.scrollLeft;
+    var left = areaLeft + foldGap, right = areaLeft + areaWidth - foldGap;
+    var a = 1 / FOLD_DEPTH;
+    folding.forEach(function (el) {
+      var x = el.foldLeft + shift;
+      var side = 0, share = 1; // which margin it's crossing, and how much of it is still in
+      if (x < left && x + foldWidth > left) { side = -1; share = (x + foldWidth - left) / foldWidth; }
+      else if (x < right && x + foldWidth > right) { side = 1; share = (right - x) / foldWidth; }
+      var transform = '';
+      if (side) {
+        // the angle at which, in perspective, the turned poster is `share`
+        // of its width wide: cos φ = share × (1 + a sin φ)
+        var angle = Math.acos(share / Math.sqrt(1 + share * share * a * a)) - Math.atan(share * a);
+        transform = 'perspective(' + foldWidth * FOLD_DEPTH + 'px) rotateY(' + side * angle * 180 / Math.PI + 'deg)';
+      }
+      if (transform === el.foldTransform) return;
+      el.foldTransform = transform;
+      el.style.transformOrigin = side < 0 ? 'right center' : 'left center';
+      el.style.transform = transform;
+    });
   }
 
   // With reduced motion asked for, posters don't alternate and videos don't play
@@ -366,6 +412,7 @@
     syncTouch: true,             // required by Lenis for infinite scroll on touch
     autoRaf: true
   });
+  lenis.on('scroll', fold);
 
   // How close (as a share of one poster + gutter) the resting point must be
   // to the grid for the track to settle onto it
@@ -488,6 +535,7 @@
       build();
       lenis.resize();
       lenis.scrollTo(restingPoint(index / rows * step), { immediate: true });
+      fold();
     }, 100);
   }
   new ResizeObserver(function () {
