@@ -1,0 +1,9 @@
+# Cloudflare Pages: headers added to the site's responses (this file isn't
+# served itself). The copies of the site at dpsaraivawebsite.pages.dev (and
+# each deploy's preview address) stay out of search results, so only
+# dpsaraiva.com is indexed.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex

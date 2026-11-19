@@ -17,6 +17,12 @@
     all: 'Todos', identity: 'Identidade', poster: 'Cartaz', editorial: 'Editorial',
     motion: 'Motion', merch: 'Merch', web: 'Web', illustration: 'Ilustração'
   };
+  // the typologies as Work's image descriptions spell them out
+  var TYPE_NAMES = {
+    'visual identity': 'identidade visual', 'poster design': 'design de cartazes',
+    'editorial design': 'design editorial', 'illustration': 'ilustração',
+    'motion design': 'motion design', 'merch design': 'design de merch', 'web design': 'web design'
+  };
 
   function rules() {
     // Work: the typology filters and each project's typologies
@@ -38,7 +44,7 @@
       else if (html.indexOf('Collaborators:') === 0) p.setAttribute('data-pt', html.replace('Collaborators:', 'Colaboradores:'));
     });
     // image and video descriptions: "Poster, …", "Animated poster, …",
-    // "Project, image 3", "Project, image 4 (video)"
+    // "Project — visual identity, image 3", "Project — editorial design, image 4 (video)"
     document.querySelectorAll('img[alt], video[aria-label]').forEach(function (media) {
       var attr = media.tagName === 'IMG' ? 'alt' : 'aria-label';
       if (media.hasAttribute('data-pt-' + attr)) return;
@@ -46,6 +52,9 @@
       var pt = text
         .replace(/^Animated poster, /, 'Cartaz animado, ')
         .replace(/^Poster, /, 'Cartaz, ')
+        .replace(/ — ([a-z, ]+), image /, function (all, types) {
+          return ' — ' + types.split(', ').map(function (type) { return TYPE_NAMES[type] || type; }).join(', ') + ', image ';
+        })
         .replace(/, image (\w+)/, ', imagem $1')
         .replace(' (video)', ' (vídeo)');
       if (pt !== text) media.setAttribute('data-pt-' + attr, pt);

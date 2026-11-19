@@ -468,6 +468,10 @@ figure.poster {
   background: var(--ink);
 }
 .project[hidden] { display: none; }
+/* each row's button sits in a heading (the project's name, for search engines
+   and screen readers) that takes no box of its own, so the button stays on
+   the row's grid */
+.project-title { display: contents; }
 /* Each row is a button (name | type | year) that opens the project's text
    below it (work.js). It looks exactly like plain text. */
 .project-head {
@@ -660,7 +664,7 @@ figure.poster {
 }
 /* Work's filters and Info's content come 30px below the menu, at every size:
    the band holds just the menu and the 30px below it */
-.page-work .site-header,
+.page-work .site-header, .page-404 .site-header,
 .page-info .site-header {
   height: calc(var(--gutter) + 1cap + var(--space));
   height: round(var(--gutter) + 1cap + var(--space), 1px);
@@ -1007,6 +1011,16 @@ body.viewer-open .site-header .tools { pointer-events: auto; }
 .crop-b { width: 149.65%; left: -18.74%; top: -19%; }
 /* filling the frame, centred */
 .photo img.crop-c { inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; }
+
+/* Page not found (404.html, which Cloudflare shows at any address that
+   doesn't exist): one line where Info's text starts, the footer at the
+   bottom of the window */
+.page-404 { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+.page-404 main { flex: 1; align-content: start; }
+.not-found { grid-column: 1 / -1; }
+@media (hover: none) {
+  .not-found a { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 2px; }
+}
 
 /* Tablet: 4 columns */
 @media (max-width: 1100px) {
