@@ -336,7 +336,7 @@
       updateFooter();
       alignToMenu();
       viewer.focus({ preventScroll: true });
-      document.title = row.querySelector('.name').textContent.trim() + ' — ' + pageTitle.replace(/^Projects — /, '');
+      document.title = row.querySelector('.name').textContent.trim() + ' — ' + pageTitle.replace(/^(Projects|Projetos) — /, '');
       // a step in the browser's history, so its back closes the project
       if (!pushed) history.pushState({ viewer: true }, '', '#' + row.dataset.project);
     }
@@ -710,26 +710,27 @@
 
 // For search engines: the projects described as works by Diogo (schema.org,
 // read by Google), each with its name, year, typologies and text, built
-// from the list itself so it always matches it. In English, as the page
-// opens (lang.js only switches to Portuguese once the page has loaded).
+// from the list itself so it always matches it, in the page's language.
 (function () {
   var rows = document.querySelectorAll('.projects > .project');
   if (!rows.length) return;
+  var pt = /^\/pt(\/|$)/.test(location.pathname);
+  var page = 'https://dpsaraiva.com/' + (pt ? 'pt/' : '') + 'work';
   var works = Array.prototype.map.call(rows, function (row) {
     var text = row.querySelector('.project-text');
     var paragraphs = text ? Array.prototype.filter.call(text.querySelectorAll('p'), function (p) {
-      return p.textContent.indexOf('Collaborators:') !== 0;
+      return !/^(Collaborators|Colaboradores):/.test(p.textContent);
     }) : [];
     var work = {
       '@type': 'CreativeWork',
       name: row.querySelector('.name').textContent.trim(),
-      url: 'https://dpsaraiva.com/work#' + row.dataset.project,
+      url: page + '#' + row.dataset.project,
       dateCreated: row.querySelector('.year').textContent.trim(),
       genre: row.querySelector('.meta > span').textContent.split(', '),
       creator: { '@type': 'Person', name: 'Diogo Pacheco Saraiva', url: 'https://dpsaraiva.com/' }
     };
     var description = paragraphs.map(function (p) { return p.textContent.trim(); }).join(' ');
-    if (description && description !== 'Project description coming soon.') work.description = description;
+    if (description && !/^(Project description coming soon|Descrição do projeto em breve)\.$/.test(description)) work.description = description;
     return work;
   });
   var data = document.createElement('script');
@@ -737,8 +738,9 @@
   data.textContent = JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Projects — Diogo Pacheco Saraiva',
-    url: 'https://dpsaraiva.com/work',
+    name: (pt ? 'Projetos' : 'Projects') + ' — Diogo Pacheco Saraiva',
+    url: page,
+    inLanguage: pt ? 'pt-PT' : 'en-GB',
     hasPart: works
   });
   document.head.appendChild(data);

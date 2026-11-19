@@ -1,14 +1,17 @@
-// Language. The site opens in English; the PT button in the menu switches it
-// to Portuguese and EN back. The choice lasts for the rest of the visit (a new
-// visit opens in English again). Loaded in <head>, like theme.js.
+// Language. Each page is in English at its own address and in Portuguese
+// under /pt/ (dpsaraiva.com/work, dpsaraiva.com/pt/work), so search engines
+// find both. The Portuguese pages are made from the English ones by
+// _originais/tools/build-pt.py; the menu's EN / PT go to the same page in the
+// other language. Loaded in <head>, like theme.js.
 // Text to translate carries its Portuguese in the HTML, next to the English:
 // data-pt for the element's content, data-pt-alt, data-pt-aria-label, ... for
 // an attribute. Text that repeats (typologies, image descriptions,
-// "Collaborators:") is given its data-pt by the rules below instead.
+// "Collaborators:") is given its data-pt by the rules below instead. The
+// Portuguese pages come with all of it already in Portuguese; here it's put
+// in again, with what the scripts write themselves.
 (function () {
   var root = document.documentElement;
-  var lang = 'en';
-  try { if (sessionStorage.getItem('lang') === 'pt') lang = 'pt'; } catch (e) {}
+  var lang = /^\/pt(\/|$)/.test(location.pathname) ? 'pt' : 'en';
   root.lang = lang;
 
   var ATTRS = ['alt', 'aria-label', 'aria-roledescription', 'data-label'];
@@ -63,7 +66,9 @@
 
   // The English is kept (data-en, data-en-…) the first time it is replaced
   function apply() {
-    document.querySelectorAll('[data-pt]').forEach(function (el) {
+    // (the page's own; its title, already in Portuguese, is left to work.js,
+    // which names an open project in it)
+    document.querySelectorAll('body [data-pt]').forEach(function (el) {
       if (el.dataset.en === undefined) el.dataset.en = el.innerHTML;
       el.innerHTML = lang === 'pt' ? el.dataset.pt : el.dataset.en;
     });
@@ -85,12 +90,14 @@
     document.querySelectorAll('.lang button').forEach(function (button) {
       button.addEventListener('click', function () {
         if (button.dataset.lang === lang) return;
-        lang = button.dataset.lang;
-        root.lang = lang;
-        try { sessionStorage.setItem('lang', lang); } catch (e) {}
-        apply();
-        // work.js updates the text it writes itself
-        document.dispatchEvent(new CustomEvent('langchange'));
+        // the same page (and open project, #…) in the other language, through
+        // a link so it fades like any other change of page (theme.js)
+        var path = lang === 'pt' ? location.pathname.replace(/^\/pt(\/|$)/, '/') : '/pt' + location.pathname;
+        var link = document.createElement('a');
+        link.href = path + location.search + location.hash;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
       });
     });
   });

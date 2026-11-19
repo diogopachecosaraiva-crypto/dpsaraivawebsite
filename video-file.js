@@ -9,7 +9,8 @@ window.videoFile = (function () {
   // the same paths as here (assets/…). Only on the published site: tried out
   // on the Mac (localhost, its address on the Wi-Fi) they come from here.
   var MEDIA = /(^|\.)dpsaraiva\.com$|\.pages\.dev$/.test(location.hostname) ? 'https://media.dpsaraiva.com/' : '';
-  function url(path) { return MEDIA && !/^[a-z]+:/.test(path) ? MEDIA + path : path; }
+  // (the Portuguese pages, under /pt/, give their paths from the site's root: /assets/…)
+  function url(path) { return MEDIA && !/^[a-z]+:/.test(path) ? MEDIA + path.replace(/^\//, '') : path; }
   var files = {};
   // the ready copy's address, or null: then it starts fetching it, and
   // calls onReady with the address once it's there
