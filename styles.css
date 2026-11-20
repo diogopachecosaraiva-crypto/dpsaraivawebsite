@@ -363,6 +363,26 @@ figure.poster {
   min-width: 0;
   margin: 0;
 }
+/* Desktop and tablet: the posters sit as far from the menu's text as from the
+   footer's, however tall the window (the space under the menu and above the
+   footer stop growing at Figma's sizes, and differ on tablets). They're
+   centred in <main> with a room below them that evens out the menu's and the
+   footer's spacing (the same formulas as theirs, above), as much as <main>
+   has to spare. At 1920x1080 this is the room the captions left: nothing moves. */
+@media (min-width: 641px) {
+  .poster-track { align-items: center; }
+  figure.poster {
+    --poster-h: calc((100cqw - (var(--visible) + 1) * var(--gutter)) / var(--visible) * 636 / 455);
+    --free: calc(100dvh - var(--poster-h) - var(--cap-gap) - var(--cap-h));
+    --header: clamp(55px, var(--free) / 2, var(--header-h));
+    --footer: clamp(var(--gutter), var(--free) / 2 - round(56 * var(--u), 1px), round(138 * var(--u), 1px));
+    --height: calc(min(
+      (100cqw - (var(--visible) + 1) * var(--gutter)) / var(--visible),
+      (100cqh - var(--cap-gap) - var(--cap-h)) * 455 / 636
+    ) * 636 / 455);
+    margin-bottom: clamp(0px, var(--header) - var(--gutter) - 1cap - var(--footer), 100cqh - var(--height));
+  }
+}
 .poster img, .poster video {
   display: block;
   width: 100%;
